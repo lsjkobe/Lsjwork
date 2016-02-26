@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 头部背景 -->
+    <color name="title_bg">#435c94</color>
+    <!-- 白色 -->
+    <color name="white">#FFFFFF</color>
+    <!-- 烟白色 -->
+    <color name="whiteSmoke">#F5F5F5</color>
+    <!-- 文本顏色 -->
+    <color name="textcolor">#ababab</color>
+    <!-- 头部文本颜色 -->
+    <color name="titletextcolor">#99ffff</color>
+    <!-- 黑色 -->
+    <color name="blackcolor">#000000</color>
+    <!-- 字体的颜色 -->
+    <color name="gray_white">#ABABAB</color>
+    <!-- 黑色 -->
+    <color name="black">#000000</color>
+    <!-- 蓝色 -->
+    <color name="bule">#0066cc</color>
+     <!-- 浅深蓝色计算健康指数 -->
+    <color name="shallow_blue">#19A5AA</color>
+    <!-- 浅蓝色 -->
+    <color name="light_bule">#EAFCFC</color>
+    <!-- 亮蓝色 -->
+    <color name="bright_blue">#00FFFF</color>
+     <!--超浅粉色 -->
+    <color name="pale_pink">#FFECEC</color>
+     <!--超浅黄色 -->
+    <color name="pale_yellow">#FFFFCE</color>
+     <!--橘色 -->
+    <color name="orange">#f8b098</color>
+     <!--暗蓝色 -->
+    <color name="dark_blue">#46A3FF</color>
+    <!--黄绿色 -->
+    <color name="green_yellow">#C4C400</color>
+    
+
+</resources>
