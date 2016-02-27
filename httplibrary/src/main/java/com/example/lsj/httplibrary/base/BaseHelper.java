@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.lsj.httplibrary.R;
 import com.example.lsj.httplibrary.callback.ApiResponse;
+import com.example.lsj.httplibrary.callback.ApiResponseNews;
 import com.example.lsj.httplibrary.callback.BaseCallBack;
 import com.example.lsj.httplibrary.callback.FailMessg;
 import com.example.lsj.httplibrary.http.HttpUtil;
@@ -162,6 +163,7 @@ public class BaseHelper {
 
     public <T> void onSuccessByString(final Class<T> cls, final BaseCallBack callBack, String content, LoadConfig loadConfig) {
         callBack.onResult(content);
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         T t = null;
@@ -193,6 +195,12 @@ public class BaseHelper {
                 }
             } else {
                 MyToast.showToast(mContext, ((ApiResponse) t).getContent());
+            }
+
+        }else if (t instanceof ApiResponseNews) {
+
+            if (!callBack.onSuccesBefore(t, mContext)) {//可以在成功回调之前做处理，可以切断事件
+                callBack.onSucces(t);
             }
         }
 
