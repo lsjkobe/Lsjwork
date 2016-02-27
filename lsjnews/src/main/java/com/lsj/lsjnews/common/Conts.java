@@ -5,5 +5,5 @@ package com.lsj.lsjnews.common;
  */
 public class Conts {
 
-    public final static String API_HTTPS_NEWS = "http://apis.baidu.com/txapi/keji/keji";
+    public final static String API_HTTPS_NEWS = "http://apis.baidu.com/txapi/world/world";
 }
