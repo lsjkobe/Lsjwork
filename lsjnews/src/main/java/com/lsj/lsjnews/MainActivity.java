@@ -1,12 +1,12 @@
 package com.lsj.lsjnews;
 
 
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,11 +42,12 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private int page = 1;
 
-    private int count = 1;
+    private int count = 0;
     private long firClick = 0;
     private long secClick = 0;
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private DrawerLayout mLayDrawer;
     @Override
     protected void initView() {
         super.initView();
@@ -56,6 +57,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_list);
         mToolbar = (Toolbar) findViewById(R.id.tb_main_toolbar);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.lay_main_top_collapsing);
+        mLayDrawer = (DrawerLayout) findViewById(R.id.lay_main_drawer);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
@@ -86,14 +88,24 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
     @Override
     protected void initData() {
+
+        initToolbar();
+        initRecycleDate();
+        baseLoadData();
+    }
+
+    private void initToolbar() {
         mCollapsingToolbarLayout.setTitle("科技热点");
+        //收缩时的title颜色
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.bule));
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setLogo(R.mipmap.ic_menu);
-        initRecycleDate();
-        baseLoadData();
+//        getSupportActionBar().setLogo(R.mipmap.ic_menu);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
+                R.string.app_name);
+        mLayDrawer.setDrawerListener(toggle);
+        toggle.syncState();
     }
 
     private void initRecycleDate(){

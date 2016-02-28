@@ -46,7 +46,21 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
         view = LayoutInflater.from(context).inflate(R.layout.layout_item, parent, false);
         view.setOnClickListener(this);
         MyViewHolder viewHolder = new MyViewHolder(view);
+        if(viewType == 0){
+            viewHolder.mImgNews.setVisibility(View.GONE);
+        }
         return viewHolder;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        if(datas.get(position).getPicUrl().equals("") || datas.get(position).getPicUrl() == ""){
+            return 0;
+        }else{
+            return 1;
+        }
+
     }
 
     @Override
@@ -59,6 +73,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
 //        }else{
 //            params.width = LPhone.getScreenWidth(context);
 //        }
+
         holder.itemView.setLayoutParams(params);
         holder.mTextView.setText(datas.get(position).getDescription());
         ImageLoader.getInstance().displayImage(datas.get(position).getPicUrl(), holder.mImgNews);

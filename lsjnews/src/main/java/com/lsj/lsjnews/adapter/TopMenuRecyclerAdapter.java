@@ -27,7 +27,7 @@ public class TopMenuRecyclerAdapter extends RecyclerView.Adapter<MenuViewHolder>
 
     @Override
     public void onBindViewHolder(MenuViewHolder holder, int position) {
-            holder.mImgItem.setImageResource(R.mipmap.ic_1);
+            holder.mImgItem.setImageResource(R.mipmap.ic_5);
 
     }
 
