@@ -1,9 +1,14 @@
 package com.lsj.lsjnews;
 
 
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +18,7 @@ import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.widget.RecyclerItemClickListener;
 import com.lsj.lsjnews.adapter.MyRecyclerViewAdapter;
+import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
@@ -29,21 +35,28 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
+    private RecyclerView mRecyTopMenu;
     private List<ApiNewsMsg.NewsBean> NewsList = new ArrayList<>();
     private MyRecyclerViewAdapter mAdapter;
+    private TopMenuRecyclerAdapter mTopMenuAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private int page = 1;
 
     private int count = 1;
     private long firClick = 0;
     private long secClick = 0;
+
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     @Override
     protected void initView() {
         super.initView();
         showTopView(false);
         mRecyclerView = (RecyclerView) findViewById(R.id.view_main_recyclerView);
+        mRecyTopMenu = (RecyclerView) findViewById(R.id.recy_view_top_menu);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_list);
         mToolbar = (Toolbar) findViewById(R.id.tb_main_toolbar);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.lay_main_top_collapsing);
+
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mToolbar.setOnTouchListener(new View.OnTouchListener() {
@@ -73,6 +86,12 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
     @Override
     protected void initData() {
+        mCollapsingToolbarLayout.setTitle("科技热点");
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.bule));
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setLogo(R.mipmap.ic_menu);
         initRecycleDate();
         baseLoadData();
     }
@@ -94,7 +113,11 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
             }
         });
-
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext, 2);
+        mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecyTopMenu.setLayoutManager(mGridLayoutManager);
+        mTopMenuAdapter = new TopMenuRecyclerAdapter(mContext);
+        mRecyTopMenu.setAdapter(mTopMenuAdapter);
     }
     private RecyclerItemClickListener.OnItemClickListener onItemClickListener = new RecyclerItemClickListener.OnItemClickListener() {
         @Override

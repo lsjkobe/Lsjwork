@@ -19,9 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by 晓勇 on 2015/7/12 0012.
- */
+
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> implements View.OnClickListener{
     private List<ApiNewsMsg.NewsBean> datas;
     private Context context;
@@ -83,6 +81,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
         }
     }
 
+    //新闻列表滑到底部接口
     OnRefresh mRefresh;
     public static interface OnRefresh{
         void Refresh();

@@ -3,6 +3,7 @@ package com.example.lsj.httplibrary.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -11,7 +12,7 @@ import com.example.lsj.httplibrary.utils.AppManager;
 /**
  * Created by lsj on 2016/1/9.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
     public BaseManager baseManager;
     protected Context mContext=this;
     private View layoutView;
