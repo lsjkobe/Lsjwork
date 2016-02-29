@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.utils.CircleImageView;
@@ -39,8 +40,10 @@ public class TopMenuRecyclerAdapter extends RecyclerView.Adapter<MenuViewHolder>
 class MenuViewHolder extends RecyclerView.ViewHolder{
 
     CircleImageView mImgItem;
+    TextView mTxtItem;
     public MenuViewHolder(View itemView) {
         super(itemView);
         mImgItem = (CircleImageView) itemView.findViewById(R.id.img_top_menu_item);
+        mTxtItem = (TextView) itemView.findViewById(R.id.txt_news_kinds_item);
     }
 }

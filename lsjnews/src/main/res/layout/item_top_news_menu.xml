@@ -3,6 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/txt_news_kinds_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="center"
+        android:textSize="@dimen/text_size_18"
+        android:textColor="@color/white"
+        android:text="社会热点"/>
+
     <com.lsj.lsjnews.utils.CircleImageView
         android:id="@+id/img_top_menu_item"
         android:layout_width="50dp"
@@ -14,5 +27,7 @@
         app:border_width="0dp"
         app:border_color="#00000000"
         app:cardCornerRadius="3dp"
-        app:cardElevation="12dp"/>
+        app:cardElevation="12dp"
+        android:visibility="gone"/>
+
 </LinearLayout>

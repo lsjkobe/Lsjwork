@@ -64,14 +64,14 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         mToolbar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(MotionEvent.ACTION_DOWN == event.getAction()){
+                if (MotionEvent.ACTION_DOWN == event.getAction()) {
                     count++;
-                    if(count == 1){
+                    if (count == 1) {
                         firClick = System.currentTimeMillis();
 
-                    } else if (count == 2){
+                    } else if (count == 2) {
                         secClick = System.currentTimeMillis();
-                        if(secClick - firClick < 1000){
+                        if (secClick - firClick < 1000) {
                             //双击事件
                             mRecyclerView.smoothScrollToPosition(0);
                         }
@@ -92,6 +92,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         initToolbar();
         initRecycleDate();
         baseLoadData();
+
     }
 
     private void initToolbar() {
@@ -114,7 +115,8 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(mContext, onItemClickListener));
+//        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(mContext, onItemClickListener));
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -125,7 +127,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
             }
         });
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext, 2);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext, 1);
         mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
         mRecyTopMenu.setLayoutManager(mGridLayoutManager);
         mTopMenuAdapter = new TopMenuRecyclerAdapter(mContext);
@@ -187,8 +189,8 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
     private void initOrRefresh(){
         if(mAdapter == null){
             mAdapter = new MyRecyclerViewAdapter(this, NewsList, 0);
-
             mRecyclerView.setAdapter(mAdapter);
+
         }else{
             mAdapter.notifyDataSetChanged();
         }

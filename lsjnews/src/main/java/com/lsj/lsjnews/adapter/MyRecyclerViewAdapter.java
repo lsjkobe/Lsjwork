@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.example.lsj.httplibrary.utils.LPhone;
 import com.example.lsj.httplibrary.utils.MyLogger;
+import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.utils.PxDipUnti;
 import com.example.lsj.httplibrary.widget.RecyclerItemClickListener;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
+import com.lsj.lsjnews.common.UiHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -44,11 +46,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view = LayoutInflater.from(context).inflate(R.layout.layout_item, parent, false);
-        view.setOnClickListener(this);
-        MyViewHolder viewHolder = new MyViewHolder(view);
+
+        final MyViewHolder viewHolder = new MyViewHolder(view);
+        view.setTag(viewHolder.getAdapterPosition());
         if(viewType == 0){
             viewHolder.mImgNews.setVisibility(View.GONE);
         }
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiHelper.showNewsInfoWeb(context, datas.get(viewHolder.getAdapterPosition()).getUrl());
+            }
+        });
         return viewHolder;
     }
 
@@ -91,9 +100,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
 
     @Override
     public void onClick(View v) {
-        if(mListener != null){
-            mListener.onItemClick(v, (String)v.getTag());
-        }
+//        if(mListener != null){
+//            mListener.onItemClick(v, (int)v.getTag());
+//        }
+        MyToast.showToast(context, ":");
     }
 
     //新闻列表滑到底部接口
@@ -105,8 +115,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
         this.mRefresh = mRefresh;
     }
 
+
     public static interface OnRecyclerViewIteListener{
-        void onItemClick(View view , String data);
+        void onItemClick(View view , int data);
     }
     public void setOnRecyclerViewIteListener(OnRecyclerViewIteListener mListener){
         this.mListener = mListener;
