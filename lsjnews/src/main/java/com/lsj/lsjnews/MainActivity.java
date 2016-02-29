@@ -22,6 +22,7 @@ import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
+import com.lsj.lsjnews.bean.JuheNewsApi;
 import com.lsj.lsjnews.common.Conts;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
@@ -92,7 +93,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         initToolbar();
         initRecycleDate();
         baseLoadData();
-
+        getJuheNews();
     }
 
     private void initToolbar() {
@@ -147,6 +148,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         params.addBodyParameter("num", "10");
         params.addBodyParameter("page", String.valueOf(page));
         params.addHeader("apikey", MyHelper.NEWS_API_KEYS);
+
         baseManager.http2Get(params, ApiNewsMsg.class, new LsjBaseCallBack() {
             @Override
             public void onSucces(Object result) {
@@ -183,6 +185,24 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
                 }
 
             }
+        });
+    }
+
+    public void getJuheNews() {
+        super.baseLoadData();
+        RequestParams params = new RequestParams(Conts.API_HTTPS_NEWS_JUHE);
+        params.addBodyParameter("q", "科技");
+        params.addBodyParameter("key", MyHelper.NEWS_API_KEYS_JUHE);
+        params.addBodyParameter("dtype", "json");
+        baseManager.http2Get(params, JuheNewsApi.class, new LsjBaseCallBack() {
+            @Override
+            public void onSucces(Object result) {
+                JuheNewsApi JuheNewsMsg = (JuheNewsApi) result;
+                if(JuheNewsMsg.getError_code() == 0){
+                    MyLogger.showLogWithLineNum(3,"1--------------成功");
+                }
+            }
+
         });
     }
 
