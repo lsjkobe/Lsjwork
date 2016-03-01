@@ -6,11 +6,11 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_news_list_123"
+            android:id="@+id/swipe_news_main_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/view_main_recyclerView_123"
+                android:id="@+id/view_news_main_recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none"

@@ -18,6 +18,7 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.fragment.SocialNewsFragment;
+import com.lsj.lsjnews.fragment.SportNewsFragment;
 
 import java.util.ArrayList;
 
@@ -28,10 +29,6 @@ public class NewsMainActivity extends MyBaseActivity{
     private TopMenuRecyclerAdapter mTopMenuAdapter;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentList;
-
-    private int count = 0;
-    private long firClick = 0;
-    private long secClick = 0;
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private DrawerLayout mLayDrawer;
@@ -46,17 +43,19 @@ public class NewsMainActivity extends MyBaseActivity{
         mViewPager = (ViewPager) findViewById(R.id.view_pager_news_msg);
 
     }
-    SocialNewsFragment mLsjMainActivity;
+    private SocialNewsFragment mLsjMainActivity;
+    private SportNewsFragment mSportNewsFragment;
+
     @Override
     protected void initData() {
         fragmentList = new ArrayList<Fragment>();
         mLsjMainActivity = new SocialNewsFragment();
-        fragmentList.add(mLsjMainActivity);
+        mSportNewsFragment = new SportNewsFragment();
+        fragmentList.add(mSportNewsFragment);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fragmentList));
         mViewPager.setCurrentItem(0);
         initToolbar();
         initRecycleDate();
-        baseLoadData();
     }
 
     private void initToolbar() {

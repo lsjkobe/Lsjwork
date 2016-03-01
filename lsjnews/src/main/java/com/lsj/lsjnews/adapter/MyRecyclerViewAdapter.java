@@ -8,26 +8,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.lsj.httplibrary.utils.LPhone;
-import com.example.lsj.httplibrary.utils.MyLogger;
-import com.example.lsj.httplibrary.utils.MyToast;
-import com.example.lsj.httplibrary.utils.PxDipUnti;
-import com.example.lsj.httplibrary.widget.RecyclerItemClickListener;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
 import com.lsj.lsjnews.common.UiHelper;
+import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> implements View.OnClickListener{
+public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder>{
     private List<ApiNewsMsg.NewsBean> datas;
     private Context context;
     private List<Integer> lists;
     private int key = 0;
-    private OnRecyclerViewIteListener mListener;
 
     public MyRecyclerViewAdapter(Context context, List<ApiNewsMsg.NewsBean> datas , int key) {
         this.datas = datas;
@@ -45,7 +40,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
     View view;
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(context).inflate(R.layout.layout_item, parent, false);
+        view = LayoutInflater.from(context).inflate(R.layout.item_social_news, parent, false);
 
         final MyViewHolder viewHolder = new MyViewHolder(view);
         view.setTag(viewHolder.getAdapterPosition());
@@ -98,30 +93,16 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> im
         return datas.size();
     }
 
-    @Override
-    public void onClick(View v) {
-//        if(mListener != null){
-//            mListener.onItemClick(v, (int)v.getTag());
-//        }
-        MyToast.showToast(context, ":");
-    }
+
 
     //新闻列表滑到底部接口
     OnRefresh mRefresh;
-    public static interface OnRefresh{
-        void Refresh();
-    }
+
     public void setOnRefresh(OnRefresh mRefresh){
         this.mRefresh = mRefresh;
     }
 
 
-    public static interface OnRecyclerViewIteListener{
-        void onItemClick(View view , int data);
-    }
-    public void setOnRecyclerViewIteListener(OnRecyclerViewIteListener mListener){
-        this.mListener = mListener;
-    }
 }
 
 class MyViewHolder extends RecyclerView.ViewHolder {

@@ -15,6 +15,7 @@ import com.example.lsj.httplibrary.callback.ApiResponseNews;
 import com.example.lsj.httplibrary.callback.BaseCallBack;
 import com.example.lsj.httplibrary.callback.FailMessg;
 import com.example.lsj.httplibrary.http.HttpUtil;
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.utils.PxDipUnti;
 
@@ -131,10 +132,11 @@ public class BaseHelper {
                         //连接错误
                         MyToast.showLongToast(mContext, FailMessg.FIALUNKNOnHOSTMSG);
                     } else {
-                        //获取去数据失败
+                        //获取数据失败
                         MyToast.showLongToast(mContext, FailMessg.FIALGETDATAMSG);
                     }
                 }
+                MyLogger.showLogWithLineNum(3,"error++++++++++++++"+error.getMessage());
                 callBack.onFail(mContext, null);
             }
 
@@ -202,6 +204,8 @@ public class BaseHelper {
             if (!callBack.onSuccesBefore(t, mContext)) {//可以在成功回调之前做处理，可以切断事件
                 callBack.onSucces(t);
             }
+        }else{
+            callBack.onSucces(t);
         }
 
         if (view != null) {

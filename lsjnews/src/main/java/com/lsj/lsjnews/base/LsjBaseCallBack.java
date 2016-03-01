@@ -13,26 +13,27 @@ public class LsjBaseCallBack extends BaseCallBack{
 
     @Override
     public void onSucces(Object result) {
-
+        MyLogger.showLogWithLineNum(3,"LsjBaseCallBack.....success");
     }
 
     @Override
     public void onResult(String result) {
+        MyLogger.showLogWithLineNum(3,"LsjBaseCallBack.....result");
         MyLogger.showLogWithLineNum(3,result);
     }
 
     @Override
     public void onStart() {
-
+        MyLogger.showLogWithLineNum(3,"LsjBaseCallBack.....start");
     }
 
     @Override
     public void onFinish() {
-
+        MyLogger.showLogWithLineNum(3,"LsjBaseCallBack.....finish");
     }
 
     @Override
     public void onFail(Context context, FailMessg result) {
-
+        MyLogger.showLogWithLineNum(3,"LsjBaseCallBack.....fail");
     }
 }

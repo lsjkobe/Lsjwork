@@ -52,6 +52,7 @@ public class ActivityNewsWeb extends MyBaseActivity{
             }
 
         });
+
         mWebNewsInfo.setWebViewClient(new WebViewClient(){
             @Override
             public void onReceivedClientCertRequest(WebView view, ClientCertRequest request) {
@@ -59,6 +60,12 @@ public class ActivityNewsWeb extends MyBaseActivity{
 
             }
 
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+
+            }
 
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -74,13 +81,13 @@ public class ActivityNewsWeb extends MyBaseActivity{
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        if(mWebNewsInfo != null){
-            mWebNewsInfo.destroy();
-        }
 
-        super.onDestroy();
+    @Override
+    protected void onPause ()
+    {
+        //解决播放视频途中退出还有声音的问题
+        mWebNewsInfo.reload ();
+        super.onPause ();
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.lsj.lsjnews.bean.NewsApi;
 import com.lsj.lsjnews.common.Conts;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
+import com.lsj.lsjnews.interfaces.OnRefresh;
 
 import org.xutils.http.RequestParams;
 
@@ -172,7 +173,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
             public void onFinish() {
                 if(first){
                     first = false;
-                    mAdapter.setOnRefresh(new MyRecyclerViewAdapter.OnRefresh() {
+                    mAdapter.setOnRefresh(new OnRefresh() {
                         @Override
                         public void Refresh() {
                             MyLogger.showLogWithLineNum(3,"到底了");
