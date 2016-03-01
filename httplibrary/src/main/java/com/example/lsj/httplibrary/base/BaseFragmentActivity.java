@@ -9,14 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import com.example.lsj.httplibrary.utils.AppManager;
 
-/**   
-* @Title: BaseActivity.java 
-* @Package cn.dxb.app.base 
-* @Description: TODO(用一句话描述该文件做什么) 
-* @author xiaoluo 
-* @date 2014年10月21日 下午4:44:44 
-* @version V1.0   
-*/
 public abstract  class  BaseFragmentActivity extends FragmentActivity {
 	
 	protected Context mContext=this;

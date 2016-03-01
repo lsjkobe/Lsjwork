@@ -12,9 +12,11 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_gravity="center"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
         android:textSize="@dimen/text_size_18"
         android:textColor="@color/white"
-        android:text="社会热点"/>
+        android:text="社会热点" />
 
     <com.lsj.lsjnews.utils.CircleImageView
         android:id="@+id/img_top_menu_item"

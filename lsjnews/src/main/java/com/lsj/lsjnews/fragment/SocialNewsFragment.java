@@ -1,144 +1,104 @@
-package com.lsj.lsjnews;
+package com.lsj.lsjnews.fragment;
 
 
-import android.graphics.Color;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
-import com.example.lsj.httplibrary.widget.RecyclerItemClickListener;
+import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.MyRecyclerViewAdapter;
-import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
-import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
 import com.lsj.lsjnews.bean.NewsApi;
 import com.lsj.lsjnews.common.Conts;
 import com.lsj.lsjnews.common.MyHelper;
-import com.lsj.lsjnews.common.UiHelper;
 
 import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class SocialNewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private Toolbar mToolbar;
+
     private RecyclerView mRecyclerView;
-    private RecyclerView mRecyTopMenu;
+
     private List<ApiNewsMsg.NewsBean> NewsList = new ArrayList<>();
     private MyRecyclerViewAdapter mAdapter;
-    private TopMenuRecyclerAdapter mTopMenuAdapter;
-//    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private int page = 1;
 
-    private int count = 0;
-    private long firClick = 0;
-    private long secClick = 0;
-
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private DrawerLayout mLayDrawer;
     @Override
     protected void initView() {
         super.initView();
         showTopView(false);
-        mRecyclerView = (RecyclerView) findViewById(R.id.view_main_recyclerView);
-        mRecyTopMenu = (RecyclerView) findViewById(R.id.recy_view_top_menu);
-//        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_list);
-        mToolbar = (Toolbar) findViewById(R.id.tb_main_toolbar);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.lay_main_top_collapsing);
-        mLayDrawer = (DrawerLayout) findViewById(R.id.lay_main_drawer);
-//        mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        mToolbar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEvent.ACTION_DOWN == event.getAction()) {
-                    count++;
-                    if (count == 1) {
-                        firClick = System.currentTimeMillis();
-
-                    } else if (count == 2) {
-                        secClick = System.currentTimeMillis();
-                        if (secClick - firClick < 1000) {
-                            //双击事件
-                            mRecyclerView.smoothScrollToPosition(0);
-                        }
-                        count = 0;
-                        firClick = 0;
-                        secClick = 0;
-
-                    }
-                }
-                return true;
-            }
-        });
+        mRecyclerView = (RecyclerView) findViewById(R.id.view_main_recyclerView_123);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_list_123);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     protected void initData() {
 
-        initToolbar();
         initRecycleDate();
         baseLoadData();
-        getNews();
     }
-
-    private void initToolbar() {
-        mCollapsingToolbarLayout.setTitle("科技热点");
-        //收缩时的title颜色
-        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.bule));
-        mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
-
-        setSupportActionBar(mToolbar);
-//        getSupportActionBar().setLogo(R.mipmap.ic_menu);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
-                R.string.app_name);
-        mLayDrawer.setDrawerListener(toggle);
-        toggle.syncState();
-    }
-
+    int key = 0; //滚回顶部为1
+    @TargetApi(Build.VERSION_CODES.M)
     private void initRecycleDate(){
         //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(mContext, onItemClickListener));
 
+//        final Snackbar snackbar = Snackbar.make(mRecyclerView, "SnackbarTest", Snackbar.LENGTH_LONG).setAction("Action", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//
+//                    }
+//                });
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(page%5 == 0){
-                    Snackbar.make(mRecyclerView,"双击导航栏回到顶部"+page,Snackbar.LENGTH_LONG).show();
-                }
 
+                final Snackbar mSnackbar = Snackbar.make(mRecyclerView,"回到顶部",Snackbar.LENGTH_LONG).setAction("確定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mRecyclerView.smoothScrollToPosition(0);
+                        key = 1;
+                    }
+                });
+                if(dy>0){
+                    key = 0;
+                }else if(page>=5 && key == 0){
+                    mSnackbar.show();
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
         });
+
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext, 1);
         mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
-        mRecyTopMenu.setLayoutManager(mGridLayoutManager);
-        mTopMenuAdapter = new TopMenuRecyclerAdapter(mContext);
-        mRecyTopMenu.setAdapter(mTopMenuAdapter);
+
     }
-    private RecyclerItemClickListener.OnItemClickListener onItemClickListener = new RecyclerItemClickListener.OnItemClickListener() {
-        @Override
-        public void onItemClick(View view, int position) {
-            UiHelper.showNewsInfoWeb(mContext, NewsList.get(position).getUrl());
-        }
-    };
+
     boolean first = true;
     @Override
     public void baseLoadData() {
@@ -151,7 +111,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         baseManager.http2Get(params, ApiNewsMsg.class, new LsjBaseCallBack() {
             @Override
             public void onSucces(Object result) {
-//                mSwipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
                 ApiNewsMsg newsMsg = (ApiNewsMsg) result;
                 if(newsMsg.getCode() == 200){
                     if(page == 1){
@@ -178,7 +138,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
                             MyLogger.showLogWithLineNum(3,"到底了");
                             page++;
                             baseLoadData();
-//                            mSwipeRefreshLayout.setRefreshing(true);
+                            mSwipeRefreshLayout.setRefreshing(true);
                         }
                     });
                 }
@@ -206,7 +166,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
     private void initOrRefresh(){
         if(mAdapter == null){
-            mAdapter = new MyRecyclerViewAdapter(this, NewsList, 0);
+            mAdapter = new MyRecyclerViewAdapter(mContext, NewsList, 0);
             mRecyclerView.setAdapter(mAdapter);
 
         }else{
@@ -216,7 +176,7 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
     }
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_main;
+        return R.layout.activity_lsj_main;
     }
 
     @Override

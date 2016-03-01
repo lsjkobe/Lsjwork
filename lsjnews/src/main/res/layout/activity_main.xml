@@ -38,12 +38,13 @@
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
+<!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:visibility="gone">
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_news_list"
             android:layout_width="match_parent"
@@ -57,6 +58,14 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
+-->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_news_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </android.support.v4.view.ViewPager>
 <!--
     <com.lsj.lsjnews.utils.CircleImageView
         android:id="@+id/fab_main_user_img"
