@@ -83,14 +83,13 @@ public class SportNewsFragment extends BaseFragment implements SwipeRefreshLayou
 
         params.addBodyParameter("channelId", "5572a109b3cdc86cf39001db");
         params.addBodyParameter("channelName", "科技焦点");
-        params.addBodyParameter("page", "page");
+        params.addBodyParameter("page", String.valueOf(page));
         baseManager.http2Get(params, NewsApi.class, new LsjBaseCallBack() {
             @Override
             public void onSucces(Object result) {
                 mSwipeRefreshLayout.setRefreshing(false);
                 NewsApi mNewsApi = (NewsApi) result;
                 if(mNewsApi.getShowapi_res_code() == 0){
-                    MyLogger.showLogWithLineNum(3,"______________success");
                     if(page == 1){
                         NewsList.clear();
                     }
@@ -102,18 +101,18 @@ public class SportNewsFragment extends BaseFragment implements SwipeRefreshLayou
             }
             @Override
             public void onFinish() {
-//                if(first){
-//                    first = false;
-//                    mAdapter.setOnRefresh(new OnRefresh() {
-//                        @Override
-//                        public void Refresh() {
-//                            MyLogger.showLogWithLineNum(3,"到底了");
-//                            page++;
-//                            getNews();
-//                            mSwipeRefreshLayout.setRefreshing(true);
-//                        }
-//                    });
-//                }
+                if(first){
+                    first = false;
+                    mAdapter.setOnRefresh(new OnRefresh() {
+                        @Override
+                        public void Refresh() {
+                            MyLogger.showLogWithLineNum(3,"到底了");
+                            page++;
+                            getNews();
+                            mSwipeRefreshLayout.setRefreshing(true);
+                        }
+                    });
+                }
 
             }
         });

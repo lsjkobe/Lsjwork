@@ -51,6 +51,7 @@ public class NewsMainActivity extends MyBaseActivity{
         fragmentList = new ArrayList<Fragment>();
         mLsjMainActivity = new SocialNewsFragment();
         mSportNewsFragment = new SportNewsFragment();
+        fragmentList.add(mLsjMainActivity);
         fragmentList.add(mSportNewsFragment);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fragmentList));
         mViewPager.setCurrentItem(0);

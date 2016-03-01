@@ -54,11 +54,11 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
             ImageLoader.getInstance().displayImage(datas.get(position).getImageurls().get(0).getUrl(), holder.mImgNews);
         }
 
-//        if(position == datas.size()-1){
-//            if(mRefresh != null){
-//                mRefresh.Refresh();
-//            }
-//        }
+        if(position == datas.size()-1){
+            if(mRefresh != null){
+                mRefresh.Refresh();
+            }
+        }
     }
 
     @Override
@@ -74,12 +74,12 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
         }
 
     }
-//    //新闻列表滑到底部接口
-//    OnRefresh mRefresh;
-//
-//    public void setOnRefresh(OnRefresh mRefresh){
-//        this.mRefresh = mRefresh;
-//    }
+    //新闻列表滑到底部接口
+    OnRefresh mRefresh;
+
+    public void setOnRefresh(OnRefresh mRefresh){
+        this.mRefresh = mRefresh;
+    }
     @Override
     public int getItemCount() {
         return datas.size();
