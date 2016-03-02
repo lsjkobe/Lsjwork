@@ -27,15 +27,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 
+import zhou.widget.RichText;
+
 /**
  * Created by Le on 2016/3/2.
  */
 public class NewsInfoShow extends MyBaseActivity{
-    TextView mTextView;
+    RichText mTextView;
     @Override
     protected void initView() {
         super.initView();
-        mTextView = (TextView) findViewById(R.id.txt_news_content_msg);
+        mTextView = (RichText) findViewById(R.id.txt_news_content_msg);
     }
 
     @Override
