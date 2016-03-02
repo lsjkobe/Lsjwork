@@ -136,7 +136,7 @@ public class BaseHelper {
                         MyToast.showLongToast(mContext, FailMessg.FIALGETDATAMSG);
                     }
                 }
-                MyLogger.showLogWithLineNum(3,"error++++++++++++++"+error.getMessage());
+
                 callBack.onFail(mContext, null);
             }
 
@@ -171,7 +171,7 @@ public class BaseHelper {
         T t = null;
         try {
             t = objectMapper.readValue(content, cls);
-        } catch (JsonParseException e) {
+        }catch (JsonParseException e) {
             if (loadConfig.isShowError) {
                 MyToast.showLongToast(mContext, FailMessg.FIALPARSINGMSG);
             }
@@ -190,7 +190,7 @@ public class BaseHelper {
             callBack.onFail(mContext, null);
             e.printStackTrace();
         }
-        if (t instanceof ApiResponse) {
+        /*if (t instanceof ApiResponse) {
             if (((ApiResponse) t).getResult() != ApiResponse.RESPONE_ERROR) {//404，服务器出错处理
                 if (!callBack.onSuccesBefore(t, mContext)) {//可以在成功回调之前做处理，可以切断事件
                     callBack.onSucces(t);
@@ -205,6 +205,10 @@ public class BaseHelper {
                 callBack.onSucces(t);
             }
         }else{
+            callBack.onSucces(t);
+
+        }*/
+        if(t != null){
             callBack.onSucces(t);
         }
 

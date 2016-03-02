@@ -6,7 +6,7 @@ import com.example.lsj.httplibrary.callback.ApiResponseNews;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/2/27.
+ * Created by lsj on 2016/2/27.
  */
 public class ApiNewsMsg extends ApiResponseNews {
 

@@ -44,7 +44,7 @@ public class NewDetailJson extends JsonPacket {
     }
 
     /**
-     * 解析图片集
+     *
      *
      * @param jsonArray
      * @return
@@ -61,7 +61,7 @@ public class NewDetailJson extends JsonPacket {
     }
 
     /**
-     * 获取图文列表
+     * 锟斤拷取图锟斤拷锟叫憋拷
      * 
      * @param jsonObject
      * @return

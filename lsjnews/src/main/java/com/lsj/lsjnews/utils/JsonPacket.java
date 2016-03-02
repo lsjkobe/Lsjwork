@@ -6,7 +6,7 @@ import android.content.Context;
 import org.json.JSONObject;
 
 /**
- * JSON½âÎö³éÏóÀà
+ *
  * 
  * @author wang.wei
  */

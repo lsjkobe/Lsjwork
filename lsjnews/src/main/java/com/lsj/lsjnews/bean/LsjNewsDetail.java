@@ -7,10 +7,8 @@ import java.util.List;
  * Created by Le on 2016/3/2.
  */
 public class LsjNewsDetail implements Serializable{
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7060210544600464481L;
+
     /**
      * docid
      */

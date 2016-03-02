@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
@@ -16,7 +17,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -36,12 +39,39 @@ public class NewsInfoShow extends MyBaseActivity{
     }
     private void getInfo(){
         RequestParams params = new RequestParams("http://c.m.163.com/nc/article/BFNFMVO800034JAU/full.html");
-        baseManager.http2Get(params, JsonRootBean.class, new LsjBaseCallBack(){
+//        baseManager.http2Post(params, JsonRootBean.class, new LsjBaseCallBack(){
+//            @Override
+//            public void onSucces(Object result) {
+//                JsonRootBean mDetail = (JsonRootBean) result;
+//                MyToast.showToast(mContext, "--------------success------------:"+mDetail.getDocid()+":123");
+//            }
+//        });
+        x.http().get(params, new Callback.CacheCallback<String>() {
             @Override
-            public void onSucces(Object result) {
-                super.onSucces(result);
-                JsonRootBean mDetail = (JsonRootBean) result;
-                MyToast.showToast(mContext, "--------------success------------:"+mDetail.getBody());
+            public void onSuccess(String s) {
+                MyLogger.showLogWithLineNum(3,"abc："+s);
+                JsonRootBean mBean = JSON.parseObject(s, JsonRootBean.class);
+                MyLogger.showLogWithLineNum(3,"--------------success------------:"+mBean.getBody()+":123");
+            }
+
+            @Override
+            public void onError(Throwable throwable, boolean b) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException e) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+
+            @Override
+            public boolean onCache(String s) {
+                return false;
             }
         });
     }
