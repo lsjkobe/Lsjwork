@@ -1,8 +1,5 @@
 package com.lsj.lsjnews.activity;
 
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -11,8 +8,8 @@ import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
-import com.lsj.lsjnews.bean.JsonRootBean;
 import com.lsj.lsjnews.bean.LsjNewsDetail;
+import com.lsj.lsjnews.test_bean.JsonRootBean;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,9 +55,9 @@ public class NewsInfoShow extends MyBaseActivity{
             @Override
             public void onSuccess(String s) {
                 MyLogger.showLogWithLineNum(3,"abc："+s);
-                LsjNewsDetail mBean = JSON.parseObject(s, LsjNewsDetail.class);
-                MyLogger.showLogWithLineNum(3,"--------------success------------:"+mBean.getBody()+":123");
-                mTextView.setText(s);
+                JsonRootBean mBean = JSON.parseObject(s, JsonRootBean.class);
+                MyLogger.showLogWithLineNum(3,"--------------success------------:"+mBean.getBfnfmvo800034jau().getBody()+":123");
+                mTextView.setText(mBean.getBfnfmvo800034jau().getBody());
             }
 
             @Override
