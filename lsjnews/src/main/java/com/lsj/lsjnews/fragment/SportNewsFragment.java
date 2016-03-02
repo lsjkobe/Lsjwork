@@ -17,8 +17,11 @@ import com.lsj.lsjnews.common.Conts;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.xutils.http.RequestParams;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

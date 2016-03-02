@@ -35,7 +35,12 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
         if(viewType == 0){
             viewHolder.mImgNews.setVisibility(View.GONE);
         }
-
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getLink());
+            }
+        });
         return viewHolder;
 //        switch (viewType){
 //            case 0:
@@ -90,8 +95,8 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
         ImageView mImgNews;
         public SportViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.txt_sport_news_msg_1);
-            mImgNews = (ImageView) itemView.findViewById(R.id.img_sport_news_header_1);
+            mTextView = (TextView) itemView.findViewById(R.id.txt_news_msg_1);
+            mImgNews = (ImageView) itemView.findViewById(R.id.img_news_header_1);
         }
     }
 }

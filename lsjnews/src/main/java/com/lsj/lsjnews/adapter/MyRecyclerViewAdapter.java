@@ -110,7 +110,7 @@ class MyViewHolder extends RecyclerView.ViewHolder {
     ImageView mImgNews;
     public MyViewHolder(final View itemView) {
         super(itemView);
-        mTextView = (TextView) itemView.findViewById(R.id.txt_news_msg);
-        mImgNews = (ImageView) itemView.findViewById(R.id.img_news_header);
+        mTextView = (TextView) itemView.findViewById(R.id.txt_news_msg_1);
+        mImgNews = (ImageView) itemView.findViewById(R.id.img_news_header_1);
     }
 }

@@ -17,6 +17,7 @@ public abstract class MyBaseActivity extends BaseActivity{
     @Override
     protected void initView() {
         super.initView();
+        showTopView(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus();
         }

@@ -5,6 +5,16 @@ import android.content.Context;
 import com.example.lsj.httplibrary.callback.BaseCallBack;
 import com.example.lsj.httplibrary.callback.FailMessg;
 import com.example.lsj.httplibrary.utils.MyLogger;
+import com.example.lsj.httplibrary.utils.MyToast;
+import com.lsj.lsjnews.bean.LsjNewsDetail;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 /**
  * Created by Administrator on 2016/2/27.
@@ -18,7 +28,7 @@ public class LsjBaseCallBack extends BaseCallBack{
 
     @Override
     public void onResult(String result) {
-        MyLogger.showLogWithLineNum(3,"LsjBaseCallBack.....result");
+        MyLogger.showLogWithLineNum(3, "LsjBaseCallBack.....result");
         MyLogger.showLogWithLineNum(3,result);
     }
 

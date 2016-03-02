@@ -8,12 +8,23 @@
     <!-- 五类字体大小 -->
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_26">26sp</dimen>
+    <dimen name="text_size_28">28sp</dimen>
     <!-- 五类字体大小 -->
 
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="margin_size_5">5dp</dimen>
+    <dimen name="margin_size_10">10dp</dimen>
+    <dimen name="margin_size_15">15dp</dimen>
+    <dimen name="margin_size_20">20dp</dimen>
+    <dimen name="margin_size_25">25dp</dimen>
 
 </resources>
