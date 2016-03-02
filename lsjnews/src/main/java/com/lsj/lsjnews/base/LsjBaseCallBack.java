@@ -30,6 +30,7 @@ public class LsjBaseCallBack extends BaseCallBack{
     public void onResult(String result) {
         MyLogger.showLogWithLineNum(3, "LsjBaseCallBack.....result");
         MyLogger.showLogWithLineNum(3,result);
+
     }
 
     @Override
