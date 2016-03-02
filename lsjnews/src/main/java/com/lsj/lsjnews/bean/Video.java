@@ -1,7 +1,7 @@
 /**
   * Copyright 2016 aTool.org 
   */
-package com.lsj.lsjnews.bean.json2bean;
+package com.lsj.lsjnews.bean;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 /**

@@ -9,6 +9,7 @@ import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
+import com.lsj.lsjnews.bean.JsonRootBean;
 import com.lsj.lsjnews.bean.LsjNewsDetail;
 
 import org.jsoup.Jsoup;
@@ -35,11 +36,11 @@ public class NewsInfoShow extends MyBaseActivity{
     }
     private void getInfo(){
         RequestParams params = new RequestParams("http://c.m.163.com/nc/article/BFNFMVO800034JAU/full.html");
-        baseManager.http2Get(params, LsjNewsDetail.class, new LsjBaseCallBack(){
+        baseManager.http2Get(params, JsonRootBean.class, new LsjBaseCallBack(){
             @Override
             public void onSucces(Object result) {
                 super.onSucces(result);
-                LsjNewsDetail mDetail = (LsjNewsDetail) result;
+                JsonRootBean mDetail = (JsonRootBean) result;
                 MyToast.showToast(mContext, "--------------success------------:"+mDetail.getBody());
             }
         });

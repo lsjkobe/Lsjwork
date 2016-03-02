@@ -1,10 +1,3 @@
-/*
- * Copyright (C) 2013 北京活动时文化传媒有限公�?
- * 
- *             http://www.mosh.cn
- * 
- * All rights reserved.
- */
 
 package com.lsj.lsjnews.utils;
 

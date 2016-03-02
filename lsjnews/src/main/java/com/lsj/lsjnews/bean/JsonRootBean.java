@@ -1,10 +1,10 @@
 /**
   * Copyright 2016 aTool.org 
   */
-package com.lsj.lsjnews.bean.json2bean;
+package com.lsj.lsjnews.bean;
 import java.io.Serializable;
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 /**
  * Auto-generated: 2016-03-02 18:52:37

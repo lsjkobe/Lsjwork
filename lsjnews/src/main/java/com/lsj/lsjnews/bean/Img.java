@@ -1,7 +1,7 @@
 /**
   * Copyright 2016 aTool.org 
   */
-package com.lsj.lsjnews.bean.json2bean;
+package com.lsj.lsjnews.bean;
 
 /**
  * Auto-generated: 2016-03-02 18:52:37

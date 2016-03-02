@@ -1,7 +1,7 @@
 /**
   * Copyright 2016 aTool.org 
   */
-package com.lsj.lsjnews.bean.json2bean;
+package com.lsj.lsjnews.bean;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 /**
@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @author aTool.org (i@aTool.org)
  * @website http://www.atool.org/json2javabean.php
  */
-public class TopiclistNews {
+public class Topiclist {
 
     @JsonProperty("hasCover")
     private boolean hascover;
