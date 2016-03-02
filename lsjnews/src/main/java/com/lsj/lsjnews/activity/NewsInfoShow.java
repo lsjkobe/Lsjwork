@@ -3,6 +3,7 @@ package com.lsj.lsjnews.activity;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.utils.MyLogger;
@@ -33,6 +34,13 @@ import java.nio.ByteBuffer;
  * Created by Le on 2016/3/2.
  */
 public class NewsInfoShow extends MyBaseActivity{
+    TextView mTextView;
+    @Override
+    protected void initView() {
+        super.initView();
+        mTextView = (TextView) findViewById(R.id.txt_news_content_msg);
+    }
+
     @Override
     protected void initData() {
         getInfo();
@@ -50,8 +58,9 @@ public class NewsInfoShow extends MyBaseActivity{
             @Override
             public void onSuccess(String s) {
                 MyLogger.showLogWithLineNum(3,"abc："+s);
-                JsonRootBean mBean = JSON.parseObject(s, JsonRootBean.class);
+                LsjNewsDetail mBean = JSON.parseObject(s, LsjNewsDetail.class);
                 MyLogger.showLogWithLineNum(3,"--------------success------------:"+mBean.getBody()+":123");
+                mTextView.setText(s);
             }
 
             @Override
