@@ -52,30 +52,6 @@ public class NewsInfoShow extends MyBaseActivity{
                 mTxtSource.setText(mDetail.getSource());
             }
         });
-//        x.http().get(params, new Callback.CommonCallback<String>() {
-//            @Override
-//            public void onSuccess(String s) {
-//                String a = MyUtil.getStrFromJson(s);
-//                MyLogger.showLogWithLineNum(3,"======================a:"+a);
-//                LsjNewsDetail abc = JSON.parseObject(a, LsjNewsDetail.class);
-//                mTextView.setText(Html.fromHtml(abc.getBody()));
-//            }
-//
-//            @Override
-//            public void onError(Throwable throwable, boolean b) {
-//                MyLogger.showLogWithLineNum(3,"======================a:onError");
-//            }
-//
-//            @Override
-//            public void onCancelled(CancelledException e) {
-//                MyLogger.showLogWithLineNum(3,"======================onCancelled:");
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//                MyLogger.showLogWithLineNum(3,"======================a:onFinished");
-//            }
-//        });
     }
     @Override
     protected int getLayoutId() {
