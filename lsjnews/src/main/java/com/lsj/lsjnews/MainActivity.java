@@ -23,7 +23,7 @@ import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
 import com.lsj.lsjnews.bean.NewsApi;
-import com.lsj.lsjnews.common.Conts;
+import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.interfaces.OnRefresh;

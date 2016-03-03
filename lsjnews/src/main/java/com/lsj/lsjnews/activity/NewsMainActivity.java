@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
+import com.lsj.lsjnews.fragment.NetNewsFragment;
 import com.lsj.lsjnews.fragment.SocialNewsFragment;
 import com.lsj.lsjnews.fragment.SportNewsFragment;
 
@@ -45,14 +46,17 @@ public class NewsMainActivity extends MyBaseActivity{
     }
     private SocialNewsFragment mLsjMainActivity;
     private SportNewsFragment mSportNewsFragment;
-
+    private NetNewsFragment mNetNewsFragment;
     @Override
     protected void initData() {
         fragmentList = new ArrayList<Fragment>();
         mLsjMainActivity = new SocialNewsFragment();
         mSportNewsFragment = new SportNewsFragment();
+        mNetNewsFragment = new NetNewsFragment();
         fragmentList.add(mLsjMainActivity);
         fragmentList.add(mSportNewsFragment);
+        fragmentList.add(mNetNewsFragment);
+        mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fragmentList));
         mViewPager.setCurrentItem(0);
         initToolbar();

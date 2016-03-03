@@ -5,6 +5,13 @@ import android.content.Context;
 import com.example.lsj.httplibrary.callback.BaseCallBack;
 import com.example.lsj.httplibrary.callback.FailMessg;
 import com.example.lsj.httplibrary.utils.MyLogger;
+import com.example.lsj.httplibrary.utils.MyToast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
 
 
 /**
@@ -21,8 +28,11 @@ public class LsjBaseCallBack extends BaseCallBack{
     public void onResult(String result) {
         MyLogger.showLogWithLineNum(3, "LsjBaseCallBack.....result");
         MyLogger.showLogWithLineNum(3,result);
-//        ApiNewsMsg mBean = JSON.parseObject(result, ApiNewsMsg.class);
-//        MyLogger.showLogWithLineNum(3,"error++++++++++++++1:"+mBean.getCode());
+//        while(keys.hasNext()){
+//            String key = (String) keys.next();
+//            MyLogger.showLogWithLineNum(3,"----------------------key:"+key);
+//        }
+
 
     }
 

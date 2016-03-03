@@ -13,9 +13,9 @@ import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.NewCallBack;
+import com.lsj.lsjnews.bean.LsjNewsBean;
 import com.lsj.lsjnews.bean.LsjNewsList;
 import com.lsj.lsjnews.bean.NewsApi;
-import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.HttpHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
@@ -28,18 +28,18 @@ import java.util.List;
 /**
  * Created by lsj on 2016/3/1.
  */
-public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.SportViewHolder> {
+public class NetNewsListAdapter extends RecyclerView.Adapter<NetNewsListAdapter.NewsViewHolder> {
 
     private Context context;
-    private List<NewsApi.Contentlist> datas;
-    public SportNewsAdapter(Context context, List<NewsApi.Contentlist> datas){
+    private List<LsjNewsBean> datas;
+    public NetNewsListAdapter(Context context, List<LsjNewsBean> datas){
         this.context = context;
         this.datas = datas;
     }
     @Override
-    public SportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_sport_news, parent, false);
-        final SportViewHolder viewHolder = new SportViewHolder(view);
+        final NewsViewHolder viewHolder = new NewsViewHolder(view);
         view.setTag(viewHolder.getAdapterPosition());
         if(viewType == 0){
             viewHolder.mImgNews.setVisibility(View.GONE);
@@ -47,7 +47,8 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UiHelper.showNewsInfoWeb(context, datas.get(viewHolder.getAdapterPosition()).getLink());
+//                UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getLink());
+                getNews();
             }
 
         });
@@ -61,11 +62,26 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
 //                break;
 //        }
     }
+    public void getNews() {
+        RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyApi.NBA_ID+"/"+"0"+ MyApi.END_URL);
+        HttpHelper.getNewsData(params, new NewCallBack() {
+            @Override
+            public void onSuccess(String s) {
+                super.onSuccess(s);
+                MyLogger.showLogWithLineNum(3, MyApi.NEWS_DETAIL + MyApi.HEADLINE_TYPE + "/" + MyApi.NBA_ID + "/" + "0" + MyApi.END_URL);
+                s = s.substring(1, s.length() - 1);
+                MyToast.showToast(context, s);
+                LsjNewsList mNewsList = JSON.parseObject(s, LsjNewsList.class);
+//                MyLogger.showLogWithLineNum(3, TAG + "" + mNewsList.getTitle());
+            }
+        });
+
+    }
     @Override
-    public void onBindViewHolder(SportViewHolder holder, int position) {
-        holder.mTextView.setText(datas.get(position).getDesc());
-        if(datas.get(position).getImageurls().size() != 0){
-            ImageLoader.getInstance().displayImage(datas.get(position).getImageurls().get(0).getUrl(), holder.mImgNews);
+    public void onBindViewHolder(NewsViewHolder holder, int position) {
+        holder.mTextView.setText(datas.get(position).getDigest());
+        if(datas.get(position).getImgsrc() != null){
+            ImageLoader.getInstance().displayImage(datas.get(position).getImgsrc(), holder.mImgNews);
         }
 
         if(position == datas.size()-1){
@@ -77,7 +93,11 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
 
     @Override
     public int getItemViewType(int position) {
-        int data_size = datas.get(position).getImageurls().size();
+        int data_size = 0;
+//        if(datas.size() != 0){
+//            data_size = datas.get(position).getImgextra().size();
+//        }
+
         switch (data_size){
             case 0:
                 return 0;
@@ -99,10 +119,10 @@ public class SportNewsAdapter extends RecyclerView.Adapter<SportNewsAdapter.Spor
         return datas.size();
     }
 
-    class SportViewHolder extends RecyclerView.ViewHolder{
+    class NewsViewHolder extends RecyclerView.ViewHolder{
         TextView mTextView;
         ImageView mImgNews;
-        public SportViewHolder(View itemView) {
+        public NewsViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.txt_news_msg_1);
             mImgNews = (ImageView) itemView.findViewById(R.id.img_news_header_1);

@@ -72,8 +72,7 @@
             <zhou.widget.RichText
                 android:id="@+id/txt_news_content_msg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/test_string"/>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

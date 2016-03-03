@@ -1,12 +1,9 @@
 package com.lsj.lsjnews.fragment;
 
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,7 +16,7 @@ import com.lsj.lsjnews.adapter.MyRecyclerViewAdapter;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
 import com.lsj.lsjnews.bean.NewsApi;
-import com.lsj.lsjnews.common.Conts;
+import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 

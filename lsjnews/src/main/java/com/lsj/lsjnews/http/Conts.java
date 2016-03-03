@@ -1,4 +1,4 @@
-package com.lsj.lsjnews.common;
+package com.lsj.lsjnews.http;
 
 /**
  * Created by Administrator on 2016/2/27.

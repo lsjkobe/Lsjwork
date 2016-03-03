@@ -22,9 +22,10 @@ public class UiHelper {
         intent.setClass(context, ActivityNewsWeb.class);
         context.startActivity(intent);
     }
-    public static void showNewsInfoThis(Context context, String url){
+    public static void showNewsInfoThis(Context context, String id){
         Intent intent = new Intent();
         intent.setClass(context, NewsInfoShow.class);
+        intent.putExtra("mNewsId", id);
         context.startActivity(intent);
     }
 }

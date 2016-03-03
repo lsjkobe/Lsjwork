@@ -6,18 +6,28 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
+import com.lsj.lsjnews.adapter.NetNewsListAdapter;
 import com.lsj.lsjnews.adapter.SportNewsAdapter;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
+import com.lsj.lsjnews.base.NewCallBack;
+import com.lsj.lsjnews.bean.LsjNewsBean;
+import com.lsj.lsjnews.bean.LsjNewsList;
 import com.lsj.lsjnews.bean.NewsApi;
-import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.http.Conts;
+import com.lsj.lsjnews.http.HttpHelper;
+import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 
+import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +35,14 @@ import java.util.List;
 /**
  * Created by lsj on 2016/3/1.
  */
-public class SportNewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
+    private static final String TAG = "NetNewsFragment.class";
     private boolean first = true;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private SportNewsAdapter mAdapter;
-    private List<NewsApi.Contentlist> NewsList = new ArrayList<>();
+    private NetNewsListAdapter mAdapter;
+    private List<LsjNewsBean> mSportNewsList = new ArrayList<>();
     private int page = 1;
     @Override
     protected void initView() {
@@ -60,16 +71,16 @@ public class SportNewsFragment extends BaseFragment implements SwipeRefreshLayou
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                final Snackbar mSnackbar = Snackbar.make(mRecyclerView,"回到顶部",Snackbar.LENGTH_LONG).setAction("確定", new View.OnClickListener() {
+                final Snackbar mSnackbar = Snackbar.make(mRecyclerView, "回到顶部", Snackbar.LENGTH_LONG).setAction("確定", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mRecyclerView.smoothScrollToPosition(0);
                         key = 1;
                     }
                 });
-                if(dy>0){
+                if (dy > 0) {
                     key = 0;
-                }else if(page>=5 && key == 0){
+                } else if (page >= 5 && key == 0) {
                     mSnackbar.show();
                 }
             }
@@ -77,50 +88,52 @@ public class SportNewsFragment extends BaseFragment implements SwipeRefreshLayou
         });
 
     }
+    //nc/article/{type}/{id}/{startPage}-20.html
     public void getNews() {
-        RequestParams params = new RequestParams(Conts.API_HTTPS_NEWS_1);
-        params.addHeader("apikey", MyHelper.NEWS_API_KEYS);
-
-        params.addBodyParameter("channelId", "5572a109b3cdc86cf39001db");
-        params.addBodyParameter("channelName", "科技焦点");
-        params.addBodyParameter("page", String.valueOf(page));
-        baseManager.http2Get(params, NewsApi.class, new LsjBaseCallBack() {
+        RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyApi.SPORTS_ID+"/"+"0"+ MyApi.END_URL);
+//        baseManager.http2Get(params, LsjNewsList.class, new LsjBaseCallBack() {
+//            @Override
+//            public void onSucces(Object result) {
+//                LsjNewsList mNewsApi = (LsjNewsList) result;
+//                MyLogger.showLogWithLineNum(3,TAG+":"+mNewsApi.getT1348649079062().get(0).getTitle());
+//            }
+//
+//        });
+        x.http().get(params, new Callback.CommonCallback<String>(){
             @Override
-            public void onSucces(Object result) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                NewsApi mNewsApi = (NewsApi) result;
-                if(mNewsApi.getShowapi_res_code() == 0){
+            public void onSuccess(String str) {
+                LsjNewsList mNewsList = JSON.parseObject(str, LsjNewsList.class);
+                if(mNewsList.getT1348649079062() != null){
                     if(page == 1){
-                        NewsList.clear();
+                        mSportNewsList.clear();
                     }
-                    NewsList.addAll(mNewsApi.getShowapi_res_body().getPagebean().getContentlist());
+                    mSportNewsList.addAll(mNewsList.getT1348649079062());
                     initOrRefresh();
-                }else{
-                    MyToast.showToast(mContext, mNewsApi.getShowapi_res_error()+"：123456");
-                }
-            }
-            @Override
-            public void onFinish() {
-                if(first){
-                    first = false;
-                    mAdapter.setOnRefresh(new OnRefresh() {
-                        @Override
-                        public void Refresh() {
-                            MyLogger.showLogWithLineNum(3,"到底了");
-                            page++;
-                            getNews();
-                            mSwipeRefreshLayout.setRefreshing(true);
-                        }
-                    });
                 }
 
+            }
+
+            @Override
+            public void onError(Throwable throwable, boolean b) {
+                MyLogger.showLogWithLineNum(3,TAG+":onError");
+            }
+
+            @Override
+            public void onCancelled(CancelledException e) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                MyLogger.showLogWithLineNum(3,TAG+":onFinished");
             }
         });
 
     }
     private void initOrRefresh(){
         if(mAdapter == null){
-            mAdapter = new SportNewsAdapter(mContext, NewsList);
+            mAdapter = new NetNewsListAdapter(mContext, mSportNewsList);
             mRecyclerView.setAdapter(mAdapter);
 
         }else{
@@ -136,6 +149,6 @@ public class SportNewsFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         page = 1;
-        baseLoadData();
+        getNews();
     }
 }

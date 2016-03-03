@@ -1,7 +1,6 @@
-/**
-  * Copyright 2016 aTool.org 
-  */
+
 package com.lsj.lsjnews.test_bean;
+import java.io.Serializable;
 import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -11,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @author aTool.org (i@aTool.org)
  * @website http://www.atool.org/json2javabean.php
  */
-public class Bfnfmvo800034jau {
+public class testBean implements Serializable {
 
     private String body;
     private List<String> users;
@@ -20,7 +19,7 @@ public class Bfnfmvo800034jau {
     private List<String> ydbaike;
     private List<String> link;
     private List<String> votes;
-    private List<Img> img;
+
     private String digest;
     @JsonProperty("topiclist_news")
     private List<TopiclistNews> topiclistNews;
@@ -31,7 +30,6 @@ public class Bfnfmvo800034jau {
     private boolean picnews;
     private String title;
     private String tid;
-    private List<Video> video;
     private String template;
     @JsonProperty("threadVote")
     private int threadvote;
@@ -89,13 +87,6 @@ public class Bfnfmvo800034jau {
      }
      public List<String> getVotes() {
          return votes;
-     }
-
-    public void setImg(List<Img> img) {
-         this.img = img;
-     }
-     public List<Img> getImg() {
-         return img;
      }
 
     public void setDigest(String digest) {
@@ -159,13 +150,6 @@ public class Bfnfmvo800034jau {
      }
      public String getTid() {
          return tid;
-     }
-
-    public void setVideo(List<Video> video) {
-         this.video = video;
-     }
-     public List<Video> getVideo() {
-         return video;
      }
 
     public void setTemplate(String template) {

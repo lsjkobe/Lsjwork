@@ -103,8 +103,8 @@ public class BaseHelper {
     public <T> void getData(RequestParams params,
                             int getOrPost, final Class<T> cls, final BaseCallBack callBack,
                             final LoadConfig loadConfig) {
-        params.setCacheMaxAge(1000*60);
-        params.setConnectTimeout(1000*6);
+//        params.setCacheMaxAge(1000*60);
+//        params.setConnectTimeout(1000*6);
         Callback.CacheCallback<String> mCallBack = new Callback.CacheCallback<String>() {
 
             @Override
