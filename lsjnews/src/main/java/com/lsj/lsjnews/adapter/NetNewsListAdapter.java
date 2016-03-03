@@ -16,6 +16,7 @@ import com.lsj.lsjnews.base.NewCallBack;
 import com.lsj.lsjnews.bean.LsjNewsBean;
 import com.lsj.lsjnews.bean.LsjNewsList;
 import com.lsj.lsjnews.bean.NewsApi;
+import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.HttpHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
@@ -47,8 +48,11 @@ public class NetNewsListAdapter extends RecyclerView.Adapter<NetNewsListAdapter.
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getLink());
-                getNews();
+                if(datas.get(viewHolder.getAdapterPosition()).getPostid() != null){
+                    UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getPostid());
+                }else{
+                    MyToast.showToast(context, "新闻出现异常");
+                }
             }
 
         });
@@ -62,24 +66,10 @@ public class NetNewsListAdapter extends RecyclerView.Adapter<NetNewsListAdapter.
 //                break;
 //        }
     }
-    public void getNews() {
-        RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyApi.NBA_ID+"/"+"0"+ MyApi.END_URL);
-        HttpHelper.getNewsData(params, new NewCallBack() {
-            @Override
-            public void onSuccess(String s) {
-                super.onSuccess(s);
-                MyLogger.showLogWithLineNum(3, MyApi.NEWS_DETAIL + MyApi.HEADLINE_TYPE + "/" + MyApi.NBA_ID + "/" + "0" + MyApi.END_URL);
-                s = s.substring(1, s.length() - 1);
-                MyToast.showToast(context, s);
-                LsjNewsList mNewsList = JSON.parseObject(s, LsjNewsList.class);
-//                MyLogger.showLogWithLineNum(3, TAG + "" + mNewsList.getTitle());
-            }
-        });
 
-    }
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
-        holder.mTextView.setText(datas.get(position).getDigest());
+        holder.mTextView.setText(datas.get(position).getTitle());
         if(datas.get(position).getImgsrc() != null){
             ImageLoader.getInstance().displayImage(datas.get(position).getImgsrc(), holder.mImgNews);
         }

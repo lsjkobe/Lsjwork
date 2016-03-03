@@ -1,36 +1,24 @@
 package com.lsj.lsjnews.activity;
 
 import android.text.Html;
-
+import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
-import com.example.lsj.httplibrary.utils.MyLogger;
-import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
-import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCallBack;
 import com.lsj.lsjnews.bean.LsjNewsDetail;
 import com.lsj.lsjnews.http.HttpHelper;
 import com.lsj.lsjnews.http.MyApi;
-import com.lsj.lsjnews.test_bean.JsonRootBean;
-import com.lsj.lsjnews.test_bean.testBean;
-import com.lsj.lsjnews.utils.MyUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
-
 import zhou.widget.RichText;
 
 /**
  * Created by Le on 2016/3/2.
  */
 public class NewsInfoShow extends MyBaseActivity{
-    RichText mTextView;
+    private RichText mTextView;
     private String mNewsId;
-
+    private TextView mTxtTitle, mTxtDate, mTxtSource;
     @Override
     protected void initGetIntent() {
         super.initGetIntent();
@@ -41,6 +29,9 @@ public class NewsInfoShow extends MyBaseActivity{
     protected void initView() {
         super.initView();
         mTextView = (RichText) findViewById(R.id.txt_news_content_msg);
+        mTxtTitle = (TextView) findViewById(R.id.txt_news_content_title);
+        mTxtDate = (TextView) findViewById(R.id.txt_news_content_time);
+        mTxtSource = (TextView) findViewById(R.id.txt_news_content_source);
     }
 
     @Override
@@ -54,8 +45,11 @@ public class NewsInfoShow extends MyBaseActivity{
             @Override
             public void onSuccess(String s) {
                 super.onSuccess(s);
-                LsjNewsDetail abc = JSON.parseObject(s, LsjNewsDetail.class);
-                mTextView.setText(Html.fromHtml(abc.getBody()));
+                LsjNewsDetail mDetail = JSON.parseObject(s, LsjNewsDetail.class);
+                mTextView.setText(Html.fromHtml(mDetail.getBody()));
+                mTxtTitle.setText(mDetail.getTitle());
+                mTxtDate.setText(mDetail.getPtime());
+                mTxtSource.setText(mDetail.getSource());
             }
         });
 //        x.http().get(params, new Callback.CommonCallback<String>() {

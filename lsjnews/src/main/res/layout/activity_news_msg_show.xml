@@ -32,47 +32,42 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_size_10"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/txt_news_content_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_margin="@dimen/margin_size_10"
                 android:textSize="@dimen/text_size_26"
                 android:ellipsize="end"
                 android:text="fsjkdfgjsdgfhdjgfhdfkh"/>
             <TextView
+                android:id="@+id/txt_news_content_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:layout_marginLeft="@dimen/margin_size_10"
                 android:textSize="@dimen/text_size_14"
                 android:text="2016.3.2"/>
             <TextView
+                android:id="@+id/txt_news_content_source"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/margin_size_5"
-                android:layout_marginLeft="@dimen/margin_size_10"
                 android:textSize="@dimen/text_size_16"
                 android:text="来源:新华社"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/margin_size_5"
-                android:layout_marginLeft="@dimen/margin_size_10"
-                android:textSize="@dimen/text_size_16"
-                android:text="类别:国内焦点"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:layout_margin="@dimen/margin_size_10"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
                 android:background="@color/blurryolorPrimary"/>
             <zhou.widget.RichText
                 android:id="@+id/txt_news_content_msg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"/>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

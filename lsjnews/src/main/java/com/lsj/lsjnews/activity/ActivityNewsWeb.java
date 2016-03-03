@@ -62,9 +62,8 @@ public class ActivityNewsWeb extends MyBaseActivity{
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+//                view.loadUrl(url);
                 return true;
-
             }
 
             @Override
