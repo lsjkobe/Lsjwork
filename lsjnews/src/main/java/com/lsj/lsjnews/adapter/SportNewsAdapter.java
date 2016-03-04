@@ -8,20 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.example.lsj.httplibrary.utils.MyLogger;
-import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
-import com.lsj.lsjnews.base.NewCallBack;
-import com.lsj.lsjnews.bean.LsjNewsList;
 import com.lsj.lsjnews.bean.NewsApi;
 import com.lsj.lsjnews.common.UiHelper;
-import com.lsj.lsjnews.http.HttpHelper;
-import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.xutils.http.RequestParams;
 
 import java.util.List;
 

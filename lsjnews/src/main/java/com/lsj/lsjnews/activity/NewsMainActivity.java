@@ -17,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
+import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.fragment.FragmentFactory;
 import com.lsj.lsjnews.fragment.NetNewsFragment;
 import com.lsj.lsjnews.fragment.SocialNewsFragment;
 import com.lsj.lsjnews.fragment.SportNewsFragment;
@@ -47,15 +49,18 @@ public class NewsMainActivity extends MyBaseActivity{
     private SocialNewsFragment mLsjMainActivity;
     private SportNewsFragment mSportNewsFragment;
     private NetNewsFragment mNetNewsFragment;
+    private NetNewsFragment mNetNewsFragmen1;
     @Override
     protected void initData() {
         fragmentList = new ArrayList<Fragment>();
         mLsjMainActivity = new SocialNewsFragment();
         mSportNewsFragment = new SportNewsFragment();
-        mNetNewsFragment = new NetNewsFragment();
+        mNetNewsFragment = NetNewsFragment.newInstance(0);
+        mNetNewsFragmen1 = NetNewsFragment.newInstance(1);
         fragmentList.add(mLsjMainActivity);
         fragmentList.add(mSportNewsFragment);
         fragmentList.add(mNetNewsFragment);
+        fragmentList.add(mNetNewsFragmen1);
         mViewPager.setOffscreenPageLimit(4);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fragmentList));
         mViewPager.setCurrentItem(0);
@@ -64,32 +69,9 @@ public class NewsMainActivity extends MyBaseActivity{
     }
 
     private void initToolbar() {
-//        mToolbar.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (MotionEvent.ACTION_DOWN == event.getAction()) {
-//                    count++;
-//                    if (count == 1) {
-//                        firClick = System.currentTimeMillis();
-//
-//                    } else if (count == 2) {
-//                        secClick = System.currentTimeMillis();
-//                        if (secClick - firClick < 1000) {
-//                            //双击事件
-////                            mRecyclerView.smoothScrollToPosition(0);
-//                        }
-//                        count = 0;
-//                        firClick = 0;
-//                        secClick = 0;
-//
-//                    }
-//                }
-//                return true;
-//            }
-//        });
         mCollapsingToolbarLayout.setTitle("科技热点");
         //收缩时的title颜色
-        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.bule));
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
 
         setSupportActionBar(mToolbar);
@@ -122,12 +104,13 @@ public class NewsMainActivity extends MyBaseActivity{
 
         @Override
         public Fragment getItem(int position) {
-            return list.get(position);
+//            return list.get(position);
+            return FragmentFactory.createFragment(position);
         }
 
         @Override
         public int getCount() {
-            return list.size();
+            return MyHelper.News_Type_Count;
         }
 
     }

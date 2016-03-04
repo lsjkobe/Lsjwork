@@ -1,4 +1,6 @@
-package com.lsj.lsjnews.bean;
+package com.lsj.lsjnews.bean.news_type_bean;
+
+import com.lsj.lsjnews.bean.LsjNewsBean;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 

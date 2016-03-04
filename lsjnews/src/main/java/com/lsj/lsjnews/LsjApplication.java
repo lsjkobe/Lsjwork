@@ -3,6 +3,8 @@ package com.lsj.lsjnews;
 import android.app.Application;
 import android.graphics.Bitmap;
 
+import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.http.MyApi;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -16,8 +18,18 @@ public class LsjApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        initFragmentType();
         x.Ext.init(this);
         initImageLoader();
+
+    }
+
+    private void initFragmentType() {
+        MyHelper.mTypeMap.put(MyHelper.HeadLine_news_Type, MyApi.HEADLINE_ID);
+        MyHelper.mTypeMap.put(MyHelper.Sport_News_Type, MyApi.SPORTS_ID);
+        MyHelper.mTypeMap.put(MyHelper.Social_News_Type, MyApi.SOCIETY_ID);
+        MyHelper.mTypeMap.put(MyHelper.NBA_News_Type, MyApi.NBA_ID);
+        MyHelper.mTypeMap.put(MyHelper.FootBall_News_Type, MyApi.FOOTBALL_ID);
     }
 
     private void initImageLoader(){

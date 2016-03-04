@@ -20,7 +20,6 @@ public abstract class BaseFragment extends Fragment {
 	protected Context mContext;
 	public BaseManager baseManager;
 	private View contentView;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -30,13 +29,13 @@ public abstract class BaseFragment extends Fragment {
 		baseManager=new BaseManager(mContext);
 		
 		contentView = baseManager.initBaseView(getLayoutId());
-		
+
 		initGetIntent();
-		
+
 		initTop();
-		
+
 		initView();
-		
+
 		initData();
 	
 		return contentView;
