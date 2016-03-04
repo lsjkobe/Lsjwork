@@ -1,5 +1,6 @@
 package com.lsj.lsjnews.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -58,6 +59,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         mRecyclerView = (RecyclerView) findViewById(R.id.view_news_main_recyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_main_list);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary);
     }
 
     @Override
