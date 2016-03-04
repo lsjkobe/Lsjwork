@@ -12,24 +12,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_gravity="center"
-        android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:textSize="@dimen/text_size_18"
-        android:textColor="@color/white"
-        android:text="社会热点" />
-
-    <com.lsj.lsjnews.utils.CircleImageView
-        android:id="@+id/img_top_menu_item"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_anchor="@id/lay_main_top_bar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="10dp"
-        android:src="@mipmap/ic_launcher"
-        app:border_width="0dp"
-        app:border_color="#00000000"
-        app:cardCornerRadius="3dp"
-        app:cardElevation="12dp"
-        android:visibility="gone"/>
-
+        android:textSize="@dimen/text_size_18"/>
 </LinearLayout>

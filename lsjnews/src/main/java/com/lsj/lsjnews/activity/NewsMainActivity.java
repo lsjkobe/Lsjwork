@@ -1,25 +1,20 @@
 package com.lsj.lsjnews.activity;
 
-
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-
 import com.lsj.lsjnews.R;
-import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.common.mainHelper;
 import com.lsj.lsjnews.fragment.FragmentFactory;
-import com.lsj.lsjnews.fragment.NetNewsFragment;
 import com.lsj.lsjnews.fragment.SocialNewsFragment;
 import com.lsj.lsjnews.fragment.SportNewsFragment;
 
@@ -27,49 +22,49 @@ import java.util.ArrayList;
 
 public class NewsMainActivity extends MyBaseActivity{
 
+    private TabLayout mTabTopMenu;
     private Toolbar mToolbar;
-    private RecyclerView mRecyTopMenu;
-    private TopMenuRecyclerAdapter mTopMenuAdapter;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentList;
 
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private DrawerLayout mLayDrawer;
+    private int mPosition = 0;
     @Override
     protected void initView() {
         super.initView();
         showTopView(false);
-        mRecyTopMenu = (RecyclerView) findViewById(R.id.recy_view_top_menu);
         mToolbar = (Toolbar) findViewById(R.id.tb_main_toolbar);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.lay_main_top_collapsing);
         mLayDrawer = (DrawerLayout) findViewById(R.id.lay_main_drawer);
         mViewPager = (ViewPager) findViewById(R.id.view_pager_news_msg);
-
+        mTabTopMenu = (TabLayout) findViewById(R.id.tabs_news_top_menu);
     }
     private SocialNewsFragment mLsjMainActivity;
     private SportNewsFragment mSportNewsFragment;
-    private NetNewsFragment mNetNewsFragment;
-    private NetNewsFragment mNetNewsFragmen1;
     @Override
     protected void initData() {
         fragmentList = new ArrayList<Fragment>();
         mLsjMainActivity = new SocialNewsFragment();
         mSportNewsFragment = new SportNewsFragment();
-        mNetNewsFragment = NetNewsFragment.newInstance(0);
-        mNetNewsFragmen1 = NetNewsFragment.newInstance(1);
         fragmentList.add(mLsjMainActivity);
         fragmentList.add(mSportNewsFragment);
-        fragmentList.add(mNetNewsFragment);
-        fragmentList.add(mNetNewsFragmen1);
-        mViewPager.setOffscreenPageLimit(4);
-        mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager(), fragmentList));
+        mViewPager.setOffscreenPageLimit(MyHelper.News_Type_Count);
+        mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+        mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
         mViewPager.setCurrentItem(0);
+
+        initTab();
         initToolbar();
-        initRecycleDate();
     }
 
+    private void initTab(){
+        mTabTopMenu.setupWithViewPager(mViewPager);
+        mTabTopMenu.setScrollPosition(0, 0, true);
+        mainHelper.dynamicSetTablayoutMode(mTabTopMenu);
+    }
     private void initToolbar() {
-        mCollapsingToolbarLayout.setTitle("科技热点");
+        mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[0]);
         //收缩时的title颜色
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
@@ -81,25 +76,9 @@ public class NewsMainActivity extends MyBaseActivity{
         mLayDrawer.setDrawerListener(toggle);
         toggle.syncState();
     }
-
-    private void initRecycleDate(){
-        //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext, 1);
-        mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
-        mRecyTopMenu.setLayoutManager(mGridLayoutManager);
-        mTopMenuAdapter = new TopMenuRecyclerAdapter(mContext);
-        mRecyTopMenu.setAdapter(mTopMenuAdapter);
-    }
-
     public class MainPagerAdapter extends FragmentPagerAdapter {
-
-        private ArrayList<Fragment> list;
-        public MainPagerAdapter(FragmentManager fragmentManager, ArrayList<Fragment> list) {
+        public MainPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
-            this.list = list;
         }
 
         @Override
@@ -113,6 +92,33 @@ public class NewsMainActivity extends MyBaseActivity{
             return MyHelper.News_Type_Count;
         }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return MyHelper.News_Name_List[position];
+        }
+
+        @Override
+        public float getPageWidth(int position) {
+            return super.getPageWidth(position);
+        }
+    }
+    private class mOnPageChangeListener implements ViewPager.OnPageChangeListener{
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+        @Override
+        public void onPageSelected(int position) {
+            if(!FragmentFactory.createFragment(position).isLoadSuccess){
+                FragmentFactory.createFragment(position).baseLoadData();
+            }
+            mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[position]);
+        }
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
     }
     @Override
     protected int getLayoutId() {

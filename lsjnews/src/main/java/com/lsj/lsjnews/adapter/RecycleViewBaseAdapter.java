@@ -9,13 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
-import com.lsj.lsjnews.bean.LsjNewsBean;
-import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.interfaces.OnRefresh;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -25,9 +20,11 @@ import java.util.List;
 public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<RecycleViewBaseAdapter.NewsViewHolder> {
     protected Context context;
     protected List<T> datas;
-    public RecycleViewBaseAdapter(Context context, List<T> datas){
+    private boolean is_show_anim;
+    public RecycleViewBaseAdapter(Context context, List<T> datas, boolean is_show_anim){
         this.context = context;
         this.datas = datas;
+        this.is_show_anim = is_show_anim;
     }
     @Override
     public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,7 +41,9 @@ public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<Rec
                 mRefresh.Refresh();
             }
         }
-        setAnimation(holder.itemView, position);
+        if(is_show_anim){
+            setAnimation(holder.itemView, position);
+        }
     }
 
     @Override
@@ -62,11 +61,20 @@ public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<Rec
             lastPosition = position;
         }
     }
+
+    //回收item动画效果，不做这处理会出现item错乱
+    @Override
+    public void onViewDetachedFromWindow(RecycleViewBaseAdapter.NewsViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.itemView.clearAnimation();
+    }
+
     //新闻列表滑到底部接口
     OnRefresh mRefresh;
     public void setOnRefresh(OnRefresh mRefresh){
         this.mRefresh = mRefresh;
     }
+
     @Override
     public int getItemCount() {
         return datas.size();

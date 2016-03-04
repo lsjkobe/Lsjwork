@@ -99,7 +99,9 @@ public abstract class BaseFragment extends Fragment {
 	/**
 	 * 用于加载网络抓取的数据
 	 */
-	public void baseLoadData(){};
+	public void baseLoadData(){
+
+	};
 	
 	/**
 	 * 这个页面的布局

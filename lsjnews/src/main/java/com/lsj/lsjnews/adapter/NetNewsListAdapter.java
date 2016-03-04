@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class NetNewsListAdapter extends RecycleViewBaseAdapter<LsjNewsBean> {
 
-    public NetNewsListAdapter(Context context, List<LsjNewsBean> datas) {
-        super(context, datas);
+    public NetNewsListAdapter(Context context, List<LsjNewsBean> datas, boolean is_show_anim) {
+        super(context, datas,is_show_anim);
     }
     @Override
     public int getItemLayoutId(int viewType) {

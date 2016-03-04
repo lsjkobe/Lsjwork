@@ -3,13 +3,9 @@ package com.lsj.lsjnews;
 
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
@@ -18,7 +14,6 @@ import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.widget.RecyclerItemClickListener;
 import com.lsj.lsjnews.adapter.MyRecyclerViewAdapter;
-import com.lsj.lsjnews.adapter.TopMenuRecyclerAdapter;
 import com.lsj.lsjnews.base.LsjBaseCallBack;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
@@ -37,10 +32,8 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
 
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
-    private RecyclerView mRecyTopMenu;
     private List<ApiNewsMsg.NewsBean> NewsList = new ArrayList<>();
     private MyRecyclerViewAdapter mAdapter;
-    private TopMenuRecyclerAdapter mTopMenuAdapter;
 //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private int page = 1;
 
@@ -55,7 +48,6 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         super.initView();
         showTopView(false);
         mRecyclerView = (RecyclerView) findViewById(R.id.view_main_recyclerView);
-        mRecyTopMenu = (RecyclerView) findViewById(R.id.recy_view_top_menu);
 //        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_list);
         mToolbar = (Toolbar) findViewById(R.id.tb_main_toolbar);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.lay_main_top_collapsing);
@@ -91,7 +83,6 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
     protected void initData() {
 
         initToolbar();
-        initRecycleDate();
         baseLoadData();
         getNews();
     }
@@ -110,30 +101,6 @@ public class MainActivity extends MyBaseActivity implements SwipeRefreshLayout.O
         toggle.syncState();
     }
 
-    private void initRecycleDate(){
-        //设置布局管理器
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(mContext, onItemClickListener));
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(page%5 == 0){
-                    Snackbar.make(mRecyclerView,"双击导航栏回到顶部"+page,Snackbar.LENGTH_LONG).show();
-                }
-
-            }
-        });
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext, 1);
-        mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
-        mRecyTopMenu.setLayoutManager(mGridLayoutManager);
-        mTopMenuAdapter = new TopMenuRecyclerAdapter(mContext);
-        mRecyTopMenu.setAdapter(mTopMenuAdapter);
-    }
     private RecyclerItemClickListener.OnItemClickListener onItemClickListener = new RecyclerItemClickListener.OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
