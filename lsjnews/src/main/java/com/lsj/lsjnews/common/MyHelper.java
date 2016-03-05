@@ -1,7 +1,5 @@
 package com.lsj.lsjnews.common;
 
-import com.lsj.lsjnews.http.MyApi;
-
 import java.util.HashMap;
 import java.util.Map;
 

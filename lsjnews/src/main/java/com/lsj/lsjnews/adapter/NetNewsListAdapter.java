@@ -4,12 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.bean.LsjNewsBean;
 import com.lsj.lsjnews.common.UiHelper;
-
+import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 /**
@@ -35,7 +34,7 @@ public class NetNewsListAdapter extends RecycleViewBaseAdapter<LsjNewsBean> {
             @Override
             public void onClick(View v) {
                 if(datas.get(viewHolder.getAdapterPosition()).getPostid() != null){
-                    UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getPostid());
+                    UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getPostid(),datas.get(viewHolder.getAdapterPosition()).getImgsrc(),v);
                 }else{
                     MyToast.showToast(context, "新闻出现异常");
                 }
@@ -54,7 +53,19 @@ public class NetNewsListAdapter extends RecycleViewBaseAdapter<LsjNewsBean> {
     }
 
     @Override
+    public int getItemViewType(int position) {
+
+        if(datas.get(position).getImgsrc() == null){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
+    @Override
     public void initData(NewsViewHolder holder, int position, LsjNewsBean item) {
-        holder.mTextView.setText(item.getTitle()); //
+        holder.mTextView.setText(item.getTitle());
+        holder.mTxtDate.setText(item.getPtime());
+        ImageLoader.getInstance().displayImage(item.getImgsrc(),holder.mImgNews);
     }
 }

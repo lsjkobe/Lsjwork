@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.bean.NewsApi;
 import com.lsj.lsjnews.common.UiHelper;

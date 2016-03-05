@@ -3,7 +3,7 @@ package com.lsj.lsjnews.base;
 import com.example.lsj.httplibrary.base.BaseFragment;
 
 /**
- * Created by Le on 2016/3/4.
+ * Created by lsj on 2016/3/4.
  */
 public abstract class LsjBaseFragment extends BaseFragment{
     boolean isVisible = false;

@@ -13,8 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.lsj.httplibrary.base.BaseFragment;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.common.MyHelper;
@@ -85,14 +83,13 @@ public class NewsMainActivity extends MyBaseActivity{
                 return true;
             }
         });
-//        mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[0]);
+        mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[0]);
         //收缩时的title颜色
-//        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+        mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.parseColor("#003300"));
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
 
         setSupportActionBar(mToolbar);
-
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.bule));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
                 R.string.app_name);
         mLayDrawer.setDrawerListener(toggle);
@@ -140,8 +137,7 @@ public class NewsMainActivity extends MyBaseActivity{
                 FragmentFactory.createFragment(position).baseLoadData();
             }
             mPosition = position;
-//            mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[position]);
-            mToolbar.setTitle(MyHelper.News_Name_List[position]);
+            mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[position]);
         }
         @Override
         public void onPageScrollStateChanged(int state) {

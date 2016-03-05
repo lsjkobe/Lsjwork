@@ -1,21 +1,12 @@
 package com.lsj.lsjnews.base;
 
 import android.content.Context;
-
 import com.example.lsj.httplibrary.callback.BaseCallBack;
 import com.example.lsj.httplibrary.callback.FailMessg;
 import com.example.lsj.httplibrary.utils.MyLogger;
-import com.example.lsj.httplibrary.utils.MyToast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Iterator;
-
 
 /**
- * Created by Administrator on 2016/2/27.
+ * Created by lsj on 2016/2/27.
  */
 public class LsjBaseCallBack extends BaseCallBack{
 

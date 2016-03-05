@@ -6,12 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
+    android:background="#33009688"
     app:tabGravity="center"
-    app:tabIndicatorColor="@color/white"
+    app:tabIndicatorColor="@color/colorPrimary"
     app:tabMode="scrollable"
-    app:tabSelectedTextColor="@color/white"
-    app:tabTextColor="@color/material_grey_300"
+    app:tabSelectedTextColor="@color/colorPrimary"
+    app:tabTextColor="#bb009688"
     app:tabTextAppearance="@style/MyTabLayoutTextSize"
     tools:ignore="PrivateResource"
     android:layout_gravity="bottom"/>
+<!--
+    app:tabSelectedTextColor="@color/white"
+    app:tabTextColor="@color/material_grey_300"-->

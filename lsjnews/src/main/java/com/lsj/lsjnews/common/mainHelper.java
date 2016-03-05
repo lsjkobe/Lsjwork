@@ -17,7 +17,7 @@ import com.lsj.lsjnews.utils.MyUtil;
 import java.util.List;
 
 /**
- * Created by Le on 2016/3/4.
+ * Created by lsj on 2016/3/4.
  */
 public class mainHelper {
     private static NBANewsList nbaNewsList;

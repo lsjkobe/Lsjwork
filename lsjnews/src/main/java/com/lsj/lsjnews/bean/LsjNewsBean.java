@@ -3,7 +3,7 @@ package com.lsj.lsjnews.bean;
 import java.util.List;
 
 /**
- * Created by Le on 2016/3/3.
+ * Created by lsj on 2016/3/3.
  */
 public class LsjNewsBean {
     private String postid;

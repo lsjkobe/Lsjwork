@@ -82,10 +82,12 @@ public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<Rec
     class NewsViewHolder extends RecyclerView.ViewHolder{
         TextView mTextView;
         ImageView mImgNews;
+        TextView mTxtDate;
         public NewsViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.txt_news_msg_1);
             mImgNews = (ImageView) itemView.findViewById(R.id.img_news_header_1);
+            mTxtDate = (TextView) itemView.findViewById(R.id.txt_news_date_1);
         }
     }
 }

@@ -1,9 +1,6 @@
 package com.lsj.lsjnews.base;
 
-import android.graphics.Color;
 import android.os.Build;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.lsj.httplibrary.base.BaseActivity;
@@ -11,7 +8,7 @@ import com.example.lsj.httplibrary.utils.SystemBarTintManager;
 import com.lsj.lsjnews.R;
 
 /**
- * Created by Le on 2016/1/29.
+ * Created by lsj on 2016/1/29.
  */
 public abstract class MyBaseActivity extends BaseActivity{
     @Override

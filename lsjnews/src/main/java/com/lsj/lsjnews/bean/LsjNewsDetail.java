@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Le on 2016/3/2.
+ * Created by lsj on 2016/3/2.
  */
 public class LsjNewsDetail implements Serializable {
 

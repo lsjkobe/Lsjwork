@@ -1,8 +1,6 @@
 package com.lsj.lsjnews.activity;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.View;
 import android.webkit.ClientCertRequest;
 import android.webkit.WebChromeClient;
@@ -15,7 +13,7 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
 
 /**
- * Created by Administrator on 2016/2/27.
+ * Created by lsj on 2016/2/27.
  */
 public class ActivityNewsWeb extends MyBaseActivity{
     private WebView mWebNewsInfo;

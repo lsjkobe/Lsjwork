@@ -4,4 +4,6 @@
     <color name="blurryolorPrimary">#66009688</color>
     <color name="colorPrimaryDark">#009688</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="textcolor">#333333</color>
+    <color name="datecolor">#666666</color>
 </resources>

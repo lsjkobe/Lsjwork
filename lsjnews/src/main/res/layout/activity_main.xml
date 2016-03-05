@@ -19,12 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:contentScrim="?attr/colorPrimary">
+            app:contentScrim="?attr/colorPrimary"
+            android:background="@mipmap/bg_news_list_top">
             <include layout="@layout/tab_news_top_menu"/>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tb_main_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
+                android:layout_height="52dp"
                 app:layout_collapseMode="pin" >
 
             </android.support.v7.widget.Toolbar>

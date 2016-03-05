@@ -7,13 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.bean.ApiNewsMsg;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 
