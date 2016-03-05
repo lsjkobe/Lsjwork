@@ -6,11 +6,13 @@ import android.view.View;
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.utils.LPhone;
 import com.lsj.lsjnews.bean.LsjNewsBean;
+import com.lsj.lsjnews.bean.NewNewsList;
 import com.lsj.lsjnews.bean.news_type_bean.FootBallNewsList;
 import com.lsj.lsjnews.bean.news_type_bean.HeadLineNewsList;
 import com.lsj.lsjnews.bean.news_type_bean.LsjNewsList;
 import com.lsj.lsjnews.bean.news_type_bean.NBANewsList;
 import com.lsj.lsjnews.bean.news_type_bean.SocialNewsList;
+import com.lsj.lsjnews.utils.MyUtil;
 
 import java.util.List;
 
@@ -63,6 +65,16 @@ public class mainHelper {
             default:
                 return  null;
         }
+    }
+    public static List<LsjNewsBean> getNewsData(String str){
+        String jsonString = MyUtil.setJsonToNewJson(str);
+        NewNewsList LsjNewsList = JSON.parseObject(jsonString, NewNewsList.class);
+        if(LsjNewsList.getMyNewsList() != null){
+            return LsjNewsList.getMyNewsList();
+        }else{
+            return null;
+        }
+
     }
 
     /**

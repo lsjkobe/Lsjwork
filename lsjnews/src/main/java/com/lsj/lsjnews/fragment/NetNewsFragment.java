@@ -8,20 +8,27 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONReader;
+import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.NetNewsListAdapter;
 import com.lsj.lsjnews.bean.LsjNewsBean;
+import com.lsj.lsjnews.bean.NewNewsList;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.mainHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
+import com.lsj.lsjnews.utils.MyUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +101,8 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         });
 
     }
-
+    NewNewsList LsjNewsList;
+    String jsonString;
     @Override
     public void baseLoadData() {
         super.baseLoadData();
@@ -106,13 +114,23 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
             @Override
             public void onSuccess(String str) {
                 isLoadSuccess = true;
-                if (mainHelper.getNewsDataByType(mFragmentType, str) != null) {
+                jsonString = null;
+                jsonString = MyUtil.setJsonToNewJson(str);
+                LsjNewsList = JSON.parseObject(jsonString, NewNewsList.class);
+                if (LsjNewsList.getMyNewsList() != null) {
                     if (page == 0) {
                         mSportNewsList.clear();
                     }
-                    mSportNewsList.addAll(mainHelper.getNewsDataByType(mFragmentType, str));
+                    mSportNewsList.addAll(LsjNewsList.getMyNewsList());
                     initOrRefresh();
                 }
+//                if (mainHelper.getNewsDataByType(mFragmentType, str) != null) {
+//                    if (page == 0) {
+//                        mSportNewsList.clear();
+//                    }
+//                    mSportNewsList.addAll(mainHelper.getNewsDataByType(mFragmentType, str));
+//                    initOrRefresh();
+//                }
             }
 
             @Override
@@ -129,18 +147,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
             public void onFinished() {
                 mSwipeRefreshLayout.setRefreshing(false);
                 MyLogger.showLogWithLineNum(3, TAG + ":onFinished");
-                if(first){
-                    first = false;
-                    mAdapter.setOnRefresh(new OnRefresh() {
-                        @Override
-                        public void Refresh() {
-                            MyLogger.showLogWithLineNum(3,"到底了");
-                            page++;
-                            baseLoadData();
-                            mSwipeRefreshLayout.setRefreshing(true);
-                        }
-                    });
-                }
+
             }
         });
     }
@@ -149,7 +156,20 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         if(mAdapter == null){
             mAdapter = new NetNewsListAdapter(mContext, mSportNewsList, true);
             mRecyclerView.setAdapter(mAdapter);
-
+            if(first){
+                first = false;
+                mAdapter.setOnRefresh(new OnRefresh() {
+                    @Override
+                    public void Refresh() {
+                        if(!mSwipeRefreshLayout.isRefreshing()){
+                            MyLogger.showLogWithLineNum(3,"到底了");
+                            page++;
+                            baseLoadData();
+                            mSwipeRefreshLayout.setRefreshing(true);
+                        }
+                    }
+                });
+            }
         }else{
             mAdapter.notifyDataSetChanged();
         }
