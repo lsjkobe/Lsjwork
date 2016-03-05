@@ -1,6 +1,5 @@
 package com.lsj.lsjnews.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,16 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONReader;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
+import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.NetNewsListAdapter;
 import com.lsj.lsjnews.bean.LsjNewsBean;
 import com.lsj.lsjnews.bean.NewNewsList;
 import com.lsj.lsjnews.common.MyHelper;
-import com.lsj.lsjnews.common.mainHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.lsj.lsjnews.utils.MyUtil;
@@ -28,7 +25,6 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +34,7 @@ import java.util.List;
 public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TAG = "NetNewsFragment.class";
-    private RecyclerView mRecyclerView;
+    public RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NetNewsListAdapter mAdapter;
     private List<LsjNewsBean> mSportNewsList = new ArrayList<>();
@@ -56,7 +52,10 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
     protected void initGetIntent() {
         super.initGetIntent();
         mFragmentType = getArguments().getInt("type");
-        MyLogger.showLogWithLineNum(3, "====================type:" + mFragmentType);
+    }
+
+    public void ToTop(){
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
@@ -77,6 +76,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         }
     }
 
+    private boolean isFirst = true;
     private void initRecycleDate(){
         //设置布局管理器
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
@@ -87,13 +87,9 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                final Snackbar mSnackbar = Snackbar.make(mRecyclerView, "回到顶部", Snackbar.LENGTH_SHORT).setAction("確定", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mRecyclerView.smoothScrollToPosition(0);
-                    }
-                });
-                if (dy < 0) {
+                final Snackbar mSnackbar = Snackbar.make(mRecyclerView, "双击导航回到顶部", Snackbar.LENGTH_SHORT);
+                if (dy < 0 && page >3 && isFirst) {
+                    isFirst = false;
                     mSnackbar.show();
                 }
             }

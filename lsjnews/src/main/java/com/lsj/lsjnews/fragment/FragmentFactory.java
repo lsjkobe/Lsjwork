@@ -2,7 +2,7 @@ package com.lsj.lsjnews.fragment;
 
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.lsj.lsjnews.common.MyHelper;
-import com.lsj.lsjnews.utils.FragmentManager;
+import com.lsj.lsjnews.utils.LsjFragmentManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +31,7 @@ public class FragmentFactory {
                     baseFragment = NetNewsFragment.newInstance(MyHelper.FootBall_News_Type);
                     break;
             }
-            FragmentManager.getAppManager().addFragment(baseFragment);
+            LsjFragmentManager.getAppManager().addFragment(baseFragment);
             mFagmentMap.put(index, baseFragment);
         }
         return baseFragment;

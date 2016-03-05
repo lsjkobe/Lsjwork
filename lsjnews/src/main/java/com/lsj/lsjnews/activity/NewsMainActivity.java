@@ -10,23 +10,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.lsj.httplibrary.base.BaseFragment;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.mainHelper;
 import com.lsj.lsjnews.fragment.FragmentFactory;
-import com.lsj.lsjnews.fragment.SocialNewsFragment;
-import com.lsj.lsjnews.fragment.SportNewsFragment;
+import com.lsj.lsjnews.fragment.NetNewsFragment;
 
-import java.util.ArrayList;
 
 public class NewsMainActivity extends MyBaseActivity{
 
     private TabLayout mTabTopMenu;
     private Toolbar mToolbar;
     private ViewPager mViewPager;
-    private ArrayList<Fragment> fragmentList;
-
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private DrawerLayout mLayDrawer;
     private int mPosition = 0;
@@ -40,15 +41,8 @@ public class NewsMainActivity extends MyBaseActivity{
         mViewPager = (ViewPager) findViewById(R.id.view_pager_news_msg);
         mTabTopMenu = (TabLayout) findViewById(R.id.tabs_news_top_menu);
     }
-    private SocialNewsFragment mLsjMainActivity;
-    private SportNewsFragment mSportNewsFragment;
     @Override
     protected void initData() {
-        fragmentList = new ArrayList<Fragment>();
-        mLsjMainActivity = new SocialNewsFragment();
-        mSportNewsFragment = new SportNewsFragment();
-        fragmentList.add(mLsjMainActivity);
-        fragmentList.add(mSportNewsFragment);
         mViewPager.setOffscreenPageLimit(MyHelper.News_Type_Count);
         mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
         mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
@@ -63,14 +57,42 @@ public class NewsMainActivity extends MyBaseActivity{
         mTabTopMenu.setScrollPosition(0, 0, true);
         mainHelper.dynamicSetTablayoutMode(mTabTopMenu);
     }
+    private int count = 0;
+    private long firClick = 0,secClick = 0;
     private void initToolbar() {
-        mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[0]);
+        //双击回到顶部
+        mToolbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    count++;
+                    if(count == 1){
+                        firClick = System.currentTimeMillis();
+
+                    } else if (count == 2){
+                        secClick = System.currentTimeMillis();
+                        if(secClick - firClick < 1000){
+                            //双击事件
+                            ((NetNewsFragment)FragmentFactory.getFragment(mPosition)).ToTop();
+                        }
+                        count = 0;
+                        firClick = 0;
+                        secClick = 0;
+
+                    }
+                }
+                return true;
+            }
+        });
+//        mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[0]);
         //收缩时的title颜色
-        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
+//        mCollapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.white));
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
 
         setSupportActionBar(mToolbar);
-//        getSupportActionBar().setLogo(R.mipmap.ic_menu);
+
+        mToolbar.setTitleTextColor(getResources().getColor(R.color.bule));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
                 R.string.app_name);
         mLayDrawer.setDrawerListener(toggle);
@@ -79,6 +101,10 @@ public class NewsMainActivity extends MyBaseActivity{
     public class MainPagerAdapter extends FragmentPagerAdapter {
         public MainPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
+        }
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
         }
 
         @Override
@@ -113,7 +139,9 @@ public class NewsMainActivity extends MyBaseActivity{
             if(!FragmentFactory.createFragment(position).isLoadSuccess){
                 FragmentFactory.createFragment(position).baseLoadData();
             }
-            mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[position]);
+            mPosition = position;
+//            mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[position]);
+            mToolbar.setTitle(MyHelper.News_Name_List[position]);
         }
         @Override
         public void onPageScrollStateChanged(int state) {
