@@ -1,6 +1,7 @@
 package com.lsj.lsjnews.activity;
 
 import android.annotation.TargetApi;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
@@ -10,13 +11,16 @@ import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCallBack;
 import com.lsj.lsjnews.bean.LsjNewsDetail;
 import com.lsj.lsjnews.http.HttpHelper;
 import com.lsj.lsjnews.http.MyApi;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.lsj.lsjnews.utils.AnimUtil;
 import org.xutils.http.RequestParams;
 import zhou.widget.RichText;
 
@@ -50,6 +54,11 @@ public class NewsInfoShow extends MyBaseActivity{
     @Override
     protected void initData() {
         getInfo();
+        mTextView.startAnimation(AnimUtil.getBottomInAnim100(mContext));
+        mTxtDate.startAnimation(AnimUtil.getRightInAnim(mContext));
+        mTxtSource.startAnimation(AnimUtil.getRightInAnim(mContext));
+        mTxtTitle.startAnimation(AnimUtil.getLeftInAnim(mContext));
+//        baseManager.getBaseView().startAnimation(animation);
     }
     private void getInfo(){
         String http_link = MyApi.NEWS_DETAIL+mNewsId+MyApi.ENDDETAIL_URL;
@@ -68,7 +77,12 @@ public class NewsInfoShow extends MyBaseActivity{
 
                     mVideoHead.setVisibility(View.GONE);
                     mImgHead.setVisibility(View.VISIBLE);
-                    ImageLoader.getInstance().displayImage(mImgSrc, mImgHead);
+//                    ImageLoader.getInstance().displayImage(mImgSrc, mImgHead);
+                    if(mDetail.getImg() != null && mDetail.getImg().size() != 0){
+                        Glide.with(mContext).load(mDetail.getImg().get(0).getSrc()).placeholder(R.drawable.loading).into(mImgHead);
+                    }else{
+                        Glide.with(mContext).load(mImgSrc).placeholder(R.drawable.loading).into(mImgHead);
+                    }
 
                 }else{
 

@@ -23,6 +23,7 @@ public class ActivityNewsWeb extends MyBaseActivity{
     protected void initGetIntent() {
         super.initGetIntent();
         url = getIntent().getStringExtra("news_url");
+
     }
 
     @Override

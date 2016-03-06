@@ -51,6 +51,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         mFragmentType = getArguments().getInt("type");
     }
 
+    //上层activity双击导航回到顶部
     public void ToTop(){
         mRecyclerView.smoothScrollToPosition(0);
     }

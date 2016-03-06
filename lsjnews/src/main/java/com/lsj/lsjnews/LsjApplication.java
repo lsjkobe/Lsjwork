@@ -18,12 +18,10 @@ public class LsjApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        initFragmentType();
         x.Ext.init(this);
         initImageLoader();
-
+        initFragmentType();
     }
-
     private void initFragmentType() {
         MyHelper.mTypeMap.put(MyHelper.HeadLine_news_Type, MyApi.HEADLINE_ID);
         MyHelper.mTypeMap.put(MyHelper.Sport_News_Type, MyApi.SPORTS_ID);
@@ -31,7 +29,6 @@ public class LsjApplication extends Application{
         MyHelper.mTypeMap.put(MyHelper.NBA_News_Type, MyApi.NBA_ID);
         MyHelper.mTypeMap.put(MyHelper.FootBall_News_Type, MyApi.FOOTBALL_ID);
     }
-
     private void initImageLoader(){
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisk(true)
