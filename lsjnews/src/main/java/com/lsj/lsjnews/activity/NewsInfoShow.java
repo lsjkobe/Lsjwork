@@ -79,7 +79,9 @@ public class NewsInfoShow extends MyBaseActivity{
                     mImgHead.setVisibility(View.VISIBLE);
 //                    ImageLoader.getInstance().displayImage(mImgSrc, mImgHead);
                     if(mDetail.getImg() != null && mDetail.getImg().size() != 0){
-                        Glide.with(mContext).load(mDetail.getImg().get(0).getSrc()).placeholder(R.drawable.loading).into(mImgHead);
+                        Glide.with(mContext).load(mDetail.getImg().get(0).getSrc()).into(mImgHead)
+//                                .placeholder(R.drawable.loading) //加载完之前的图
+                        ;
                     }else{
                         Glide.with(mContext).load(mImgSrc).placeholder(R.drawable.loading).into(mImgHead);
                     }
