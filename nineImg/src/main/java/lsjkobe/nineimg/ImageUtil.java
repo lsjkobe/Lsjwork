@@ -3,6 +3,7 @@ package lsjkobe.nineimg;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,10 @@ public class ImageUtil {
     static Bitmap bitmap;
     static Bitmap itemBitmap = null;
     static List<Bitmap> pieces;
-    public static List<Bitmap> getImageList(Resources res) {
-        bitmap = BitmapFactory.decodeResource(res, R.mipmap.bg1);
+    public static List<Bitmap> getImageList(Resources res, String bitmapPath) {
+        Log.i("-------lsj---------",bitmapPath);
+        bitmap = BitmapFactory.decodeFile(bitmapPath);
+//        bitmap = BitmapFactory.decodeResource(res, R.mipmap.bg1);
         pieces = new ArrayList<Bitmap>();
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();

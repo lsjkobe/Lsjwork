@@ -14,7 +14,6 @@
             <option value="$PROJECT_DIR$/httplibrary" />
             <option value="$PROJECT_DIR$/lsjnews" />
             <option value="$PROJECT_DIR$/nineImg" />
-            <option value="$PROJECT_DIR$/test" />
           </set>
         </option>
         <option name="myModules">
@@ -24,7 +23,6 @@
             <option value="$PROJECT_DIR$/httplibrary" />
             <option value="$PROJECT_DIR$/lsjnews" />
             <option value="$PROJECT_DIR$/nineImg" />
-            <option value="$PROJECT_DIR$/test" />
           </set>
         </option>
       </GradleProjectSettings>
