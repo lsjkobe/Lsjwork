@@ -2,6 +2,7 @@ package com.lsj.lsjnews.activity;
 
 import android.annotation.TargetApi;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
@@ -21,6 +22,8 @@ import com.lsj.lsjnews.bean.LsjNewsDetail;
 import com.lsj.lsjnews.http.HttpHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.utils.AnimUtil;
+import com.lsj.lsjnews.view.LsjLoadingView;
+
 import org.xutils.http.RequestParams;
 import zhou.widget.RichText;
 
@@ -33,6 +36,7 @@ public class NewsInfoShow extends MyBaseActivity{
     private TextView mTxtTitle, mTxtDate, mTxtSource;
     private ImageView mImgHead;
     private VideoView mVideoHead;
+    private LsjLoadingView mViewLoading;
     @Override
     protected void initGetIntent() {
         super.initGetIntent();
@@ -49,6 +53,7 @@ public class NewsInfoShow extends MyBaseActivity{
         mTxtSource = (TextView) findViewById(R.id.txt_news_content_source);
         mImgHead = (ImageView) findViewById(R.id.img_news_head_img);
         mVideoHead = (VideoView) findViewById(R.id.video_news_head);
+        mViewLoading = (LsjLoadingView) findViewById(R.id.view_news_video_loading);
     }
 
     @Override
@@ -64,11 +69,15 @@ public class NewsInfoShow extends MyBaseActivity{
         String http_link = MyApi.NEWS_DETAIL+mNewsId+MyApi.ENDDETAIL_URL;
         RequestParams params = new RequestParams(http_link);
         HttpHelper.getNewsData(params, new NewCallBack(){
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             @Override
             public void onSuccess(String s) {
                 super.onSuccess(s);
                 LsjNewsDetail mDetail = JSON.parseObject(s, LsjNewsDetail.class);
+                if(mDetail == null || mDetail.getBody() == null){
+                    MyToast.showToast(mContext, "新闻获取不了");
+                    finish();
+                }
                 mTextView.setText(Html.fromHtml(mDetail.getBody()));
                 mTxtTitle.setText(mDetail.getTitle());
                 mTxtDate.setText(mDetail.getPtime());
@@ -89,6 +98,8 @@ public class NewsInfoShow extends MyBaseActivity{
                 }else{
 
                     mVideoHead.setVisibility(View.VISIBLE);
+                    mViewLoading.setVisibility(View.VISIBLE);
+                    mViewLoading.startLoadingAnim();
                     mImgHead.setVisibility(View.GONE);
                     mVideoHead.setMediaController(new MediaController(mContext));
                     mVideoHead.setVideoURI(Uri.parse(mDetail.getVideo().get(0).getUrl_mp4()));
@@ -96,6 +107,14 @@ public class NewsInfoShow extends MyBaseActivity{
                     mVideoHead.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            mVideoHead.start();
+                        }
+                    });
+                    mVideoHead.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mViewLoading.setVisibility(View.GONE);
+                            mViewLoading.onCleanAnim();
                             mVideoHead.start();
                         }
                     });

@@ -35,6 +35,7 @@ public class NetNewsListAdapter extends RecycleViewBaseAdapter<LsjNewsBean> {
             public void onClick(View v) {
                 if(datas.get(viewHolder.getAdapterPosition()).getPostid() != null){
                     UiHelper.showNewsInfoThis(context, datas.get(viewHolder.getAdapterPosition()).getPostid(),datas.get(viewHolder.getAdapterPosition()).getImgsrc(),v);
+//                    UiHelper.showTest(context);
                 }else{
                     MyToast.showToast(context, "新闻出现异常");
                 }

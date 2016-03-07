@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -39,13 +40,14 @@ public class NewsMainActivity extends MyBaseActivity{
         mViewPager = (ViewPager) findViewById(R.id.view_pager_news_msg);
         mTabTopMenu = (TabLayout) findViewById(R.id.tabs_news_top_menu);
     }
+    MainPagerAdapter mAdapter = new MainPagerAdapter(getSupportFragmentManager());
     @Override
     protected void initData() {
         mViewPager.setOffscreenPageLimit(MyHelper.News_Type_Count);
-        mViewPager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+//        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
-        mViewPager.setCurrentItem(0);
-
+//        mViewPager.setCurrentItem(0);
         initTab();
         initToolbar();
     }
@@ -109,6 +111,11 @@ public class NewsMainActivity extends MyBaseActivity{
 //            return list.get(position);
             return FragmentFactory.createFragment(position);
         }
+
+//        @Override
+//        public Object instantiateItem(ViewGroup container, int position) {
+//            return FragmentFactory.createFragment(position);
+//        }
 
         @Override
         public int getCount() {

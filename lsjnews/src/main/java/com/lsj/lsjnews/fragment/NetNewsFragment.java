@@ -69,6 +69,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     protected void initData() {
         initRecycleDate();
+
         if(mFragmentType == 0){
             baseLoadData();
         }
@@ -107,6 +108,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String str) {
+                MyLogger.showLogWithLineNum(3, TAG + page+"lsj:"+str);
                 isLoadSuccess = true;
                 jsonString = null;
                 jsonString = MyUtil.setJsonToNewJson(str);

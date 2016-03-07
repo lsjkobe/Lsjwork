@@ -27,6 +27,8 @@
         <activity
             android:name=".activity.NewsInfoShow"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".activity.lsj_test1"/>
     </application>
 
 </manifest>
