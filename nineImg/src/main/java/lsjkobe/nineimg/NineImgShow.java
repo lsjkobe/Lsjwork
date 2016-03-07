@@ -3,9 +3,11 @@ package lsjkobe.nineimg;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -39,8 +41,6 @@ public class NineImgShow extends Activity implements View.OnClickListener{
         mBitmapPath = getIntent().getStringExtra("bitmap");
         initView();
         initData();
-
-
     }
 
 
@@ -76,7 +76,17 @@ public class NineImgShow extends Activity implements View.OnClickListener{
                 for(int i = 0; i<9; i++){
                     ImageFileUtil.saveMyBitmap(imageBitmap.get(i), "nine_img_"+i);
                 }
+                /**
+                 * 这样就保存好了，可是有的时候明明保存下来了，为什么进入相册时查看不到呢？
+                 * 反正我是遇到这样的问题的，原来我们在保存成功后，还要发一个系统广播通知手机有图片更新，广播如下：
+                  */
+                ImageFileUtil.deleteFile(mBitmapPath);
                 Toast.makeText(context, "成功", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri uri = Uri.fromFile(ImageFileUtil.createDirectory(ImageFileUtil.SDPATH));
+                intent.setData(uri);
+                context.sendBroadcast(intent);
+                finish();
                 break;
             case R.id.card_cancel:
                 finish();
@@ -130,4 +140,5 @@ public class NineImgShow extends Activity implements View.OnClickListener{
         }
         ImageUtil.cleanBitmap();
     }
+
 }

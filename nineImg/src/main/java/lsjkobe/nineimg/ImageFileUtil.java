@@ -102,6 +102,15 @@ public class ImageFileUtil {
 		dir.delete();// 删除目录本身
 	}
 
+	public static  void deleteFile(String filePath){
+		File file = new File(filePath);
+		if (file.exists()) { // 判断文件是否存在
+			if (file.isFile()) { // 判断是否是文件
+				file.delete(); // delete()方法 你应该知道 是删除的意思;
+			}
+		}
+	}
+
 	public static boolean fileIsExists(String path) {
 		try {
 			File f = new File(path);

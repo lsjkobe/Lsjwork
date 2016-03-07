@@ -7,18 +7,18 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Button;
-
+import android.widget.TextView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    private Button mBtnNine;
+    private CardView mCardNine;
     private Context context = this;
+    private TextView mTxtView;
     public static final int NONE = 0;
     public static final int GETFROMPHONE = 1;
     public static final int GETFROMCAMERA = 2;
@@ -32,7 +32,8 @@ public class MainActivity extends Activity {
     }
 
     private void initView() {
-        mBtnNine = (Button) findViewById(R.id.btn_nine_img_show);
+        mCardNine = (CardView) findViewById(R.id.card_nine_img_show);
+        mTxtView = (TextView) findViewById(R.id.txt_tip);
     }
 
     protected void initData() {
@@ -43,7 +44,8 @@ public class MainActivity extends Activity {
 //                startActivity(mIntent);
 //            }
 //        });
-        mBtnNine.setOnClickListener(new MyOnClickListener());
+        mTxtView.setText("图片保存路径为:"+ImageFileUtil.SDPATH);
+        mCardNine.setOnClickListener(new MyOnClickListener());
     }
     public class MyOnClickListener implements View.OnClickListener {
 
@@ -52,7 +54,7 @@ public class MainActivity extends Activity {
             // TODO Auto-generated method stub
             Intent intent;
             switch (v.getId()) {
-                case R.id.btn_nine_img_show:
+                case R.id.card_nine_img_show:
                     intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setDataAndType(
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,IMAGE_UNSPECIFIED);
