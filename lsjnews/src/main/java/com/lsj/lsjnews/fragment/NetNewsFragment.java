@@ -6,6 +6,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
@@ -17,6 +19,7 @@ import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.lsj.lsjnews.utils.MyUtil;
+import com.lsj.lsjnews.view.LsjLoadingView;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -35,6 +38,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NetNewsListAdapter mAdapter;
     private List<LsjNewsBean> mSportNewsList = new ArrayList<>();
+    private LsjLoadingView mViewLoading;
     private int page = 0;
     private int mFragmentType;
     private boolean first = true;
@@ -64,13 +68,15 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_news_main_list);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(R.color.colorPrimary);
+        mViewLoading = (LsjLoadingView) findViewById(R.id.view_news_main_loading);
     }
 
     @Override
     protected void initData() {
         initRecycleDate();
-
+//        baseLoadData();
         if(mFragmentType == 0){
+            mSwipeRefreshLayout.setRefreshing(true);
             baseLoadData();
         }
     }
@@ -104,7 +110,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         //nc/article/{type}/{id}/{startPage}-20.html
         RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyHelper.mTypeMap.get(mFragmentType)+"/"+page+ MyApi.END_URL);
 //        RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyHelper.mTypeMap.get(MyHelper.NBA_News_Type)+"/"+"0"+ MyApi.END_URL);
-        mSwipeRefreshLayout.setRefreshing(true);
+//        mSwipeRefreshLayout.setRefreshing(true);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String str) {
@@ -143,7 +149,8 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
             public void onFinished() {
                 mSwipeRefreshLayout.setRefreshing(false);
                 MyLogger.showLogWithLineNum(3, TAG + ":onFinished");
-
+                mViewLoading.setVisibility(View.GONE);
+                mViewLoading.onCleanAnim();
             }
         });
     }
@@ -159,26 +166,43 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
                     public void Refresh() {
                         if(!mSwipeRefreshLayout.isRefreshing()){
                             MyLogger.showLogWithLineNum(3,"到底了");
-                            page++;
+                            page += 20;
                             baseLoadData();
-                            mSwipeRefreshLayout.setRefreshing(true);
+//                            mSwipeRefreshLayout.setRefreshing(true);
+                            mViewLoading.setVisibility(View.VISIBLE);
+                            mViewLoading.startLoadingAnim();
                         }
                     }
                 });
             }
         }else{
+            //解决按返回键退出重新进入数据被清空
+
             mAdapter.notifyDataSetChanged();
         }
 
     }
+
+
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_news_main;
+    public void onDestroy() {
+        super.onDestroy();
+        if(mSportNewsList!=null){
+            mSportNewsList.clear();
+        }
+        mViewLoading.onCleanAnim();
+    }
+    public SwipeRefreshLayout getSwipeRefreshLayout(){
+        return  this.mSwipeRefreshLayout;
     }
 
     @Override
     public void onRefresh() {
         page = 0;
         baseLoadData();
+    }
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_news_main;
     }
 }

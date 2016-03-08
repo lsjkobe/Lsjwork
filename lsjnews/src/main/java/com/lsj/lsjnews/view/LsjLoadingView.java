@@ -6,13 +6,12 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 import com.example.lsj.httplibrary.utils.LPhone;
 import com.example.lsj.httplibrary.utils.MyLogger;
-import com.example.lsj.httplibrary.utils.MyToast;
+import com.lsj.lsjnews.R;
 
 /**
  * Created by Administrator on 2016/3/7.
@@ -25,7 +24,7 @@ public class LsjLoadingView extends View{
     private float mStep = 0;
     private Context mContext;
     private int mDefoultRadius, mChangeRedius;
-    private Paint mPaintPoint0, mPaintPoint1,mPaintPoint2,mPaintPoint3;
+    private Paint mPaintPoint0;
     public LsjLoadingView(Context context) {
         this(context, null);
     }
@@ -41,7 +40,7 @@ public class LsjLoadingView extends View{
         screenWidth = LPhone.getScreenWidth(mContext);
         screenHight = screenWidth;
 
-        mSpace = screenWidth / 20;
+        mSpace = screenWidth / 18;
         mStep = mSpace;
         mDefoultRadius = screenWidth / 60;
         mChangeRedius = screenWidth /60;
@@ -51,44 +50,33 @@ public class LsjLoadingView extends View{
         mSEdge = (float) mSpace/2;
         mLEdge = (float) Math.sqrt(mSpace*mSpace - mSEdge*mSEdge);
         initPaint();
-
     }
 
     private void initPaint() {
         mPaintPoint0 = new Paint();
         mPaintPoint0.setStyle(Paint.Style.FILL);
         mPaintPoint0.setAntiAlias(true);
-        mPaintPoint0.setColor(Color.WHITE);
-
-        mPaintPoint1 = new Paint();
-        mPaintPoint1.setStyle(Paint.Style.FILL);
-        mPaintPoint1.setAntiAlias(true);
-        mPaintPoint1.setColor(Color.BLUE);
-
-        mPaintPoint2 = new Paint();
-        mPaintPoint2.setStyle(Paint.Style.FILL);
-        mPaintPoint2.setAntiAlias(true);
-        mPaintPoint2.setColor(Color.RED);
-
-        mPaintPoint3 = new Paint();
-        mPaintPoint3.setStyle(Paint.Style.FILL);
-        mPaintPoint3.setAntiAlias(true);
-        mPaintPoint3.setColor(Color.GREEN);
-
+        mPaintPoint0.setColor(getResources().getColor(R.color.colorPrimary));
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        int mW = MeasureSpec.getSize(widthMeasureSpec);
+//        int mH = MeasureSpec.getSize(heightMeasureSpec);
+//        int mWMode = MeasureSpec.getMode(widthMeasureSpec);
+//        int mHMode = MeasureSpec.getMode(heightMeasureSpec);
+//        if(mWMode == MeasureSpec.EXACTLY ){
+//            mWidth = mW;
+//        }
         setMeasuredDimension(mWidth, mWidth);
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 //        canvas.drawCircle(screenWidth/2, screenHight/2 - mStep, mDefoultRadius, mPaintPoint0);
-        canvas.drawCircle(mWidth/2, mHight/2 + mSpace/4  - mStep, mChangeRedius, mPaintPoint1);
-        canvas.drawCircle(mWidth/2 - mLEdge, mHight/2 + mSpace/4  + mSEdge, mChangeRedius, mPaintPoint2);
-        canvas.drawCircle(mWidth/2 + mLEdge, mHight/2 + mSpace/4  + mSEdge, mChangeRedius, mPaintPoint3);
+        canvas.drawCircle(mWidth/2, mHight/2  - mStep, mChangeRedius, mPaintPoint0);
+        canvas.drawCircle(mWidth/2 - mLEdge, mHight/2  + mSEdge, mChangeRedius, mPaintPoint0);
+        canvas.drawCircle(mWidth/2 + mLEdge, mHight/2  + mSEdge, mChangeRedius, mPaintPoint0);
 
     }
 
@@ -100,7 +88,7 @@ public class LsjLoadingView extends View{
             public void run() {
                 mLoadingAnim1 = new ValueAnimator();
                 mLoadingAnim1.setIntValues(0, mSpace);
-                mLoadingAnim1.setDuration(1000);
+                mLoadingAnim1.setDuration(300);
                 mLoadingAnim1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -108,16 +96,15 @@ public class LsjLoadingView extends View{
                             mStep = mSpace - (int) animation.getAnimatedValue();
                             mChangeRedius = (int) (mDefoultRadius*mStep/mSpace);
                             mSEdge = mStep / 2;
-                            mLEdge = (float) Math.sqrt(mSEdge*mSEdge + mStep*mStep);
+//                            mLEdge = (float) Math.sqrt(mSEdge*mSEdge + mStep*mStep);
+                            mLEdge = (float) (Math.sqrt(3)*mSEdge);
                         }
                         postInvalidate();
                     }
                 });
-//                mLoadingAnim1.start();
-
                 mLoadingAnim2 = new ValueAnimator();
                 mLoadingAnim2.setIntValues(0, mSpace);
-                mLoadingAnim2.setDuration(1000);
+                mLoadingAnim2.setDuration(300);
                 mLoadingAnim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {
@@ -125,12 +112,12 @@ public class LsjLoadingView extends View{
                             mStep = (int) animation.getAnimatedValue();
                             mChangeRedius = (int) (mDefoultRadius*mStep/mSpace);
                             mSEdge = mStep / 2;
-                            mLEdge = (float) Math.sqrt(mSEdge*mSEdge + mStep*mStep);
+//                            mLEdge = (float) Math.sqrt(mSEdge*mSEdge + mStep*mStep);
+                            mLEdge = (float) (Math.sqrt(3)*mSEdge);
                         }
                         postInvalidate();
                     }
                 });
-//                mLoadingAnim1.start();
                 mAnimationSet = new AnimatorSet();
                 mAnimationSet.addListener(new AnimatorListenerAdapter() {
                     @Override

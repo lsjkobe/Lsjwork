@@ -10,4 +10,9 @@
     <style name="MyTabLayoutTextSize" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
         <item name="android:textSize">20sp</item>
     </style>
+    <style name="ToolBarStyle" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="actionMenuTextColor">@color/colorAccent</item>
+    </style>
 </resources>

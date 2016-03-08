@@ -1,7 +1,6 @@
 package com.lsj.lsjnews.activity;
 
 import android.annotation.TargetApi;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -13,7 +12,9 @@ import android.widget.TextView;
 import android.widget.VideoView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
@@ -23,7 +24,6 @@ import com.lsj.lsjnews.http.HttpHelper;
 import com.lsj.lsjnews.http.MyApi;
 import com.lsj.lsjnews.utils.AnimUtil;
 import com.lsj.lsjnews.view.LsjLoadingView;
-
 import org.xutils.http.RequestParams;
 import zhou.widget.RichText;
 
@@ -87,10 +87,35 @@ public class NewsInfoShow extends MyBaseActivity{
                     mVideoHead.setVisibility(View.GONE);
                     mImgHead.setVisibility(View.VISIBLE);
 //                    ImageLoader.getInstance().displayImage(mImgSrc, mImgHead);
+                    //循环遍历获取到图片数组是否有gif图
                     if(mDetail.getImg() != null && mDetail.getImg().size() != 0){
-                        Glide.with(mContext).load(mDetail.getImg().get(0).getSrc()).into(mImgHead)
-//                                .placeholder(R.drawable.loading) //加载完之前的图
-                        ;
+                        int i;
+                        for(i = 0; i<mDetail.getImg().size(); i++){
+                            String  mLen = mDetail.getImg().get(i).getSrc();
+                            if(mLen.substring(mLen.length()-3, mLen.length()).equals("gif")){
+                                mViewLoading.setVisibility(View.VISIBLE);
+                                mViewLoading.startLoadingAnim();
+                                Glide.with(mContext).load(mDetail.getImg().get(i).getSrc()).listener(new RequestListener<String, GlideDrawable>() {
+                                    @Override
+                                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        mViewLoading.setVisibility(View.GONE);
+                                        mViewLoading.onCleanAnim();
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                        mViewLoading.setVisibility(View.GONE);
+                                        mViewLoading.onCleanAnim();
+                                        return false;
+                                    }
+                                }).placeholder(R.drawable.loading).into(mImgHead);
+                                break;
+                            }
+                        }
+                        if(i == mDetail.getImg().size()){
+                            Glide.with(mContext).load(mImgSrc).placeholder(R.drawable.loading).into(mImgHead);
+                        }
                     }else{
                         Glide.with(mContext).load(mImgSrc).placeholder(R.drawable.loading).into(mImgHead);
                     }

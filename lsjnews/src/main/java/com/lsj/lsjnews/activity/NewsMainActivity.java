@@ -6,21 +6,28 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.lsj.lsjnews.R;
+import com.lsj.lsjnews.adapter.RecycleMenuAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.mainHelper;
-import com.lsj.lsjnews.fragment.FragmentFactory;
 import com.lsj.lsjnews.fragment.NetNewsFragment;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewsMainActivity extends MyBaseActivity{
 
@@ -30,6 +37,10 @@ public class NewsMainActivity extends MyBaseActivity{
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private DrawerLayout mLayDrawer;
     private int mPosition = 0;
+    private List<NetNewsFragment> datas = new ArrayList<>();
+
+    private RecycleMenuAdapter menuAdapter;
+    private RecyclerView mMenuRecycler;
     @Override
     protected void initView() {
         super.initView();
@@ -39,17 +50,41 @@ public class NewsMainActivity extends MyBaseActivity{
         mLayDrawer = (DrawerLayout) findViewById(R.id.lay_main_drawer);
         mViewPager = (ViewPager) findViewById(R.id.view_pager_news_msg);
         mTabTopMenu = (TabLayout) findViewById(R.id.tabs_news_top_menu);
+        mMenuRecycler = (RecyclerView) findViewById(R.id.view_navigation_recycler_menu);
     }
-    MainPagerAdapter mAdapter = new MainPagerAdapter(getSupportFragmentManager());
+
     @Override
     protected void initData() {
+        initFragment();
+        MainPagerAdapter mAdapter = new MainPagerAdapter(getSupportFragmentManager(), datas);
         mViewPager.setOffscreenPageLimit(MyHelper.News_Type_Count);
-//        mViewPager.setOffscreenPageLimit(0);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
-//        mViewPager.setCurrentItem(0);
+        mViewPager.setCurrentItem(0);
         initTab();
         initToolbar();
+        initRecycler();
+    }
+
+    private void initRecycler() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mMenuRecycler.setLayoutManager(linearLayoutManager);
+        menuAdapter = new RecycleMenuAdapter(mContext);
+        mMenuRecycler.setAdapter(menuAdapter);
+    }
+
+    private void initFragment(){
+        NetNewsFragment mFragment = NetNewsFragment.newInstance(0);
+        datas.add(mFragment);
+        NetNewsFragment mFragment1 = NetNewsFragment.newInstance(1);
+        datas.add(mFragment1);
+        NetNewsFragment mFragment2 = NetNewsFragment.newInstance(2);
+        datas.add(mFragment2);
+        NetNewsFragment mFragment3 = NetNewsFragment.newInstance(3);
+        datas.add(mFragment3);
+        NetNewsFragment mFragment4 = NetNewsFragment.newInstance(4);
+        datas.add(mFragment4);
     }
 
     private void initTab(){
@@ -74,7 +109,7 @@ public class NewsMainActivity extends MyBaseActivity{
                         secClick = System.currentTimeMillis();
                         if(secClick - firClick < 1000){
                             //双击事件
-                            ((NetNewsFragment)FragmentFactory.getFragment(mPosition)).ToTop();
+                            datas.get(mPosition).ToTop();
                         }
                         count = 0;
                         firClick = 0;
@@ -91,15 +126,39 @@ public class NewsMainActivity extends MyBaseActivity{
         mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
-                R.string.app_name);
+                R.string.app_name){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                if(slideOffset == 0 && mLayDrawer.isShown()){
+                    menuAdapter = new RecycleMenuAdapter(mContext);
+                    mMenuRecycler.setAdapter(menuAdapter);
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                menuAdapter = null;
+
+            }
+        };
         mLayDrawer.setDrawerListener(toggle);
         toggle.syncState();
     }
     public class MainPagerAdapter extends FragmentPagerAdapter {
-        public MainPagerAdapter(FragmentManager fragmentManager) {
+        List<NetNewsFragment> datas;
+        public MainPagerAdapter(FragmentManager fragmentManager,List<NetNewsFragment> datas) {
             super(fragmentManager);
+            this.datas = datas;
         }
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
@@ -108,18 +167,12 @@ public class NewsMainActivity extends MyBaseActivity{
 
         @Override
         public Fragment getItem(int position) {
-//            return list.get(position);
-            return FragmentFactory.createFragment(position);
+            return datas.get(position);
         }
-
-//        @Override
-//        public Object instantiateItem(ViewGroup container, int position) {
-//            return FragmentFactory.createFragment(position);
-//        }
 
         @Override
         public int getCount() {
-            return MyHelper.News_Type_Count;
+            return datas.size();
         }
 
         @Override
@@ -140,8 +193,9 @@ public class NewsMainActivity extends MyBaseActivity{
         }
         @Override
         public void onPageSelected(int position) {
-            if(!FragmentFactory.createFragment(position).isLoadSuccess){
-                FragmentFactory.createFragment(position).baseLoadData();
+            if(datas.get(position).isLoadSuccess != true){
+                datas.get(position).getSwipeRefreshLayout().setRefreshing(true);
+                datas.get(position).baseLoadData();
             }
             mPosition = position;
             mCollapsingToolbarLayout.setTitle(MyHelper.News_Name_List[position]);
@@ -151,6 +205,19 @@ public class NewsMainActivity extends MyBaseActivity{
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;

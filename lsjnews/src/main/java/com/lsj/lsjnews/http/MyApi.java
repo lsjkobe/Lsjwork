@@ -11,7 +11,7 @@ package com.lsj.lsjnews.http;
 public class MyApi {
 
     public static final String NETEAST_HOST = "http://c.m.163.com/";
-    public static final String END_URL = "-20.html";
+    public static final String END_URL = "-10.html";
     public static final String ENDDETAIL_URL = "/full.html";
 
     // 新闻详情
