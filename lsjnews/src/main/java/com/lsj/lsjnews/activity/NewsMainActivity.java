@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,8 +17,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.lsj.httplibrary.utils.MyLogger;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.RecycleMenuAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
@@ -74,6 +71,7 @@ public class NewsMainActivity extends MyBaseActivity{
         mMenuRecycler.setAdapter(menuAdapter);
     }
 
+    //初始化新闻Fragment 0焦点 1体育 2社会 3nba 4足球
     private void initFragment(){
         NetNewsFragment mFragment = NetNewsFragment.newInstance(0);
         datas.add(mFragment);
@@ -138,6 +136,7 @@ public class NewsMainActivity extends MyBaseActivity{
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
+                //刚划出来时启动动画效果
                 if(slideOffset == 0 && mLayDrawer.isShown()){
                     menuAdapter = new RecycleMenuAdapter(mContext);
                     mMenuRecycler.setAdapter(menuAdapter);

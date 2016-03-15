@@ -15,7 +15,10 @@
         <activity
             android:name=".activity.NewsMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.ActivityNewsWeb"
@@ -25,12 +28,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".activity.lsj_test1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+        <activity android:name=".mdnews.UserLoginActivity"/>
+        <activity android:name=".mdnews.UserRegisterActivity"/>
     </application>
 
 </manifest>

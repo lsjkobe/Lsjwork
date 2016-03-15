@@ -12,6 +12,8 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.activity.ActivityNewsWeb;
 import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.lsj_test1;
+import com.lsj.lsjnews.mdnews.UserLoginActivity;
+import com.lsj.lsjnews.mdnews.UserRegisterActivity;
 
 /**
  * Created by lsj on 2016/2/27.
@@ -47,6 +49,28 @@ public class UiHelper {
         }
     }
 
+    /**
+     * 显示用户登录
+     * @param context
+     */
+    public static void showUserLogin(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserLoginActivity.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 显示用户注册
+     * @param context
+     */
+    public static void showUserRegister(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserRegisterActivity.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 测试
+     * @param context
+     */
     public static void showTest(Context context){
         Intent intent = new Intent();
         intent.setClass(context, lsj_test1.class);
