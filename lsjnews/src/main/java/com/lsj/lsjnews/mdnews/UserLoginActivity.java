@@ -96,7 +96,6 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
             @Override
             public void onSuccess(String s) {
                 MyToast.showToast(mContext, s);
-
             }
 
             @Override
