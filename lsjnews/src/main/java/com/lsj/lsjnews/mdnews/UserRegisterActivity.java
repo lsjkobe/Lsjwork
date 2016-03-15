@@ -100,7 +100,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
     private boolean is_smssdk_register = false;
     private void initSDK() {
         // 初始化短信SDK
-        SMSSDK.initSDK(this, "6434ec38261c", "24322283b126fad5598d771995fabc83", true);
+        SMSSDK.initSDK(this, "1077c5d8774ee", "84a5f9ee0cb55f01703548026df279e3", true);
         final Handler handler = new Handler(this);
         EventHandler eventHandler = new EventHandler() {
             public void afterEvent(int event, int result, Object data) {
@@ -131,8 +131,8 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
             }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
                 //返回支持发送验证码的国家列表
 
-                HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
-                MyToast.showToast(mContext,"返回支持发送验证码的国家列表+"+phoneMap.get("country"));
+//                HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
+                MyToast.showToast(mContext,"返回支持发送验证码的国家列表+"+data.toString());
             }
         }else{
             ((Throwable)data).printStackTrace();
