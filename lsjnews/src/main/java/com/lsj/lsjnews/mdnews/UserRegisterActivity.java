@@ -50,8 +50,8 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         switch (v.getId()){
             case R.id.card_btn_user_register:
 //                userRegister();
-//                SMSSDK.getVerificationCode("+86","13726226699");
-                SMSSDK.getSupportedCountries();
+                SMSSDK.getVerificationCode("0086","+8613726226699");
+//                SMSSDK.getSupportedCountries();
                 break;
         }
     }
