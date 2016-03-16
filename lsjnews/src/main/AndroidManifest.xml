@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     //SMSSDK权限
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -36,18 +35,21 @@
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".activity.lsj_test1">
-
         </activity>
+        //登录
         <activity android:name=".mdnews.UserLoginActivity"/>
+        //注册
         <activity android:name=".mdnews.UserRegisterActivity"/>
+        //社区主页
+        <activity android:name=".mdnews.UserBBSMain"/>
+
+
+        //mob
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".mdnews.smssdktest">
-
-        </activity>
     </application>
 
 </manifest>

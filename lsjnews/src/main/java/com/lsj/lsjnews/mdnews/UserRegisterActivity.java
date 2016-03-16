@@ -181,7 +181,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
             }
         } else {
             ((Throwable) data).printStackTrace();
-            Toast.makeText(mContext, "验证码错误", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "验证码获取失败", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

@@ -5,7 +5,7 @@
     tools:context=".activity.NewsMainActivity">
     <item android:id="@+id/action_settings"
         android:title="3"
-        android:icon="@mipmap/ic_menu"
+        android:icon="@mipmap/ic_people"
         android:orderInCategory="100"
-        app:showAsAction="never"/>
+        app:showAsAction="ifRoom"/>
 </menu>
