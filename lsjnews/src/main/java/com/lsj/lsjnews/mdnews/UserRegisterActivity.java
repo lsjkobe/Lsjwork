@@ -66,8 +66,10 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         switch (v.getId()){
             case R.id.card_btn_user_register:
 //                userRegister();
-                if(mPhoneGetCode.equals("")){
+                if(mEditPhone.getText().toString().equals("") || mEditPhone.getText().toString() == null){
                     MyToast.showToast(mContext,"电话号码不能为空");
+                }else if(mPhoneGetCode.equals("")){
+                    MyToast.showToast(mContext,"没有获取验证码");
                 }else if(mEditCode.getText().toString().equals("") || mEditCode.getText().toString() == null){
                     MyToast.showToast(mContext,"验证码不能为空");
                 }else if(!mPhoneGetCode.equals(mEditPhone.getText().toString())){
@@ -79,7 +81,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
             case R.id.card_btn_get_code:
 //                userRegister();
                 SMSSDK.getVerificationCode("86", mEditPhone.getText().toString());
-                mPhoneGetCode = mEditPhone.getText().toString();
+
                 break;
         }
     }
@@ -174,6 +176,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
                 userRegister();
             } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                 MyToast.showToast(mContext, "验证码已经发送");
+                mPhoneGetCode = mEditPhone.getText().toString();
                 mTime.start();
             }
         } else {
