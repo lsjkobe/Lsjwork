@@ -1,13 +1,16 @@
 package com.lsj.lsjnews.mdnews;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lsj.httplibrary.utils.MyToast;
@@ -16,9 +19,6 @@ import com.lsj.lsjnews.base.MyBaseActivity;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
-import java.util.HashMap;
-
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
@@ -26,22 +26,38 @@ import cn.smssdk.SMSSDK;
  * Created by Le on 2016/3/15.
  */
 public class UserRegisterActivity extends MyBaseActivity implements View.OnClickListener,Handler.Callback{
-    private EditText mEditPhone, mEditPwd;
-    private CardView mCardRegister;
-    private ImageView mImgIsClick;
+    private EditText mEditPhone, mEditPwd, mEditCode;
+    private CardView mCardRegister,mCardGetCode;
+    private ImageView mImgIsClick,mImgGetCodeIsClick;
+    private TextView mTxtGetCode;
+
+    private timeCount mTime; // 验证码倒计时
+    private String mPhoneGetCode = ""; //获取验证码时记录获取验证码的手机号，防止验证码获取成功后修改手机号
     @Override
     protected void initView() {
         super.initView();
         mCardRegister = (CardView) findViewById(R.id.card_btn_user_register);
         mEditPhone  = (EditText) findViewById(R.id.edit_user_register_phone);
         mEditPwd = (EditText) findViewById(R.id.edit_user_register_password);
+        mEditCode = (EditText) findViewById(R.id.edit_user_register_code);
         mImgIsClick = (ImageView) findViewById(R.id.img_register_is_can_click);
-        mCardRegister.setOnClickListener(this);
+        mImgGetCodeIsClick = (ImageView) findViewById(R.id.img_get_code_is_can_click);
+        mCardGetCode = (CardView) findViewById(R.id.card_btn_get_code);
+        mTxtGetCode = (TextView) findViewById(R.id.txt_register_get_code);
 
+        mCardRegister.setOnClickListener(this);
+        mCardGetCode.setOnClickListener(this);
+        mTime = new timeCount(60000, 1000);
     }
     @Override
     protected void initData() {
-        mEditPwd.addTextChangedListener(new registerWatcher());
+
+        mEditPhone.addTextChangedListener(new registerWatcher(1));
+        mEditPwd.addTextChangedListener(new registerWatcher(0));
+        mCardGetCode.setClickable(false);
+        mCardGetCode.setEnabled(false);
+        mCardRegister.setClickable(false);
+        mCardRegister.setEnabled(false);
         initSDK();
     }
 
@@ -50,27 +66,57 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         switch (v.getId()){
             case R.id.card_btn_user_register:
 //                userRegister();
-                SMSSDK.getVerificationCode("86","13726226699");
-//                SMSSDK.getSupportedCountries();
+                if(mPhoneGetCode.equals("")){
+                    MyToast.showToast(mContext,"电话号码不能为空");
+                }else if(mEditCode.getText().toString().equals("") || mEditCode.getText().toString() == null){
+                    MyToast.showToast(mContext,"验证码不能为空");
+                }else if(!mPhoneGetCode.equals(mEditPhone.getText().toString())){
+                    MyToast.showToast(mContext,"手机号改变了，重新获取验证码");
+                }else{
+                    SMSSDK.submitVerificationCode("86",mEditPhone.getText().toString(),mEditCode.getText().toString());
+                }
+                break;
+            case R.id.card_btn_get_code:
+//                userRegister();
+                SMSSDK.getVerificationCode("86", mEditPhone.getText().toString());
+                mPhoneGetCode = mEditPhone.getText().toString();
                 break;
         }
     }
 
 
     private class registerWatcher implements TextWatcher{
+        int key ;
+        public registerWatcher(int key){
+            this.key = key;
+        }
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(s.length() >= 6){
-                mCardRegister.setClickable(true);
-                mCardRegister.setEnabled(true);
-                mImgIsClick.setVisibility(View.INVISIBLE);
-            }else{
-                mCardRegister.setClickable(false);
-                mCardRegister.setEnabled(false);
-                mImgIsClick.setVisibility(View.VISIBLE);
+            if(key == 0){
+                if(s.length() >= 6){
+                    mCardRegister.setClickable(true);
+                    mCardRegister.setEnabled(true);
+                    mImgIsClick.setVisibility(View.INVISIBLE);
+                }else{
+                    mCardRegister.setClickable(false);
+                    mCardRegister.setEnabled(false);
+                    mImgIsClick.setVisibility(View.VISIBLE);
+                }
             }
+            if(key == 1){
+                if(s.length() >= 11){
+                    mCardGetCode.setClickable(true);
+                    mCardGetCode.setEnabled(true);
+                    mImgGetCodeIsClick.setVisibility(View.INVISIBLE);
+                }else{
+                    mCardGetCode.setClickable(false);
+                    mCardGetCode.setEnabled(false);
+                    mImgGetCodeIsClick.setVisibility(View.VISIBLE);
+                }
+            }
+
         }
         @Override
         public void afterTextChanged(Editable s) {}
@@ -78,7 +124,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
 
     private void userRegister(){
         RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_register.php");
-        params.addBodyParameter("username", mEditPhone.getText().toString().trim());
+        params.addBodyParameter("phone", mEditPhone.getText().toString().trim());
         params.addBodyParameter("password",mEditPwd.getText().toString().trim());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -100,7 +146,9 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
     private boolean is_smssdk_register = false;
     private void initSDK() {
         // 初始化短信SDK
-        SMSSDK.initSDK(this, "1077c5d8774ee", "84a5f9ee0cb55f01703548026df279e3", true);
+        SMSSDK.initSDK(mContext, "1077c5d8774ee", "84a5f9ee0cb55f01703548026df279e3");
+//        SMSSDK.initSDK(this, "f6a97e467f20", "7c75beadd45786c06c29df2f7d6f85f6");
+
         final Handler handler = new Handler(this);
         EventHandler eventHandler = new EventHandler() {
             public void afterEvent(int event, int result, Object data) {
@@ -121,31 +169,46 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         int result = msg.arg2;
         Object data = msg.obj;
         if (result == SMSSDK.RESULT_COMPLETE) {
-            //回调完成
             if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                //提交验证码成功
-                MyToast.showToast(mContext,"提交验证码成功");
-            }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                //获取验证码成功
-                MyToast.showToast(mContext,"获取验证码成功");
-            }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
-                //返回支持发送验证码的国家列表
-
-//                HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
-                MyToast.showToast(mContext,"返回支持发送验证码的国家列表+"+data.toString());
+                MyToast.showToast(mContext, "验证成功");
+                userRegister();
+            } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                MyToast.showToast(mContext, "验证码已经发送");
+                mTime.start();
             }
-        }else{
-            ((Throwable)data).printStackTrace();
+        } else {
+            ((Throwable) data).printStackTrace();
+            Toast.makeText(mContext, "验证码错误", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
+    class timeCount extends CountDownTimer {
 
+        public timeCount(long millisInFuture, long countDownInterval) {
+            //millisInFuture
+            super(millisInFuture, countDownInterval);
+            // TODO Auto-generated constructor stub
+        }
+        @Override
+        public void onFinish() {
+            // TODO Auto-generated method stub
+            mCardGetCode.setClickable(true);
+            mTxtGetCode.setText("重获验证码");
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            // TODO Auto-generated method stub
+            mCardGetCode.setClickable(false);
+            mTxtGetCode.setText(millisUntilFinished / 1000 + "秒");
+        }
+
+    }
     @Override
     protected void onDestroy() {
         if(is_smssdk_register){
             SMSSDK.unregisterAllEventHandler();
         }
-
         super.onDestroy();
     }
 

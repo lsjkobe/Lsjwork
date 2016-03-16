@@ -6,5 +6,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="textcolor">#333333</color>
     <color name="datecolor">#666666</color>
-    <color name="loginViewColor">#bbbbbb</color>
+    <color name="loginViewColor">#eeeeee</color>
 </resources>
