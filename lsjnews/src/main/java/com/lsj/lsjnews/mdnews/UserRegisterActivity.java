@@ -6,13 +6,11 @@ import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
@@ -128,6 +126,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_register.php");
         params.addBodyParameter("phone", mEditPhone.getText().toString().trim());
         params.addBodyParameter("password",mEditPwd.getText().toString().trim());
+
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
@@ -148,7 +147,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
     private boolean is_smssdk_register = false;
     private void initSDK() {
         // 初始化短信SDK
-        SMSSDK.initSDK(mContext, "1077c5d8774ee", "84a5f9ee0cb55f01703548026df279e3");
+        SMSSDK.initSDK(this, "1077c5d8774ee", "84a5f9ee0cb55f01703548026df279e3",false);
 //        SMSSDK.initSDK(this, "f6a97e467f20", "7c75beadd45786c06c29df2f7d6f85f6");
 
         final Handler handler = new Handler(this);
@@ -171,7 +170,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         int result = msg.arg2;
         Object data = msg.obj;
         if (result == SMSSDK.RESULT_COMPLETE) {
-            if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+            if (event == 3) {
                 MyToast.showToast(mContext, "验证成功");
                 userRegister();
             } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {

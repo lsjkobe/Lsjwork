@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
@@ -16,7 +17,10 @@ import com.lsj.lsjnews.common.UiHelper;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.http.cookie.DbCookieStore;
 import org.xutils.x;
+
+import java.util.List;
 
 /**
  * Created by Le on 2016/3/15.
@@ -79,6 +83,7 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                 userLogin();
                 break;
             case R.id.txt_btn_forget_psw:
+
                 break;
             case R.id.txt_btn_register:
                 UiHelper.showUserRegister(mContext);
@@ -88,14 +93,17 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
 
     private void userLogin(){
         RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_login.php");
-        params.addBodyParameter("username", mEditPhone.getText().toString().trim());
-        params.addBodyParameter("password",mEditPassword.getText().toString().trim());
+        params.addBodyParameter("phone", mEditPhone.getText().toString().trim());
+        params.addBodyParameter("password", mEditPassword.getText().toString().trim());
 //        params.addBodyParameter("username", "李上健");
 //        params.addBodyParameter("password","123456");
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
                 MyToast.showToast(mContext, s);
+                DbCookieStore instance = DbCookieStore.INSTANCE;
+                List cookies = instance.getCookies();
+                MyLogger.showLogWithLineNum(3,"---------coolies:"+cookies.get(0).toString());
             }
 
             @Override
