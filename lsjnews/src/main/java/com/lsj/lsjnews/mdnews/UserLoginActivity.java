@@ -83,7 +83,30 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                 userLogin();
                 break;
             case R.id.txt_btn_forget_psw:
+                RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/getBBSDate.php");
+                x.http().post(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        MyToast.showToast(mContext, s);
+//                        DbCookieStore instance = DbCookieStore.INSTANCE;
+//                        List cookies = instance.getCookies();
+//                        MyLogger.showLogWithLineNum(3,"---------coolies:"+cookies.get(0).toString());
+                    }
 
+                    @Override
+                    public void onError(Throwable throwable, boolean b) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException e) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+                    }
+                });
                 break;
             case R.id.txt_btn_register:
                 UiHelper.showUserRegister(mContext);
