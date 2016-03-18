@@ -21,6 +21,7 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.RecycleMenuAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.common.mainHelper;
 import com.lsj.lsjnews.fragment.NetNewsFragment;
 import java.util.ArrayList;
@@ -213,7 +214,9 @@ public class NewsMainActivity extends MyBaseActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        if(item.getItemId() == R.id.action_people){
+            UiHelper.showUserBBS(mContext);
+        }
         return super.onOptionsItemSelected(item);
     }
 

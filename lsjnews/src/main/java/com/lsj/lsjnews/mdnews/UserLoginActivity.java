@@ -90,26 +90,34 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                         MyToast.showToast(mContext, s);
 //                        DbCookieStore instance = DbCookieStore.INSTANCE;
 //                        List cookies = instance.getCookies();
-//                        MyLogger.showLogWithLineNum(3,"---------coolies:"+cookies.get(0).toString());
+                        MyLogger.showLogWithLineNum(3,"---------json:"+s);
                     }
-
                     @Override
-                    public void onError(Throwable throwable, boolean b) {
-
-                    }
-
+                    public void onError(Throwable throwable, boolean b) {}
                     @Override
-                    public void onCancelled(CancelledException e) {
-
-                    }
-
+                    public void onCancelled(CancelledException e) {}
                     @Override
-                    public void onFinished() {
-                    }
+                    public void onFinished() {}
                 });
                 break;
             case R.id.txt_btn_register:
-                UiHelper.showUserRegister(mContext);
+//                UiHelper.showUserRegister(mContext);
+                RequestParams logoutParams = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_logout.php");
+                x.http().post(logoutParams, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        MyToast.showToast(mContext, s);
+//                        DbCookieStore instance = DbCookieStore.INSTANCE;
+//                        List cookies = instance.getCookies();
+                        MyLogger.showLogWithLineNum(3,"---------json:"+s);
+                    }
+                    @Override
+                    public void onError(Throwable throwable, boolean b) {}
+                    @Override
+                    public void onCancelled(CancelledException e) {}
+                    @Override
+                    public void onFinished() {}
+                });
                 break;
         }
     }

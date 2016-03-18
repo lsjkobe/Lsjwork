@@ -10,7 +10,7 @@
     android:foreground="?android:attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="2dp"
-    app:cardElevation="1dp"
+    app:cardElevation="@dimen/cardview_height_base"
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true">
     <RelativeLayout

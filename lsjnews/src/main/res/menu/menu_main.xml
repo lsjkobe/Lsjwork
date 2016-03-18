@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.NewsMainActivity">
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/action_people"
         android:title="3"
         android:icon="@mipmap/ic_people"
         android:orderInCategory="100"

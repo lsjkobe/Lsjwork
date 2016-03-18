@@ -12,6 +12,7 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.activity.ActivityNewsWeb;
 import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.lsj_test1;
+import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
 
@@ -65,6 +66,16 @@ public class UiHelper {
     public static void showUserRegister(Context context){
         Intent intent = new Intent();
         intent.setClass(context, UserRegisterActivity.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示bbs首页
+     * @param context
+     */
+    public static void showUserBBS(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserBBSMain.class);
         context.startActivity(intent);
     }
     /**
