@@ -79,6 +79,7 @@
 
 
 </android.support.design.widget.CoordinatorLayout>
+
     <android.support.design.widget.NavigationView
         android:layout_width="80dp"
         android:layout_height="wrap_content"

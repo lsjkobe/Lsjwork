@@ -47,6 +47,8 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
     }
     @Override
     protected void initData() {
+        mEditPhone.setText("13726226699");
+        mEditPassword.setText("123456");
         mTxtForgetPwd.setText(Html.fromHtml("<u>" + "忘记密码" + "</u>"));
         mTxtRegister.setText(Html.fromHtml("<u>" + "没有帐号" + "</u>"));
         mCardBtnLogin.setClickable(false);
