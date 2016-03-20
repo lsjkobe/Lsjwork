@@ -30,7 +30,6 @@ public class RecycleMenuAdapter extends RecyclerView.Adapter<RecycleMenuAdapter.
             @Override
             public void onClick(View v) {
                 if(menuViewHolder.getAdapterPosition() == 0){
-                    UiHelper.showUserLogin(context);
                 }
             }
         });

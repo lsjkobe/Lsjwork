@@ -7,6 +7,9 @@ import java.util.Map;
  * Created by Administrator on 2016/2/27.
  */
 public class MyHelper {
+    public static  String USER_HEAD_IMG = "";
+    public static  String USER_NAME = "";
+
     public final static  String My_News_List = "MyNewsList";
 
     public final static String NEWS_API_KEYS = "9877658e3bf15280c371ded239997299";

@@ -15,4 +15,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="actionMenuTextColor">@color/colorAccent</item>
     </style>
+
+    <style name="popwin_anim_style">
+        <item name="android:windowEnterAnimation">@anim/item_right_in</item>
+        <item name="android:windowExitAnimation">@anim/item_right_out</item>
+    </style>
 </resources>

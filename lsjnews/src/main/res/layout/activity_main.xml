@@ -22,14 +22,7 @@
             app:contentScrim="?attr/colorPrimary"
             android:background="@mipmap/bg_news_list_top">
             <include layout="@layout/tab_news_top_menu"/>
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/tb_main_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                app:layout_collapseMode="pin"
-                style="@style/ToolBarStyle">
-
-            </android.support.v7.widget.Toolbar>
+            <include layout="@layout/toolbar_mdnews_main_top"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 <!--
@@ -93,4 +86,5 @@
             android:layout_gravity="center">
         </android.support.v7.widget.RecyclerView>
     </android.support.design.widget.NavigationView>
+
 </android.support.v4.widget.DrawerLayout>

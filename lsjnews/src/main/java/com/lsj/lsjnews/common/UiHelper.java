@@ -11,6 +11,7 @@ import android.view.View;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.activity.ActivityNewsWeb;
 import com.lsj.lsjnews.activity.NewsInfoShow;
+import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
@@ -53,11 +54,14 @@ public class UiHelper {
     /**
      * 显示用户登录
      * @param context
+     * type那个页面跳转过来的
+     * 0新闻页面 1社区页面
      */
-    public static void showUserLogin(Context context){
+    public static void showUserLogin(Context context, int type) {
         Intent intent = new Intent();
+        intent.putExtra("type", type);
         intent.setClass(context, UserLoginActivity.class);
-        context.startActivity(intent);
+        ((Activity) context).startActivityForResult(intent, 1);
     }
     /**
      * 显示用户注册
@@ -75,7 +79,20 @@ public class UiHelper {
      */
     public static void showUserBBS(Context context){
         Intent intent = new Intent();
+        // 此标志用于启动一个Activity的时候，若栈中存在此Activity实例，则把它调到栈顶。不创建多一个
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.setClass(context, UserBBSMain.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 显示新闻首页
+     * @param context
+     */
+    public static void showUserNews(Context context){
+        Intent intent = new Intent();
+        // 此标志用于启动一个Activity的时候，若栈中存在此Activity实例，则把它调到栈顶。不创建多一个
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setClass(context, NewsMainActivity.class);
         context.startActivity(intent);
     }
     /**

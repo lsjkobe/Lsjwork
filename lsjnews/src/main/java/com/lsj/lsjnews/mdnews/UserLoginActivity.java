@@ -9,13 +9,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
+import com.lsj.lsjnews.base.NewCommonCallBack;
+import com.lsj.lsjnews.bean.mdnewsBean.userBean;
+import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.MD5;
 import org.xutils.http.RequestParams;
 import org.xutils.http.cookie.DbCookieStore;
 import org.xutils.x;
@@ -31,6 +37,14 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
     private CardView mCardBtnLogin;
     private TextView mTxtForgetPwd, mTxtRegister;
     private ImageView mImgIsClick;
+
+    private int type; //0新闻界面进入， 1社区界面进入
+    @Override
+    protected void initGetIntent() {
+        super.initGetIntent();
+        type = getIntent().getIntExtra("type",0);
+    }
+
     @Override
     protected void initView() {
         super.initView();
@@ -51,8 +65,11 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
         mEditPassword.setText("123456");
         mTxtForgetPwd.setText(Html.fromHtml("<u>" + "忘记密码" + "</u>"));
         mTxtRegister.setText(Html.fromHtml("<u>" + "没有帐号" + "</u>"));
-        mCardBtnLogin.setClickable(false);
-        mCardBtnLogin.setEnabled(false);
+        if(mEditPassword.getText().length() < 6){
+            mCardBtnLogin.setClickable(false);
+            mCardBtnLogin.setEnabled(false);
+        }
+
 //        mCardBtnLogin.setMaxCardElevation(10f);
     }
 
@@ -81,8 +98,14 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch(v.getId()){
+
             case R.id.card_btn_user_login:
-                userLogin();
+                if(mEditPhone.getText().length() == 0){
+                    MyToast.showToast(mContext,"手机号为空了");
+                }else{
+                    userLogin();
+                }
+
                 break;
             case R.id.txt_btn_forget_psw:
                 RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/getBBSDate.php");
@@ -108,7 +131,7 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                 x.http().post(logoutParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String s) {
-                        MyToast.showToast(mContext, s);
+
 //                        DbCookieStore instance = DbCookieStore.INSTANCE;
 //                        List cookies = instance.getCookies();
                         MyLogger.showLogWithLineNum(3,"---------json:"+s);
@@ -125,32 +148,34 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
     }
 
     private void userLogin(){
+        String md5Pwd = MD5.md5(mEditPassword.getText().toString().trim());
         RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_login.php");
         params.addBodyParameter("phone", mEditPhone.getText().toString().trim());
-        params.addBodyParameter("password", mEditPassword.getText().toString().trim());
+        params.addBodyParameter("password", md5Pwd);
 //        params.addBodyParameter("username", "李上健");
 //        params.addBodyParameter("password","123456");
-        x.http().post(params, new Callback.CommonCallback<String>() {
+
+        x.http().post(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
                 MyToast.showToast(mContext, s);
-                DbCookieStore instance = DbCookieStore.INSTANCE;
-                List cookies = instance.getCookies();
-                MyLogger.showLogWithLineNum(3,"---------coolies:"+cookies.get(0).toString());
-            }
-
-            @Override
-            public void onError(Throwable throwable, boolean b) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException e) {
-
-            }
-
-            @Override
-            public void onFinished() {
+//                DbCookieStore instance = DbCookieStore.INSTANCE;
+//                List cookies = instance.getCookies();
+                userBean mUserBean = JSON.parseObject(s,userBean.class);
+                switch (mUserBean.getResultCode()){
+                    case 1:
+                        MyToast.showToast(mContext, "登录成功");
+                        MyHelper.USER_HEAD_IMG = mUserBean.getuImg();
+                        MyHelper.USER_NAME = mUserBean.getuName();
+                        if(type == 1){
+                            setResult(1);
+                        }
+                        AppManager.getAppManager().finishActivity();
+                        break;
+                    case 0:
+                        MyToast.showToast(mContext, "用户名或密码错误");
+                        break;
+                }
             }
         });
     }

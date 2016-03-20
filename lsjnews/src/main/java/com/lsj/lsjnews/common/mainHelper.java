@@ -5,9 +5,14 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.utils.LPhone;
+import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.LsjNewsBean;
 import com.lsj.lsjnews.bean.NewNewsList;
+import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.utils.MyUtil;
+
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.List;
 
@@ -46,4 +51,5 @@ public class mainHelper {
             tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
     }
+
 }
