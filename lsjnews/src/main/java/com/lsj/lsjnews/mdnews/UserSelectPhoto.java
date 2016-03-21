@@ -40,7 +40,6 @@ import java.util.Map;
 public class UserSelectPhoto extends MyBaseActivity{
     private final int LOAD_FINISH = 1;
     private List<String> mPhotoLists = new ArrayList<>();
-    private Map<Integer,String> mPhotoBackMaps = new HashMap<>();
     private int [] is_select ;
     private RecyclerView mRecyclePhoto;
     private Toolbar mToolbar;
@@ -127,44 +126,49 @@ public class UserSelectPhoto extends MyBaseActivity{
             //data倒序
             Collections.reverse(datas);
             is_select = new int[datas.size()];
-
         }
         @Override
         public photoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_select_photo,null);
             final photoViewHolder viewHolder = new photoViewHolder(view);
-            viewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked){
-                        allCount++;
-                        if(allCount > 9){
-                            allCount--;
-                            viewHolder.mCheckBox.setChecked(false);
-                            MyToast.showToast(mContext,"选择不能超过9张图片");
-                            for(int i=0; i<is_select.length; i++){
-                                MyLogger.showLogWithLineNum(3,"----------------:"+is_select[i]);
-                                setToolbarCenterCount(allCount);
-                            }
-                        }else{
-//                            mPhotoBackMaps.put(position,datas.get(position));
-                            is_select[viewHolder.getAdapterPosition()] = 1;
-                            setToolbarCenterCount(allCount);
-                        }
-                    }else{
-                        allCount--;
-                        is_select[viewHolder.getAdapterPosition()] = 0;
-                    }
 
-                }
-            });
+
             return viewHolder;
         }
 
         @Override
         public void onBindViewHolder(final photoViewHolder holder, final int position) {
             Glide.with(mContext).load(datas.get(position)).into(holder.mImgPhoto);
+            //checkbox  复用问题
+            if (isHasSelect()) {
+                holder.mCheckBox.setChecked((is_select[holder.getAdapterPosition()] == 1) ? true : false);
+            } else {
+                holder.mCheckBox.setChecked(false);
+            }
+            holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        allCount++;
+                        if(allCount > 9){
+                            allCount--;
+                            holder.mCheckBox.setChecked(false);
+                            MyToast.showToast(mContext,"选择不能超过9张图片");
+                            for(int i=0; i<is_select.length; i++){
+                                MyLogger.showLogWithLineNum(3,"----------------:"+is_select[i]);
+                                setToolbarCenterCount(allCount);
+                            }
+                        }else{
+                            is_select[holder.getAdapterPosition()] = 1;
+                            setToolbarCenterCount(allCount);
+                        }
+                    }else{
+                        allCount--;
+                        is_select[holder.getAdapterPosition()] = 0;
+                    }
 
+                }
+            });
         }
 
         @Override
@@ -220,6 +224,14 @@ public class UserSelectPhoto extends MyBaseActivity{
                 mImgLists.add(mPhotoLists.get(i));
             }
         }
+    }
+    private boolean isHasSelect(){
+        for(int i=0; i<is_select.length; i++){
+            if(is_select[i] == 1){
+                return true;
+            }
+        }
+        return false;
     }
     @Override
     protected int getLayoutId() {
