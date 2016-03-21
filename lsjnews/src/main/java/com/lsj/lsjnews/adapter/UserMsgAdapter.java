@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewHolder> {
 
-    private final int ITEM_SPACE = 5;
+    private final int ITEM_SPACE = 2;
     private Context context;
     private List<bbsBean.Lists> datas = new ArrayList<>();
     private imgAdapter mImgAdapter;

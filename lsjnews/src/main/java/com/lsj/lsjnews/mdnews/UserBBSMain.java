@@ -35,7 +35,6 @@ import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
-
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 import java.util.ArrayList;
@@ -67,31 +66,43 @@ public class UserBBSMain extends MyBaseActivity{
         initRecyleView();
         initToolbar();
         getBBSData();
-    }
-
-    int downX,downY;
-    private void initRecyleView(){
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext);
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyleMsg.setLayoutManager(mLinearLayoutManager);
-        mRecyleMsg.setOnTouchListener(new View.OnTouchListener() {
+        mFabWrite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    downX = v.getScrollX();
-                    downY = v.getScrollY();
-                }if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    if(v.getScaleY() > downY){
-//                        float curTranslationY = mFabWrite.getY();
-//                        ObjectAnimator animator = ObjectAnimator.ofFloat(mFabWrite, "translationY", curTranslationY, curTranslationY);
-//                        animator.setDuration(10000);
-//                        animator.start();
-                    }
-                }
-                return false;
+            public void onClick(View v) {
+                UiHelper.showUserWrite(mContext);
             }
         });
     }
+
+
+    float downX,downY;
+    @TargetApi(Build.VERSION_CODES.M)
+    private void initRecyleView(){
+
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext);
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyleMsg.setLayoutManager(mLinearLayoutManager);
+        //向上滑动隐藏fab向下滑动显示发布
+
+        mRecyleMsg.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy > 0){
+                    float curTranslationX = mFabWrite.getTranslationX();
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(mFabWrite, "translationX", curTranslationX, 200f);
+                    animator.setDuration(300);
+                    animator.start();
+                }else if(dy < 0){
+                    float curTranslationX = mFabWrite.getTranslationX();
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(mFabWrite, "translationX", curTranslationX, 0);
+                    animator.setDuration(300);
+                    animator.start();
+                }
+            }
+        });
+    }
+
     private int count = 0;
     private long firClick = 0,secClick = 0;
     private void initToolbar(){

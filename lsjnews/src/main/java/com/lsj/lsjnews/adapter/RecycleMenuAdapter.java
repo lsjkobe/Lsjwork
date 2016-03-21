@@ -11,6 +11,7 @@ import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.utils.AnimUtil;
+import com.lsj.lsjnews.utils.getPhoneImg;
 
 /**
  * Created by Administrator on 2016/3/8.
@@ -30,6 +31,7 @@ public class RecycleMenuAdapter extends RecyclerView.Adapter<RecycleMenuAdapter.
             @Override
             public void onClick(View v) {
                 if(menuViewHolder.getAdapterPosition() == 0){
+
                 }
             }
         });

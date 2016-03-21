@@ -16,6 +16,8 @@ import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
+import com.lsj.lsjnews.mdnews.UserSelectPhoto;
+import com.lsj.lsjnews.mdnews.UserWriteActivity;
 
 /**
  * Created by lsj on 2016/2/27.
@@ -93,6 +95,24 @@ public class UiHelper {
         // 此标志用于启动一个Activity的时候，若栈中存在此Activity实例，则把它调到栈顶。不创建多一个
 //        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.setClass(context, NewsMainActivity.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 选择图片界面
+     * @param context
+     */
+    public static void showSelectPhoto(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserSelectPhoto.class);
+        ((Activity)context).startActivityForResult(intent,1);
+    }
+    /**
+     * 写微博界面
+     * @param context
+     */
+    public static void showUserWrite(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserWriteActivity.class);
         context.startActivity(intent);
     }
     /**

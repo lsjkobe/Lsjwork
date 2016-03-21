@@ -158,7 +158,6 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
         x.http().post(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
-                MyToast.showToast(mContext, s);
 //                DbCookieStore instance = DbCookieStore.INSTANCE;
 //                List cookies = instance.getCookies();
                 userBean mUserBean = JSON.parseObject(s,userBean.class);

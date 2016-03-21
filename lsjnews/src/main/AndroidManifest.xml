@@ -43,8 +43,12 @@
         <activity android:name=".mdnews.UserRegisterActivity"/>
         //社区主页
         <activity android:name=".mdnews.UserBBSMain"/>
-
-
+        //选择照片
+        <activity android:name=".mdnews.UserSelectPhoto"/>
+        //发送界面
+        <activity
+            android:name=".mdnews.UserWriteActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         //mob
         <activity
             android:name="com.mob.tools.MobUIShell"
