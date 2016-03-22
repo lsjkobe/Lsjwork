@@ -40,6 +40,7 @@ import java.util.List;
 public class UserWriteActivity extends MyBaseActivity implements View.OnClickListener{
     private EditText mEditWriteContent;
     private ImageView mImgSelect,mImgLocation,mImgRelease;
+
     private RecyclerView mRecycleImages;
     private TextView mTxtLocation;
     private LinearLayout mLayLocation;
