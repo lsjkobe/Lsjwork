@@ -44,6 +44,8 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
     private TextView mTxtLocation;
     private LinearLayout mLayLocation;
     private Location mLocation;
+
+    ArrayList<String> mImgLists = new ArrayList<>();
     @Override
     protected void initView() {
         super.initView();
@@ -92,9 +94,12 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
     private void releaseBBS(){
         RequestParams params = new RequestParams(Conts.POST_WRITE_BBS);
         params.addBodyParameter("content",mEditWriteContent.getText().toString());
+//        params.addBodyParameter("imgList",mImgLists);
+        params.addParameter("imgList",mImgLists);
         x.http().post(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
+                MyToast.showToast(mContext,":"+s);
                 switch (s){
                     case "1":
                         MyToast.showToast(mContext,"发布成功");
@@ -129,7 +134,7 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
             }
         });
     }
-    ArrayList<String> mImgLists = new ArrayList<>();
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
