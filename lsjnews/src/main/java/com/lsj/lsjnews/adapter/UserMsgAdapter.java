@@ -2,18 +2,14 @@ package com.lsj.lsjnews.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.LPhone;
-import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.PxDipUnti;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
@@ -28,7 +24,7 @@ import java.util.List;
  */
 public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewHolder> {
 
-    private final int ITEM_SPACE = 2;
+    private final int ITEM_SPACE = 0;
     private Context context;
     private List<bbsBean.Lists> datas = new ArrayList<>();
     private imgAdapter mImgAdapter;

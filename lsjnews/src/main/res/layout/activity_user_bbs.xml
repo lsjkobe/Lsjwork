@@ -43,7 +43,7 @@
             app:layout_anchor= "@id/recyle_user_bbs"
             app:layout_anchorGravity="bottom|right"
             app:fabSize="mini"
-            android:backgroundTint="@color/colorPrimary"
+            app:backgroundTint="@color/colorPrimary"
             android:src="@mipmap/ic_write_bbs"/>
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>

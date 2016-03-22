@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/3/16.
+ * Created by lsj on 2016/3/16.
  */
 public class UserBBSMain extends MyBaseActivity{
 
@@ -150,7 +150,6 @@ public class UserBBSMain extends MyBaseActivity{
                             bbsBeanList.addAll(mbbsBean.getLists());
                             initOrRefresh();
                         }
-                        MyLogger.showLogWithLineNum(3,"--------------userBBS:"+s);
                         break;
                     case 0:
                         MyToast.showToast(mContext,"没数据");
