@@ -72,7 +72,6 @@ public class UserSelectPhoto extends MyBaseActivity{
         getImages();
     }
     private void getImages() {
-        final HashMap<String, List<String>> mGruopMap = new HashMap<String, List<String>>();
         if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             MyToast.showToast(mContext, "暂无外部存储");
             return ;
