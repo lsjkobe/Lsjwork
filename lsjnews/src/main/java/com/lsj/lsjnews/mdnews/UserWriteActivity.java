@@ -7,13 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.LPhone;
@@ -26,12 +23,12 @@ import com.lsj.lsjnews.bean.mdnewsBean.locationBean;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.utils.myLocation;
-
+import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,7 +37,6 @@ import java.util.List;
 public class UserWriteActivity extends MyBaseActivity implements View.OnClickListener{
     private EditText mEditWriteContent;
     private ImageView mImgSelect,mImgLocation,mImgRelease;
-
     private RecyclerView mRecycleImages;
     private TextView mTxtLocation;
     private LinearLayout mLayLocation;
@@ -94,12 +90,30 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
     }
     private void releaseBBS(){
         RequestParams params = new RequestParams(Conts.POST_WRITE_BBS);
-        params.addBodyParameter("content",mEditWriteContent.getText().toString());
+        params.addBodyParameter("content", mEditWriteContent.getText().toString());
 //        params.addBodyParameter("imgList",mImgLists);
-        params.addParameter("imgList",mImgLists);
-        x.http().post(params, new NewCommonCallBack() {
+        if(mImgLists != null && mImgLists.size() != 0){
+            for(int i=0; i<mImgLists.size(); i++){
+                File imgFile = new File(mImgLists.get(i));
+                params.addParameter("imgList["+i+"]",imgFile);
+                MyLogger.showLogWithLineNum(3, "------------------" + mImgLists.get(i));
+            }
+        }
+        x.http().post(params, new Callback.ProgressCallback<String>() {
+            @Override
+            public void onWaiting() {
+
+            }
+            @Override
+            public void onStarted() {
+            }
+            @Override
+            public void onLoading(long total, long current, boolean b) {
+//                MyLogger.showLogWithLineNum(3,"total:current:"+current);
+            }
             @Override
             public void onSuccess(String s) {
+                MyLogger.showLogWithLineNum(3,"---"+s);
                 MyToast.showToast(mContext,":"+s);
                 switch (s){
                     case "1":
@@ -116,7 +130,42 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
                         break;
                 }
             }
+
+            @Override
+            public void onError(Throwable throwable, boolean b) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException e) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
         });
+//        x.http().post(params, new NewCommonCallBack() {
+//            @Override
+//            public void onSuccess(String s) {
+//                MyToast.showToast(mContext,":"+s);
+//                switch (s){
+//                    case "1":
+//                        MyToast.showToast(mContext,"发布成功");
+//                        break;
+//                    case "0":
+//                        MyToast.showToast(mContext,"发布失败");
+//                        break;
+//                    case "400":
+//                        MyToast.showToast(mContext,"没登录");
+//                        break;
+//                    case "401":
+//                        //不是post
+//                        break;
+//                }
+//            }
+//        });
     }
     //根据经纬度获取地址名（百度接口）http://api.map.baidu.com/geocoder?output=json&location=纬度,经度&key=nOUeWMWpZPfHYGkoHzGp63hL
     private void getAddressName(Location mLocation){
