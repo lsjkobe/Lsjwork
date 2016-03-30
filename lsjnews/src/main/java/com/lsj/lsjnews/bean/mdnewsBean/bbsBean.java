@@ -20,10 +20,9 @@ public class bbsBean extends baseBean{
         private String uHeadImg;
         private String uName;
         private String content;
-
         private String date;
-
         private List<imglists> imglists ;
+        private String location;
 
         public int getMid() {
             return mid;
@@ -86,6 +85,14 @@ public class bbsBean extends baseBean{
             public void setImgsrc(String imgsrc) {
                 this.imgsrc = imgsrc;
             }
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
         }
     }
 }

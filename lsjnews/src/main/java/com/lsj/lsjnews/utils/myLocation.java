@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
@@ -16,7 +19,7 @@ import com.example.lsj.httplibrary.utils.MyToast;
 /**
  * Created by Le on 2016/3/22.
  */
-public class myLocation {
+public class myLocation{
     private static myLocation instance;
     public static myLocation getInstance(){
         if(instance == null){
@@ -35,7 +38,7 @@ public class myLocation {
         LocationManager alm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (alm
                 .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
-            MyToast.showToast(context, "GPS模块正常");
+//            MyToast.showToast(context, "GPS模块正常");
             return;
         }
         MyToast.showToast(context, "请开启GPS！");
@@ -44,7 +47,8 @@ public class myLocation {
 
     }
 
-    public Location getLocation(Context context) {
+    public void getLocation(final Context context) {
+        openGPSSettings(context);
         // 获取位置管理服务
         LocationManager locationManager;
         String serviceName = Context.LOCATION_SERVICE;
@@ -58,6 +62,7 @@ public class myLocation {
         criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
 
         String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
+
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -66,16 +71,33 @@ public class myLocation {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return null;
+            return ;
         }
         Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
-//        updateToNewLocation(location,context);
-        if(location == null){
-            return null;
-        }else{
-            return location;
-        }
+
+
         // 设置监听器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
-//        locationManager.requestLocationUpdates(provider, 100 * 1000, 500,locationListener);
+        locationManager.requestLocationUpdates(provider, 10 * 1000, 100, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                MyToast.showToast(context,location.getLongitude()+":"+location.getLatitude());
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        });
     }
+
 }

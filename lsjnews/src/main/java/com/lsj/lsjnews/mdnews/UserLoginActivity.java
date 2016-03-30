@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.utils.AppManager;
+import com.example.lsj.httplibrary.utils.CacheUtils;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
@@ -19,6 +20,7 @@ import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.userBean;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
+import com.lsj.lsjnews.http.Conts;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.MD5;
@@ -127,29 +129,14 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                 break;
             case R.id.txt_btn_register:
 //                UiHelper.showUserRegister(mContext);
-                RequestParams logoutParams = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_logout.php");
-                x.http().post(logoutParams, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String s) {
 
-//                        DbCookieStore instance = DbCookieStore.INSTANCE;
-//                        List cookies = instance.getCookies();
-                        MyLogger.showLogWithLineNum(3,"---------json:"+s);
-                    }
-                    @Override
-                    public void onError(Throwable throwable, boolean b) {}
-                    @Override
-                    public void onCancelled(CancelledException e) {}
-                    @Override
-                    public void onFinished() {}
-                });
                 break;
         }
     }
 
     private void userLogin(){
         String md5Pwd = MD5.md5(mEditPassword.getText().toString().trim());
-        RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/user_login.php");
+        RequestParams params = new RequestParams(Conts.POST_USER_LOGIN);
         params.addBodyParameter("phone", mEditPhone.getText().toString().trim());
         params.addBodyParameter("password", md5Pwd);
 //        params.addBodyParameter("username", "李上健");
@@ -164,6 +151,8 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                 switch (mUserBean.getResultCode()){
                     case 1:
                         MyToast.showToast(mContext, "登录成功");
+                        CacheUtils.setLoginCache(mContext,"phone",mEditPhone.getText().toString().trim());
+                        CacheUtils.setLoginCache(mContext,"password",mEditPassword.getText().toString().trim());
                         MyHelper.USER_HEAD_IMG = mUserBean.getuImg();
                         MyHelper.USER_NAME = mUserBean.getuName();
                         if(type == 1){

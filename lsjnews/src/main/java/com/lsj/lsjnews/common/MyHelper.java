@@ -7,8 +7,10 @@ import java.util.Map;
  * Created by Administrator on 2016/2/27.
  */
 public class MyHelper {
+    //登录时保存的数据
     public static  String USER_HEAD_IMG = "";
     public static  String USER_NAME = "";
+    //end
 
     public final static  String My_News_List = "MyNewsList";
 

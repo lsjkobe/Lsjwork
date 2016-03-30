@@ -15,6 +15,7 @@ import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
+import com.lsj.lsjnews.mdnews.UserMainActivity;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
 import com.lsj.lsjnews.mdnews.UserSelectPhoto;
 import com.lsj.lsjnews.mdnews.UserWriteActivity;
@@ -66,6 +67,15 @@ public class UiHelper {
         ((Activity) context).startActivityForResult(intent, 1);
     }
     /**
+     * 显示用户主界面
+     * @param context
+     */
+    public static void showUserMain(Context context) {
+        Intent intent = new Intent();
+        intent.setClass(context, UserMainActivity.class);
+        context.startActivity(intent);
+    }
+    /**
      * 显示用户注册
      * @param context
      */
@@ -113,7 +123,7 @@ public class UiHelper {
     public static void showUserWrite(Context context){
         Intent intent = new Intent();
         intent.setClass(context, UserWriteActivity.class);
-        context.startActivity(intent);
+        ((Activity)context).startActivityForResult(intent,1);
     }
     /**
      * 测试

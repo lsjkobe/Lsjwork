@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.AppManager;
+import com.example.lsj.httplibrary.utils.CacheUtils;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.RecycleMenuAdapter;
@@ -39,6 +40,8 @@ import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.common.mainHelper;
 import com.lsj.lsjnews.fragment.NetNewsFragment;
 import com.lsj.lsjnews.http.Conts;
+import com.lsj.lsjnews.mdnews.UserAutoLogin;
+
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -59,6 +62,15 @@ public class NewsMainActivity extends MyBaseActivity{
     private RecyclerView mMenuRecycler;
 
     private AppBarLayout mAppBarLayout;
+
+    @Override
+    protected void initGetIntent() {
+        super.initGetIntent();
+        if(CacheUtils.getLoginCache(mContext,"phone") != null && CacheUtils.getLoginCache(mContext,"phone")!=null){
+            UserAutoLogin.getInstance().autoLogin(mContext);
+        }
+    }
+
     @Override
     protected void initView() {
         super.initView();
@@ -316,7 +328,8 @@ public class NewsMainActivity extends MyBaseActivity{
             @Override
             public void onSuccess(String s) {
                 if(s.equals("1")){
-                    MyToast.showToast(mContext,"已经登录了");
+//                    MyToast.showToast(mContext,"已经登录了");
+                    UiHelper.showUserMain(mContext);
                 }else{
                     MyHelper.USER_HEAD_IMG = "";
                     UiHelper.showUserLogin(mContext,0);

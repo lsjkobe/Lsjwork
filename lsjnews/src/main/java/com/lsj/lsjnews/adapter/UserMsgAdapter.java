@@ -7,14 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.LPhone;
+import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.utils.PxDipUnti;
 import com.lsj.lsjnews.R;
+import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.utils.CircleImageView;
 import com.lsj.lsjnews.utils.RecycleSpaceItemDecoration;
+
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +29,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/3/16.
  */
-public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewHolder> {
+public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewHolder>{
 
     private final int ITEM_SPACE = 0;
     private Context context;
@@ -45,12 +52,31 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             lineCount = 3;
         }
         View view = LayoutInflater.from(context).inflate(R.layout.item_user_bbs_msg, parent, false);
-        msgViewHolder viewHolder = new msgViewHolder(view);
+        final msgViewHolder viewHolder = new msgViewHolder(view);
+        viewHolder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                MyToast.showToast(context,":"+viewHolder.getAdapterPosition());
+                RequestParams params = new RequestParams(Conts.GET_USER_CLICK_STAR);
+                params.addBodyParameter("mid", String.valueOf(datas.get(viewHolder.getAdapterPosition()).getMid()));
+                x.http().get(params, new NewCommonCallBack() {
+                    @Override
+                    public void onSuccess(String s) {
+                        MyToast.showToast(context,s);
+                    }
+                });
+            }
+        });
         return viewHolder;
     }
-
     @Override
     public void onBindViewHolder(msgViewHolder holder, int position) {
+        if(datas.get(holder.getAdapterPosition()).getLocation() != null && datas.get(holder.getAdapterPosition()).getLocation().length() != 0){
+            holder.mLayLocation.setVisibility(View.VISIBLE);
+            holder.mTxtLocation.setText(datas.get(holder.getAdapterPosition()).getLocation());
+        }else{
+            holder.mLayLocation.setVisibility(View.GONE);
+        }
         Glide.with(context).load(datas.get(position).getuHeadImg()).into(holder.mImgHead);
         holder.mName.setText(datas.get(position).getuName());
         holder.mDate.setText(datas.get(position).getDate());
@@ -87,6 +113,9 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         TextView mDate ;
         TextView mContent;
         RecyclerView mRecyleImgs;
+        LinearLayout mLayLocation;
+        TextView mTxtLocation;
+        ImageView mImgBtnStar;
         public msgViewHolder(View itemView) {
             super(itemView);
             mImgHead = (CircleImageView) itemView.findViewById(R.id.img_user_bbs_msg_head);
@@ -94,6 +123,9 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             mDate = (TextView) itemView.findViewById(R.id.txt_user_bbs_msg_date);
             mContent = (TextView) itemView.findViewById(R.id.txt_user_bbs_content);
             mRecyleImgs = (RecyclerView) itemView.findViewById(R.id.recyle_user_bbs_img);
+            mLayLocation = (LinearLayout) itemView.findViewById(R.id.lay_item_location);
+            mTxtLocation = (TextView) itemView.findViewById(R.id.txt_item_location);
+            mImgBtnStar = (ImageView) itemView.findViewById(R.id.img_btn_msg_star);
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyleImgs.setLayoutManager(mGridLayoutManager);

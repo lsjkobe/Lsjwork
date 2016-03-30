@@ -67,6 +67,23 @@
             android:layout_gravity="center"
             android:layout_marginTop="5dp">
         </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:id="@+id/lay_item_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/ic_get_location" />
+            <TextView
+                android:id="@+id/txt_item_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,6 +98,7 @@
                 android:src="@mipmap/ic_commend"
                 android:layout_gravity="center"/>
             <ImageView
+                android:id="@+id/img_btn_msg_star"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@mipmap/ic_star_default"

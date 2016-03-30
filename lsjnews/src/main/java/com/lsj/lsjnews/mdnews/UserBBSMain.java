@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.AppManager;
-import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.UserMsgAdapter;
@@ -69,7 +68,12 @@ public class UserBBSMain extends MyBaseActivity{
         mFabWrite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UiHelper.showUserWrite(mContext);
+                if(MyHelper.USER_HEAD_IMG.equals("")){
+                    MyToast.showToast(mContext,"请先登录");
+                }else{
+                    UiHelper.showUserWrite(mContext);
+                }
+
             }
         });
     }
@@ -133,7 +137,7 @@ public class UserBBSMain extends MyBaseActivity{
         setSupportActionBar(mToolbar);
     }
     public void getBBSData() {
-        RequestParams params = new RequestParams("http://182.254.145.222/lsj/mdnews/user/getBBSDate.php");
+        RequestParams params = new RequestParams(Conts.GET_BBS);
         x.http().post(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
@@ -147,6 +151,7 @@ public class UserBBSMain extends MyBaseActivity{
                         break;
                     case 1:
                         if(mbbsBean.getLists() != null && mbbsBean.getLists().size() != 0){
+                            bbsBeanList.clear();
                             bbsBeanList.addAll(mbbsBean.getLists());
                             initOrRefresh();
                         }
@@ -231,7 +236,8 @@ public class UserBBSMain extends MyBaseActivity{
             @Override
             public void onSuccess(String s) {
                 if(s.equals("1")){
-                    MyToast.showToast(mContext,"已经登录了");
+//                    MyToast.showToast(mContext,"已经登录了");
+                    UiHelper.showUserMain(mContext);
                 }else{
                     MyHelper.USER_HEAD_IMG = "";
                     UiHelper.showUserLogin(mContext,1);
