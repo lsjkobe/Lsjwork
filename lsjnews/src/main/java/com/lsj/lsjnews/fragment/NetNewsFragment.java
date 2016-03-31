@@ -177,7 +177,6 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
             }
         }else{
             //解决按返回键退出重新进入数据被清空
-
             mAdapter.notifyDataSetChanged();
         }
 

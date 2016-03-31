@@ -112,11 +112,10 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
                     getLocation(mContext);
                 }else{
                     //二次点击清空并隐藏
-                    mLayLocation.setVisibility(View.VISIBLE);
+                    mLayLocation.setVisibility(View.GONE);
                     mTxtLocation.setText("");
                     is_location = false;
                 }
-
                 break;
             case R.id.img_write_bbs_release:
                 if (mEditWriteContent.getText().length() == 0 && mEditWriteContent.getText().toString().trim().equals("")) {
@@ -300,7 +299,7 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
 
     //获取地理位置
     public void getLocation(final Context context) {
-        openGPSSettings(context);
+//        openGPSSettings(context);
         // 获取位置管理服务
 
         String serviceName = Context.LOCATION_SERVICE;
@@ -313,8 +312,8 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
         criteria.setCostAllowed(true);
         criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
 
-        String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
-
+        String provider = locationManager.getBestProvider(new Criteria(), true); // 获取GPS信息
+        MyToast.showToast(context,"provider："+provider);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -326,6 +325,7 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
             return ;
         }
         // 设置监听器，自动更新的最小时间为间隔N秒(1秒为1*1000，这样写主要为了方便)或最小位移变化超过N米
+
         locationListener = new myLocationListener();
         locationManager.requestLocationUpdates(provider, 10 * 1000, 100, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);

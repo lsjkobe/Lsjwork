@@ -23,6 +23,15 @@ public class bbsBean extends baseBean{
         private String date;
         private List<imglists> imglists ;
         private String location;
+        private int is_star;
+
+        public int getIs_star() {
+            return is_star;
+        }
+
+        public void setIs_star(int is_star) {
+            this.is_star = is_star;
+        }
 
         public int getMid() {
             return mid;
