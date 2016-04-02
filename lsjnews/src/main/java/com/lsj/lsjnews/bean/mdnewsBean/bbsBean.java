@@ -24,6 +24,24 @@ public class bbsBean extends baseBean{
         private List<imglists> imglists ;
         private String location;
         private int is_star;
+        private int mType;
+        private String sourceContent;
+
+        public String getSourceContent() {
+            return sourceContent;
+        }
+
+        public void setSourceContent(String sourceContent) {
+            this.sourceContent = sourceContent;
+        }
+
+        public int getmType() {
+            return mType;
+        }
+
+        public void setmType(int mType) {
+            this.mType = mType;
+        }
 
         public int getIs_star() {
             return is_star;

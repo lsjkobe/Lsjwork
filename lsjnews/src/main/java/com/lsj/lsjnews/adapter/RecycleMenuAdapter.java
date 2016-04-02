@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.TextView;
 
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.utils.AnimUtil;
+import com.lsj.lsjnews.utils.EmojiParser;
 import com.lsj.lsjnews.utils.getPhoneImg;
 
 /**
@@ -59,9 +61,10 @@ public class RecycleMenuAdapter extends RecyclerView.Adapter<RecycleMenuAdapter.
         }
     }
     public class menuViewHolder extends RecyclerView.ViewHolder {
-
+        TextView mTxtMenu;
         public menuViewHolder(View itemView) {
             super(itemView);
+            mTxtMenu = (TextView) itemView.findViewById(R.id.txt_left_menu_item_title);
         }
     }
 

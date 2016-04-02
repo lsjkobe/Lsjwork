@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,16 +13,25 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -30,12 +40,15 @@ import com.example.lsj.httplibrary.utils.LPhone;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
+import com.lsj.lsjnews.adapter.EmojiAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
 import com.lsj.lsjnews.bean.mdnewsBean.locationBean;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
+import com.lsj.lsjnews.interfaces.OnEmojiOnclick;
+import com.lsj.lsjnews.utils.EmojiParser;
 import com.lsj.lsjnews.view.LsjLoadingView;
 
 import org.xutils.common.Callback;
@@ -49,10 +62,12 @@ import java.util.List;
 /**
  * Created by lsj on 2016/3/21.
  */
-public class UserWriteActivity extends MyBaseActivity implements View.OnClickListener {
+public class UserWriteActivity extends MyBaseActivity implements View.OnClickListener{
     private EditText mEditWriteContent;
-    private ImageView mImgSelect, mImgLocation, mImgRelease;
+    private ImageView mImgSelect, mImgLocation, mImgRelease, mImgEmoji;
     private RecyclerView mRecycleImages;
+    private RecyclerView mRecycleEmoji;
+    private EmojiAdapter mEmojiAdapter;
     private TextView mTxtLocation;
     private LinearLayout mLayLocation;
     private LsjLoadingView mLoading;
@@ -61,14 +76,17 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
     private LocationManager locationManager;
     private myLocationListener locationListener;
 
+    private boolean is_emoji_open = false;
     @Override
     protected void initView() {
         super.initView();
         mEditWriteContent = (EditText) findViewById(R.id.edit_write_bbs_content);
         mImgSelect = (ImageView) findViewById(R.id.img_write_bbs_select);
         mRecycleImages = (RecyclerView) findViewById(R.id.recyvle_write_bbs_image);
+        mRecycleEmoji = (RecyclerView) findViewById(R.id.recycler_emoji_select);
         mImgLocation = (ImageView) findViewById(R.id.img_write_bbs_location);
         mImgRelease = (ImageView) findViewById(R.id.img_write_bbs_release);
+        mImgEmoji = (ImageView) findViewById(R.id.img_write_bbs_emoji);
         mLayLocation = (LinearLayout) findViewById(R.id.lay_location);
         mTxtLocation = (TextView) findViewById(R.id.txt_location);
         mLoading = (LsjLoadingView) findViewById(R.id.loading_write_bbs);
@@ -76,15 +94,51 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
         mImgSelect.setOnClickListener(this);
         mImgLocation.setOnClickListener(this);
         mImgRelease.setOnClickListener(this);
+        mImgEmoji.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
         initToolbar();
+        initRecycler();
+        mEditWriteContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    is_emoji_open = false;
+                    mRecycleEmoji.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void initRecycler() {
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecycleImages.setLayoutManager(mLinearLayoutManager);
+
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext,3);
+        mGridLayoutManager.setOrientation(GridLayoutManager.HORIZONTAL);
+        mRecycleEmoji.setLayoutManager(mGridLayoutManager);
+        mEmojiAdapter = new EmojiAdapter(mContext, EmojiParser.DEFAULT_EMOJI_RES_IDS);
+        mEmojiAdapter.setOnEmojiOnclick(new OnEmojiOnclick() {
+            @Override
+            public void getPosition(int position) {
+//                MyToast.showToast(mContext,position+"");
+//                SpannableString spannableString = new SpannableString(EmojiParser.strEmojis[position]);
+//                Drawable drawable = getResources().getDrawable(EmojiParser.DEFAULT_EMOJI_RES_IDS[position]);
+//                drawable.setBounds(0,0,drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
+//                ImageSpan span = new ImageSpan(drawable,ImageSpan.ALIGN_BASELINE);
+//                spannableString.setSpan(span,0,EmojiParser.strEmojis[position].length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                int currentPosition = mEditWriteContent.getSelectionStart();
+                mEditWriteContent.getText().insert(currentPosition,EmojiParser.getInstance(mContext).edittextReplace(position,mEditWriteContent.getTextSize()));
+//                Toast.makeText(mContext,""+mEditWriteContent.getText(),Toast.LENGTH_LONG).show();
+            }
+        });
+        mRecycleEmoji.setAdapter(mEmojiAdapter);
+
     }
+
 
     private void initToolbar() {
         mToolbar.setNavigationIcon(R.mipmap.ic_back);
@@ -122,6 +176,19 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
                     MyToast.showToast(mContext, "内容不能为空");
                 } else {
                     releaseBBS();
+                }
+                break;
+            case R.id.img_write_bbs_emoji:
+                if(is_emoji_open){
+                    is_emoji_open = false;
+                    mRecycleEmoji.setVisibility(View.GONE);
+                }else{
+                    //关闭软键盘
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                    mEditWriteContent.clearFocus();
+                    is_emoji_open = true;
+                    mRecycleEmoji.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -292,28 +359,27 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
             return;
         }
         MyToast.showToast(context, "请开启GPS！");
-        Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
-        ((Activity) context).startActivityForResult(intent, 0); //此为设置完成后返回到获取界面
-
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivityForResult(intent, 0); //此为设置完成后返回到获取界面
     }
 
     //获取地理位置
     public void getLocation(final Context context) {
-//        openGPSSettings(context);
+        openGPSSettings(context);
         // 获取位置管理服务
 
         String serviceName = Context.LOCATION_SERVICE;
         locationManager = (LocationManager) context.getSystemService(serviceName);
         // 查找到服务信息
         Criteria criteria = new Criteria();
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
+        criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
         criteria.setAltitudeRequired(false);
         criteria.setBearingRequired(false);
         criteria.setCostAllowed(true);
         criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
 
         String provider = locationManager.getBestProvider(new Criteria(), true); // 获取GPS信息
-        MyToast.showToast(context,"provider："+provider);
+//        MyToast.showToast(context,"provider："+provider);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions

@@ -1,8 +1,7 @@
 package com.lsj.lsjnews.adapter;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.LPhone;
@@ -23,6 +21,7 @@ import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.utils.CircleImageView;
+import com.lsj.lsjnews.utils.EmojiParser;
 import com.lsj.lsjnews.utils.RecycleSpaceItemDecoration;
 
 import org.xutils.http.RequestParams;
@@ -42,23 +41,33 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
     private imgAdapter mImgAdapter;
     private int lineCount = 3;
     private int [] is_star ;
+    private int [] is_source; //0原创 1其它
 
     public UserMsgAdapter(Context context, List<bbsBean.Lists> datas){
         this.context = context;
         this.datas = datas;
         is_star = new int[datas.size()];
+        is_source = new int[datas.size()];
     }
     @Override
     public msgViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == -1){
+
+        if(viewType == 0 || viewType == 3){
             lineCount = 1;
-        }else if(viewType == 0){
+        }else if(viewType == 1 || viewType == 4){
             lineCount = 2;
-        }else if(viewType == 1){
+        }else if(viewType == 2 || viewType == 5){
             lineCount = 3;
         }
         View view = LayoutInflater.from(context).inflate(R.layout.item_user_bbs_msg, parent, false);
         final msgViewHolder viewHolder = new msgViewHolder(view);
+        if(viewType == 0 || viewType == 1 || viewType ==2){
+            viewHolder.mCardSource.setVisibility(View.GONE);
+            viewHolder.mRecyleImgs.setVisibility(View.VISIBLE);
+        }else{
+            viewHolder.mCardSource.setVisibility(View.VISIBLE);
+            viewHolder.mRecyleImgs.setVisibility(View.GONE);
+        }
         return viewHolder;
     }
     @Override
@@ -104,9 +113,15 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         Glide.with(context).load(datas.get(position).getuHeadImg()).into(holder.mImgHead);
         holder.mName.setText(datas.get(position).getuName());
         holder.mDate.setText(datas.get(position).getDate());
-        holder.mContent.setText(datas.get(position).getContent());
+//        holder.mContent.setText(datas.get(position).getContent());
+        holder.mContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getContent()));
         if(datas.get(position).getImglists() != null && datas.get(position).getImglists().size()!=0){
-            initRecyle(holder,position);
+            if(is_source[position] == 0){
+                initRecyle(holder,position);
+            }
+        }
+        if(is_source[position] == 1){
+            holder.mTxtSourceContent.setText(datas.get(position).getSourceContent());
         }
     }
 
@@ -115,18 +130,32 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             holder.mRecyleImgs.setAdapter(mImgAdapter);
     }
 
+    //return 0原创没有图片 1原创少于4图片 2原创大于5张图片
+    // 3 4 5
     @Override
     public int getItemViewType(int position) {
         if(datas.get(position).getIs_star() == 1){
             is_star[position] = 1;
         }
-        if(datas.get(position).getImglists().size() == 0){
-            return -1;
-        }else if(datas.get(position).getImglists().size() <= 4){
-            return 0;
+        if(datas.get(position).getmType() == 0){
+            if(datas.get(position).getImglists().size() == 0){
+                return 0;
+            }else if(datas.get(position).getImglists().size() <= 4){
+                return 1;
+            }else{
+                return 2;
+            }
         }else{
-            return 1;
+            is_source[position] = 1;
+            if(datas.get(position).getImglists().size() == 0){
+                return 3;
+            }else if(datas.get(position).getImglists().size() <= 4){
+                return 4;
+            }else{
+                return 5;
+            }
         }
+
     }
 
     @Override
@@ -143,6 +172,9 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         LinearLayout mLayLocation;
         TextView mTxtLocation;
         ImageView mImgBtnStar;
+        //转发是显示
+        CardView mCardSource;
+        TextView mTxtSourceContent;
         public msgViewHolder(View itemView) {
             super(itemView);
             mImgHead = (CircleImageView) itemView.findViewById(R.id.img_user_bbs_msg_head);
@@ -153,6 +185,8 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             mLayLocation = (LinearLayout) itemView.findViewById(R.id.lay_item_location);
             mTxtLocation = (TextView) itemView.findViewById(R.id.txt_item_location);
             mImgBtnStar = (ImageView) itemView.findViewById(R.id.img_btn_msg_star);
+            mCardSource = (CardView) itemView.findViewById(R.id.card_source_bbs_msg);
+            mTxtSourceContent = (TextView) itemView.findViewById(R.id.txt_source_bbs_content);
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyleImgs.setLayoutManager(mGridLayoutManager);

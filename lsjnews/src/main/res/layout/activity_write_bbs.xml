@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lay_write_bbs"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +23,7 @@
             android:layout_height="0dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:paddingTop="10dp"
             android:singleLine="false"
             android:background="@null"
             android:gravity="top"
@@ -68,6 +72,14 @@
                 android:layout_toRightOf="@id/img_write_bbs_location"
                 android:src="@drawable/sel_photo_is_select" />
             <ImageView
+                android:id="@+id/img_write_bbs_emoji"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/img_write_bbs_select"
+                android:src="@drawable/sel_emoji_select" />
+            <ImageView
                 android:id="@+id/img_write_bbs_release"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -76,6 +88,12 @@
                 android:layout_marginRight="10dp"
                 android:src="@drawable/sel_write_is_ok" />
         </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_emoji_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
     <com.lsj.lsjnews.view.LsjLoadingView
         android:id="@+id/loading_write_bbs"

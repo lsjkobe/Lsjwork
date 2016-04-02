@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.AppManager;
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.UserMsgAdapter;
@@ -141,7 +142,7 @@ public class UserBBSMain extends MyBaseActivity{
         x.http().post(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
-
+                MyLogger.showLogWithLineNum(3,"-----------------------------"+s);
                 bbsBean mbbsBean = JSON.parseObject(s, bbsBean.class);
 //                        DbCookieStore instance = DbCookieStore.INSTANCE;
 //                        List cookies = instance.getCookies();
