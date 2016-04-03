@@ -58,30 +58,52 @@
             android:id="@+id/txt_user_bbs_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:textSize="@dimen/text_size_18"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyle_user_bbs_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp">
+            android:paddingTop="5dp">
         </android.support.v7.widget.RecyclerView>
         <android.support.v7.widget.CardView
             android:id="@+id/card_source_bbs_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:cardBackgroundColor="@color/whiteSmoke"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#eeeeee"
             app:cardCornerRadius="2dp"
             app:cardElevation="1dp"
             android:visibility="gone">
-            <TextView
-                android:id="@+id/txt_source_bbs_content"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_marginLeft="5dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txt_source_bbs_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_18"
+                    android:text="lsj"/>
+                <TextView
+                    android:id="@+id/txt_source_bbs_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="@dimen/text_size_16"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyle_user_source_bbs_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <LinearLayout
             android:id="@+id/lay_item_location"
@@ -105,6 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
             <ImageView
+                android:id="@+id/img_btn_msg_forward"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@mipmap/ic_forward"/>

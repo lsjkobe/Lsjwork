@@ -7,13 +7,22 @@ import java.util.List;
  */
 public class bbsBean extends baseBean{
     private List<Lists> lists ;
-
+    private int pageCount;
     public void setLists(List<Lists> lists){
         this.lists = lists;
     }
     public List<Lists> getLists(){
         return this.lists;
     }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+
     public static class Lists {
         private int uid;
         private int mid;
@@ -26,7 +35,32 @@ public class bbsBean extends baseBean{
         private int is_star;
         private int mType;
         private String sourceContent;
+        private String sName;
+        private int suid; //原圈子用户id
+        private int sid; // 原圈子id
 
+        public int getSid() {
+            return sid;
+        }
+
+        public void setSid(int sid) {
+            this.sid = sid;
+        }
+
+        public int getSuid() {
+            return suid;
+        }
+
+        public void setSuid(int suid) {
+            this.suid = suid;
+        }
+
+        public String getsName() {
+            return sName;
+        }
+        public void setsName(String sName) {
+            this.sName = sName;
+        }
         public String getSourceContent() {
             return sourceContent;
         }

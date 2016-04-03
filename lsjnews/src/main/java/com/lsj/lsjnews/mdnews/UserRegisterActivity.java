@@ -11,9 +11,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
+import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
+
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -130,7 +134,19 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String s) {
-                MyToast.showToast(mContext, s);
+//                MyToast.showToast(mContext, s);
+                baseBean bean = JSON.parseObject(s,baseBean.class);
+                switch (bean.getResultCode()){
+                    case 101:
+                        MyToast.showToast(mContext, "手机号已经存在");
+                        break;
+                    case 1:
+                        MyToast.showToast(mContext, "注册成功");
+                        break;
+                    case 0:
+                        MyToast.showToast(mContext, "注册失败");
+                        break;
+                }
             }
             @Override
             public void onError(Throwable throwable, boolean b) {
@@ -171,7 +187,7 @@ public class UserRegisterActivity extends MyBaseActivity implements View.OnClick
         Object data = msg.obj;
         if (result == SMSSDK.RESULT_COMPLETE) {
             if (event == 3) {
-                MyToast.showToast(mContext, "验证成功");
+//                MyToast.showToast(mContext, "验证成功");
                 userRegister();
             } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                 MyToast.showToast(mContext, "验证码已经发送");

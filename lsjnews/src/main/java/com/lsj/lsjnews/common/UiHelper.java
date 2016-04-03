@@ -14,6 +14,7 @@ import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
+import com.lsj.lsjnews.mdnews.UserForwardActivity;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserMainActivity;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
@@ -123,6 +124,17 @@ public class UiHelper {
     public static void showUserWrite(Context context){
         Intent intent = new Intent();
         intent.setClass(context, UserWriteActivity.class);
+        ((Activity)context).startActivityForResult(intent,1);
+    }
+
+    /**
+     * 转发微博界面
+     * @param context
+     */
+    public static void showUserForward(Context context,int mid){
+        Intent intent = new Intent();
+        intent.putExtra("mid",mid);
+        intent.setClass(context, UserForwardActivity.class);
         ((Activity)context).startActivityForResult(intent,1);
     }
     /**

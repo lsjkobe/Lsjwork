@@ -11,6 +11,15 @@ public class userBean extends baseBean {
     private int uFollowCount;
     private int uReleasCount;
     private int uSexy;
+    private String uStateContent;
+
+    public String getuStateContent() {
+        return uStateContent;
+    }
+
+    public void setuStateContent(String uStateContent) {
+        this.uStateContent = uStateContent;
+    }
 
     public int getuFansCount() {
         return uFansCount;

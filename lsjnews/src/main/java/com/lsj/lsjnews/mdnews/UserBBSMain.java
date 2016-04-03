@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.AppManager;
@@ -35,6 +35,9 @@ import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
+import com.lsj.lsjnews.interfaces.OnRefresh;
+import com.lsj.lsjnews.view.LsjLoadingView;
+
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 import java.util.ArrayList;
@@ -43,7 +46,7 @@ import java.util.List;
 /**
  * Created by lsj on 2016/3/16.
  */
-public class UserBBSMain extends MyBaseActivity{
+public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     private Toolbar mToolbar;
     private RecyclerView mRecyleMsg;
@@ -51,6 +54,9 @@ public class UserBBSMain extends MyBaseActivity{
     private List<bbsBean.Lists> bbsBeanList = new ArrayList<>();
     private TextView mTxtToolbarName;
     private FloatingActionButton mFabWrite;
+    private LsjLoadingView mLoadingBBS;
+    private SwipeRefreshLayout mSwipeBBSMain;
+    private int page = 1,pageCount;
     @Override
     protected void initView() {
         super.initView();
@@ -58,6 +64,9 @@ public class UserBBSMain extends MyBaseActivity{
         mRecyleMsg = (RecyclerView) findViewById(R.id.recyle_user_bbs);
         mTxtToolbarName = (TextView) findViewById(R.id.txt_toolbar_center_username);
         mFabWrite = (FloatingActionButton) findViewById(R.id.fab_user_bbs_write);
+        mLoadingBBS = (LsjLoadingView) findViewById(R.id.loading_bbs_main);
+        mSwipeBBSMain = (SwipeRefreshLayout) findViewById(R.id.swipe_bbs_main_list);
+        mSwipeBBSMain.setOnRefreshListener(this);
     }
 
     @Override
@@ -79,8 +88,6 @@ public class UserBBSMain extends MyBaseActivity{
         });
     }
 
-
-    float downX,downY;
     @TargetApi(Build.VERSION_CODES.M)
     private void initRecyleView(){
 
@@ -139,7 +146,8 @@ public class UserBBSMain extends MyBaseActivity{
     }
     public void getBBSData() {
         RequestParams params = new RequestParams(Conts.GET_BBS);
-        x.http().post(params, new NewCommonCallBack() {
+        params.addBodyParameter("page",String.valueOf(page));
+        x.http().get(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
                 MyLogger.showLogWithLineNum(3,"-----------------------------"+s);
@@ -151,8 +159,11 @@ public class UserBBSMain extends MyBaseActivity{
                         MyToast.showToast(mContext,"没登录");
                         break;
                     case 1:
+                        pageCount = mbbsBean.getPageCount();
                         if(mbbsBean.getLists() != null && mbbsBean.getLists().size() != 0){
-                            bbsBeanList.clear();
+                            if(page == 1){
+                                bbsBeanList.clear();
+                            }
                             bbsBeanList.addAll(mbbsBean.getLists());
                             initOrRefresh();
                         }
@@ -163,6 +174,13 @@ public class UserBBSMain extends MyBaseActivity{
                 }
             }
 
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                mSwipeBBSMain.setRefreshing(false);
+                mLoadingBBS.setVisibility(View.GONE);
+                mLoadingBBS.clearAnimation();
+            }
         });
     }
 
@@ -171,7 +189,22 @@ public class UserBBSMain extends MyBaseActivity{
         if(mMsgAdapter == null){
             mMsgAdapter = new UserMsgAdapter(mContext, bbsBeanList);
             mRecyleMsg.setAdapter(mMsgAdapter);
+            mMsgAdapter.setOnRefresh(new OnRefresh() {
+                @Override
+                public void Refresh() {
+                    page++;
+                    if(page > pageCount){
+                       MyToast.showToast(mContext,"没有数据了");
+                    }else{
+                        getBBSData();
+                        mLoadingBBS.setVisibility(View.VISIBLE);
+                        mLoadingBBS.startLoadingAnim();
+                    }
+                }
+            });
         }else{
+            //数据长度改变时动态改变配置，防止数组下标越界
+            mMsgAdapter.changeNewConfig();
             mMsgAdapter.notifyDataSetChanged();
         }
     }
@@ -207,6 +240,13 @@ public class UserBBSMain extends MyBaseActivity{
         popWnd.setBackgroundDrawable(new BitmapDrawable());
         popWnd.showAsDropDown(mToolbar,0,0, Gravity.RIGHT);
     }
+
+    @Override
+    public void onRefresh() {
+        page = 1;
+        getBBSData();
+    }
+
     private class myOnclickListener implements View.OnClickListener {
         PopupWindow popWnd;
         public myOnclickListener(PopupWindow popWnd){
@@ -253,6 +293,7 @@ public class UserBBSMain extends MyBaseActivity{
         if(requestCode == 1){
             if(resultCode == 1){
                 mTxtToolbarName.setText(MyHelper.USER_NAME);
+                page = 1;
                 getBBSData();
             }
         }

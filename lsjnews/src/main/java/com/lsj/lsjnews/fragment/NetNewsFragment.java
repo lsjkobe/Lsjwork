@@ -76,6 +76,8 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         initRecycleDate();
 //        baseLoadData();
         if(mFragmentType == 0){
+            mViewLoading.setVisibility(View.VISIBLE);
+            mViewLoading.startLoadingAnim();
             mSwipeRefreshLayout.setRefreshing(true);
             baseLoadData();
         }
@@ -194,7 +196,9 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
     public SwipeRefreshLayout getSwipeRefreshLayout(){
         return  this.mSwipeRefreshLayout;
     }
-
+    public LsjLoadingView getViewLoading(){
+        return  this.mViewLoading;
+    }
     @Override
     public void onRefresh() {
         page = 0;

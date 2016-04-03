@@ -19,7 +19,9 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
+import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.lsj.lsjnews.utils.CircleImageView;
 import com.lsj.lsjnews.utils.EmojiParser;
 import com.lsj.lsjnews.utils.RecycleSpaceItemDecoration;
@@ -46,6 +48,9 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
     public UserMsgAdapter(Context context, List<bbsBean.Lists> datas){
         this.context = context;
         this.datas = datas;
+        changeNewConfig();
+    }
+    public void changeNewConfig(){
         is_star = new int[datas.size()];
         is_source = new int[datas.size()];
     }
@@ -70,13 +75,26 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
         return viewHolder;
     }
+
     @Override
-    public void onBindViewHolder(final msgViewHolder holder, int position) {
+    public void onBindViewHolder(final msgViewHolder holder, final int position) {
         if(is_star[holder.getAdapterPosition()] == 1){
             holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
         }else{
             holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
         }
+        holder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int sid ;
+                if(is_source[position] == 1){
+                    sid = datas.get(position).getSid();
+                }else{
+                    sid = datas.get(position).getMid();
+                }
+                UiHelper.showUserForward(context,sid);
+            }
+        });
         holder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,18 +134,27 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
 //        holder.mContent.setText(datas.get(position).getContent());
         holder.mContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getContent()));
         if(datas.get(position).getImglists() != null && datas.get(position).getImglists().size()!=0){
-            if(is_source[position] == 0){
                 initRecyle(holder,position);
-            }
         }
         if(is_source[position] == 1){
-            holder.mTxtSourceContent.setText(datas.get(position).getSourceContent());
+            if(datas.get(position).getSourceContent() != null){
+                holder.mTxtSourceContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getSourceContent()));
+            }
+            holder.mTxtSourceUserName.setText("@"+datas.get(position).getsName());
+        }
+        if(position == datas.size() - 1){
+            mOnRefresh.Refresh();
         }
     }
 
     private void initRecyle(msgViewHolder holder, int position) {
             mImgAdapter = new imgAdapter(context,datas.get(position).getImglists());
+        //如果是原创加载mRemRecyleImgs  其它加载mSourceRecyleImgs
+        if(is_source[position] == 0) {
             holder.mRecyleImgs.setAdapter(mImgAdapter);
+        }else {
+            holder.mSourceRecyleImgs.setAdapter(mImgAdapter);
+        }
     }
 
     //return 0原创没有图片 1原创少于4图片 2原创大于5张图片
@@ -163,6 +190,11 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         return datas.size();
     }
 
+    //滑到底部加载接口
+    private OnRefresh mOnRefresh ;
+    public void setOnRefresh(OnRefresh mOnRefresh){
+        this.mOnRefresh = mOnRefresh;
+    }
     public class msgViewHolder extends RecyclerView.ViewHolder {
         CircleImageView mImgHead;
         TextView mName;
@@ -171,10 +203,12 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         RecyclerView mRecyleImgs;
         LinearLayout mLayLocation;
         TextView mTxtLocation;
-        ImageView mImgBtnStar;
+        ImageView mImgBtnStar,mImgBtnForward;
         //转发是显示
         CardView mCardSource;
         TextView mTxtSourceContent;
+        TextView mTxtSourceUserName;
+        RecyclerView mSourceRecyleImgs;
         public msgViewHolder(View itemView) {
             super(itemView);
             mImgHead = (CircleImageView) itemView.findViewById(R.id.img_user_bbs_msg_head);
@@ -185,11 +219,17 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             mLayLocation = (LinearLayout) itemView.findViewById(R.id.lay_item_location);
             mTxtLocation = (TextView) itemView.findViewById(R.id.txt_item_location);
             mImgBtnStar = (ImageView) itemView.findViewById(R.id.img_btn_msg_star);
+            mImgBtnForward = (ImageView) itemView.findViewById(R.id.img_btn_msg_forward);
             mCardSource = (CardView) itemView.findViewById(R.id.card_source_bbs_msg);
             mTxtSourceContent = (TextView) itemView.findViewById(R.id.txt_source_bbs_content);
+            mTxtSourceUserName = (TextView) itemView.findViewById(R.id.txt_source_bbs_user_name);
+            mSourceRecyleImgs = (RecyclerView) itemView.findViewById(R.id.recyle_user_source_bbs_img);
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyleImgs.setLayoutManager(mGridLayoutManager);
+            GridLayoutManager mGridLayoutManagerSource = new GridLayoutManager(context,lineCount);
+            mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+            mSourceRecyleImgs.setLayoutManager(mGridLayoutManagerSource);
             int spacingInPixels = ITEM_SPACE;
             mRecyleImgs.addItemDecoration(new RecycleSpaceItemDecoration(spacingInPixels));
         }

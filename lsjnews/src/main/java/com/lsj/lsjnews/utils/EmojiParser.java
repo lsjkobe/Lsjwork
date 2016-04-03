@@ -82,7 +82,11 @@ public class EmojiParser {
         Matcher matcher = mPattern.matcher(text);
         while (matcher.find()) {
             int resId = mSmileyToRes.get(matcher.group());
-            builder.setSpan(new ImageSpan(context, resId),matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            Drawable drawable = context.getResources().getDrawable(resId);
+            drawable.setBounds(0,0,(int)(drawable.getIntrinsicWidth()*1.5),(int)(drawable.getIntrinsicHeight()*1.5));
+            ImageSpan span = new ImageSpan(drawable,ImageSpan.ALIGN_BOTTOM);
+//            builder.setSpan(new ImageSpan(context, resId),matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(span,matcher.start(), matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return builder;
     }

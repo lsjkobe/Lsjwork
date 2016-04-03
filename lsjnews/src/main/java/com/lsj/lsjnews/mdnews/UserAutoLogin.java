@@ -41,6 +41,11 @@ public class UserAutoLogin {
 //                        MyToast.showToast(context, "登录成功");
                         MyHelper.USER_HEAD_IMG = mUserBean.getuImg();
                         MyHelper.USER_NAME = mUserBean.getuName();
+                        MyHelper.USER_SEXY = mUserBean.getuSexy();
+                        MyHelper.USER_STATE_CONTENT = mUserBean.getuStateContent();
+                        MyHelper.USER_FANS_COUNT = mUserBean.getuFansCount();
+                        MyHelper.USER_RELEAS_COUNT = mUserBean.getuReleasCount();
+                        MyHelper.USER_FROWARD_COUNT = mUserBean.getuFollowCount();
                         break;
                     case 0:
 //                        MyToast.showToast(context, "发生错误");

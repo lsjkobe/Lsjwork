@@ -53,6 +53,10 @@
         <activity
             android:name=".mdnews.UserWriteActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+        //转发界面
+        <activity
+            android:name=".mdnews.UserForwardActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         //用户个人界面
         <activity
             android:name=".mdnews.UserMainActivity"/>

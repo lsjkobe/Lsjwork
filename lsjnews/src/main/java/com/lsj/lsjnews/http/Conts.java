@@ -17,8 +17,10 @@ public class Conts {
     public final static String isLogin = HTTP_HOST+"userIsLogin.php";
     //发表微博
     public final static String POST_WRITE_BBS = HTTP_HOST+"insertBBSData.php";
-    //发表微博
+    //获取微博
     public final static String GET_BBS = HTTP_HOST+"getBBSDate.php";
+    //转发微博
+    public final static String POST_FORWARD_BBS = HTTP_HOST+"insertForwardBBSData.php";
     //登录
     public final static String POST_USER_LOGIN = HTTP_HOST+"user_login.php";
     //退出登录

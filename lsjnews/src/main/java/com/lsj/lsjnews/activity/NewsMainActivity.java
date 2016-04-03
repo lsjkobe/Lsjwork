@@ -104,7 +104,7 @@ public class NewsMainActivity extends MyBaseActivity{
         mViewPager.setOffscreenPageLimit(MyHelper.News_Type_Count);
         mViewPager.setAdapter(mAdapter);
         mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
-        mViewPager.setCurrentItem(0);
+//        mViewPager.setCurrentItem(0);
         initTab();
         initToolbar();
         initRecycler();
@@ -240,7 +240,9 @@ public class NewsMainActivity extends MyBaseActivity{
         @Override
         public void onPageSelected(int position) {
             if(datas.get(position).isLoadSuccess != true){
-                datas.get(position).getSwipeRefreshLayout().setRefreshing(true);
+//                datas.get(position).getSwipeRefreshLayout().setRefreshing(true);
+                datas.get(position).getViewLoading().setVisibility(View.VISIBLE);
+                datas.get(position).getViewLoading().startLoadingAnim();
                 datas.get(position).baseLoadData();
             }
             mPosition = position;
