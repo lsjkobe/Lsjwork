@@ -7,12 +7,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ScrollView;
 
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.NetNewsListAdapter;
+import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.LsjNewsBean;
 import com.lsj.lsjnews.bean.NewNewsList;
 import com.lsj.lsjnews.common.MyHelper;
@@ -32,12 +34,11 @@ import java.util.List;
  * Created by lsj on 2016/3/1.
  */
 public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
-
     private static final String TAG = "NetNewsFragment.class";
     public RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NetNewsListAdapter mAdapter;
-    private List<LsjNewsBean> mSportNewsList = new ArrayList<>();
+    private List<LsjNewsBean> mNewsList = new ArrayList<>();
     private LsjLoadingView mViewLoading;
     private int page = 0;
     private int mFragmentType;
@@ -113,7 +114,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
         RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyHelper.mTypeMap.get(mFragmentType)+"/"+page+ MyApi.END_URL);
 //        RequestParams params = new RequestParams(MyApi.NEWS_DETAIL+MyApi.HEADLINE_TYPE+"/"+MyHelper.mTypeMap.get(MyHelper.NBA_News_Type)+"/"+"0"+ MyApi.END_URL);
 //        mSwipeRefreshLayout.setRefreshing(true);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+        x.http().get(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String str) {
                 MyLogger.showLogWithLineNum(3, TAG + page+"lsj:"+str);
@@ -123,9 +124,9 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
                 LsjNewsList = JSON.parseObject(jsonString, NewNewsList.class);
                 if (LsjNewsList.getMyNewsList() != null) {
                     if (page == 0) {
-                        mSportNewsList.clear();
+                        mNewsList.clear();
                     }
-                    mSportNewsList.addAll(LsjNewsList.getMyNewsList());
+                    mNewsList.addAll(LsjNewsList.getMyNewsList());
                     initOrRefresh();
                 }
 //                if (mainHelper.getNewsDataByType(mFragmentType, str) != null) {
@@ -136,17 +137,6 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
 //                    initOrRefresh();
 //                }
             }
-
-            @Override
-            public void onError(Throwable throwable, boolean b) {
-                MyLogger.showLogWithLineNum(3, TAG + ":onError");
-            }
-
-            @Override
-            public void onCancelled(CancelledException e) {
-
-            }
-
             @Override
             public void onFinished() {
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -159,7 +149,7 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
 
     private void initOrRefresh(){
         if(mAdapter == null){
-            mAdapter = new NetNewsListAdapter(mContext, mSportNewsList, true);
+            mAdapter = new NetNewsListAdapter(mContext, mNewsList, true);
             mRecyclerView.setAdapter(mAdapter);
             if(first){
                 first = false;
@@ -188,8 +178,8 @@ public class NetNewsFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mSportNewsList!=null){
-            mSportNewsList.clear();
+        if(mNewsList!=null){
+            mNewsList.clear();
         }
         mViewLoading.onCleanAnim();
     }

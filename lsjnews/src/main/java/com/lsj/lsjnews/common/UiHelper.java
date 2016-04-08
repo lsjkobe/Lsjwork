@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.lsj.lsjnews.activity.ActivityNewsWeb;
 import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
+import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.mdnews.UserBBSDetailMsg;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserForwardActivity;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
@@ -118,7 +121,7 @@ public class UiHelper {
         ((Activity)context).startActivityForResult(intent,1);
     }
     /**
-     * 写微博界面
+     * 写圈子界面
      * @param context
      */
     public static void showUserWrite(Context context){
@@ -128,14 +131,29 @@ public class UiHelper {
     }
 
     /**
-     * 转发微博界面
+     * 转发圈子界面
      * @param context
      */
-    public static void showUserForward(Context context,int mid){
+    public static void showUserForward(Context context,int sid, int mid){
         Intent intent = new Intent();
+        intent.putExtra("sid",sid);
         intent.putExtra("mid",mid);
         intent.setClass(context, UserForwardActivity.class);
         ((Activity)context).startActivityForResult(intent,1);
+    }
+    /**
+     * 圈子正文界面
+     * @param context
+     */
+    public static void showBBSDetailMsg(Context context, bbsBean.Lists data, int key){
+        Intent intent = new Intent();
+//        intent.putExtra("mid",mid);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("detailMsg",data);
+        intent.putExtras(bundle);
+        intent.putExtra("key",key);
+        intent.setClass(context, UserBBSDetailMsg.class);
+        context.startActivity(intent);
     }
     /**
      * 测试

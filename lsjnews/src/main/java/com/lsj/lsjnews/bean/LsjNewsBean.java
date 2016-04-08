@@ -20,6 +20,16 @@ public class LsjNewsBean {
 
     private String ptime;
 
+    private String TAG;
+
+    public String getTAG() {
+        return TAG;
+    }
+
+    public void setTAGS(String TAG) {
+        this.TAG = TAG;
+    }
+
     public String getPostid() {
         return postid;
     }

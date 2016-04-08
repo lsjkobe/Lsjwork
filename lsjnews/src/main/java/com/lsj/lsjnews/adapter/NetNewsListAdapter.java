@@ -68,5 +68,13 @@ public class NetNewsListAdapter extends RecycleViewBaseAdapter<LsjNewsBean> {
         holder.mTextView.setText(item.getTitle());
         holder.mTxtDate.setText(item.getPtime());
         ImageLoader.getInstance().displayImage(item.getImgsrc(),holder.mImgNews);
+        if(item.getTAG() != null){
+            if(item.getTAG().equals("视频")){
+                holder.mTxtVideoTags.setText(item.getTAG());
+            }
+        }else{
+            holder.mTxtVideoTags.setText("");
+        }
+
     }
 }

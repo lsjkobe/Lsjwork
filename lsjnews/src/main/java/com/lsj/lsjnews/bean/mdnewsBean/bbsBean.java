@@ -1,5 +1,6 @@
 package com.lsj.lsjnews.bean.mdnewsBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class bbsBean extends baseBean{
         this.pageCount = pageCount;
     }
 
-    public static class Lists {
+    public static class Lists implements Serializable {
         private int uid;
         private int mid;
         private String uHeadImg;
@@ -136,7 +137,7 @@ public class bbsBean extends baseBean{
             return this.imglists;
         }
 
-        public static class imglists{
+        public static class imglists implements Serializable{
             private String imgsrc;
 
             public String getImgsrc() {

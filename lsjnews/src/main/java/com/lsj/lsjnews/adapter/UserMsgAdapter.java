@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewHolder>{
 
-    private final int ITEM_SPACE = 0;
+    public static final int ITEM_SPACE = 0;
     private Context context;
     private List<bbsBean.Lists> datas = new ArrayList<>();
     private imgAdapter mImgAdapter;
@@ -66,6 +66,13 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
         View view = LayoutInflater.from(context).inflate(R.layout.item_user_bbs_msg, parent, false);
         final msgViewHolder viewHolder = new msgViewHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiHelper.showBBSDetailMsg(context,datas.get(viewHolder.getAdapterPosition()), 0);
+            }
+        });
+
         if(viewType == 0 || viewType == 1 || viewType ==2){
             viewHolder.mCardSource.setVisibility(View.GONE);
             viewHolder.mRecyleImgs.setVisibility(View.VISIBLE);
@@ -86,13 +93,18 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         holder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int sid ;
-                if(is_source[position] == 1){
-                    sid = datas.get(position).getSid();
+                int sid , mid;
+                if(is_source[position] == 0){
+                    sid = -1;
+                    mid = datas.get(position).getMid();
+                    UiHelper.showUserForward(context,sid,mid);
                 }else{
-                    sid = datas.get(position).getMid();
+                    sid = datas.get(position).getSid();
+                    mid = datas.get(position).getMid();
+                    UiHelper.showUserForward(context,sid,mid);
                 }
-                UiHelper.showUserForward(context,sid);
+//                MyToast.showToast(context,""+sid);
+
             }
         });
         holder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +149,13 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                 initRecyle(holder,position);
         }
         if(is_source[position] == 1){
+            //进入转发源圈子
+            holder.mCardSource.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UiHelper.showBBSDetailMsg(context,datas.get(position), 1);
+                }
+            });
             if(datas.get(position).getSourceContent() != null){
                 holder.mTxtSourceContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getSourceContent()));
             }
@@ -148,7 +167,7 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
     }
 
     private void initRecyle(msgViewHolder holder, int position) {
-            mImgAdapter = new imgAdapter(context,datas.get(position).getImglists());
+        mImgAdapter = new imgAdapter(context,datas.get(position).getImglists());
         //如果是原创加载mRemRecyleImgs  其它加载mSourceRecyleImgs
         if(is_source[position] == 0) {
             holder.mRecyleImgs.setAdapter(mImgAdapter);
@@ -235,14 +254,13 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
     }
 
-    private class imgAdapter extends RecyclerView.Adapter<imgAdapter.imgViewHolder>{
+    public static class imgAdapter extends RecyclerView.Adapter<imgAdapter.imgViewHolder>{
 
         private Context mContext;
         private List<bbsBean.Lists.imglists> mImgLists = new ArrayList<>();
         public imgAdapter(Context mContext,List<bbsBean.Lists.imglists> mImgLists){
             this.mContext = mContext;
             this.mImgLists = mImgLists;
-
         }
 
         @Override

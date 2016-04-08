@@ -83,11 +83,13 @@ public abstract class RecycleViewBaseAdapter<T> extends RecyclerView.Adapter<Rec
         TextView mTextView;
         ImageView mImgNews;
         TextView mTxtDate;
+        TextView mTxtVideoTags;
         public NewsViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.txt_news_msg_1);
             mImgNews = (ImageView) itemView.findViewById(R.id.img_news_header_1);
             mTxtDate = (TextView) itemView.findViewById(R.id.txt_news_date_1);
+            mTxtVideoTags = (TextView) itemView.findViewById(R.id.txt_news_video_tag);
         }
     }
 }

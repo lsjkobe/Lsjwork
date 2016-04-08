@@ -34,14 +34,16 @@ public class UserForwardActivity extends MyBaseActivity implements View.OnClickL
     private EmojiAdapter mEmojiAdapter;
     private LsjLoadingView mLoading;
     private Toolbar mToolbar;
-    private int sid ; //原圈子id
+    private int sid , mid; //原圈子id
 
     private boolean is_emoji_open = false;
 
     @Override
     protected void initGetIntent() {
         super.initGetIntent();
-        sid = getIntent().getIntExtra("mid",0);
+        sid = getIntent().getIntExtra("sid",-1);
+        mid = getIntent().getIntExtra("mid",-1);
+        MyLogger.showLogWithLineNum(3,"----:"+sid+":"+mid);
     }
 
     @Override
@@ -132,6 +134,7 @@ public class UserForwardActivity extends MyBaseActivity implements View.OnClickL
         }
         params.addBodyParameter("content", content);
         params.addBodyParameter("sid", String.valueOf(sid));
+        params.addBodyParameter("mid", String.valueOf(mid));
         x.http().post(params, new Callback.ProgressCallback<String>() {
             @Override
             public void onWaiting() {

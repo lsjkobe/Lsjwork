@@ -35,9 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2016/3/21.
+ * Created by lsj on 2016/3/21.
  */
 public class UserSelectPhoto extends MyBaseActivity{
+    private final int PHOTO_COUNT = 9;
     private final int LOAD_FINISH = 1;
     private List<String> mPhotoLists = new ArrayList<>();
     private int [] is_select ;
@@ -116,7 +117,7 @@ public class UserSelectPhoto extends MyBaseActivity{
     };
 
     public void setToolbarCenterCount(int count){
-        mTxtCount.setText(count+"/9");
+        mTxtCount.setText(count+"/"+PHOTO_COUNT);
     }
     private class selectPhotoAdapter extends RecyclerView.Adapter<selectPhotoAdapter.photoViewHolder>{
         private List<String> datas;
@@ -149,10 +150,10 @@ public class UserSelectPhoto extends MyBaseActivity{
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked){
                         allCount++;
-                        if(allCount > 9){
+                        if(allCount > PHOTO_COUNT){
                             allCount--;
                             holder.mCheckBox.setChecked(false);
-                            MyToast.showToast(mContext,"选择不能超过9张图片");
+                            MyToast.showToast(mContext,"选择不能超过"+PHOTO_COUNT+"张图片");
                             for(int i=0; i<is_select.length; i++){
                                 MyLogger.showLogWithLineNum(3,"----------------:"+is_select[i]);
                                 setToolbarCenterCount(allCount);
