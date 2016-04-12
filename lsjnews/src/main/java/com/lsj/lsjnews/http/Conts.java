@@ -27,6 +27,8 @@ public class Conts {
     public final static String POST_USER_LOGOUT = HTTP_HOST+"user_logout.php";
     //获取圈子评论
     public final static String GET_BBS_COMMENTS = HTTP_HOST+"getBBSComment.php";
+    //圈子评论
+    public final static String POST_BBS_COMMENTS = HTTP_HOST+"CommentBBS.php";
 
     //点赞
     public final static String GET_USER_CLICK_STAR = HTTP_HOST+"clickStarBBS.php";

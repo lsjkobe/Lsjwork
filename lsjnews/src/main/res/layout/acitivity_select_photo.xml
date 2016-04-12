@@ -14,8 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="@dimen/text_size_20"
-            android:text="0/9"/>
+            android:textSize="@dimen/text_size_20"/>
     </android.support.v7.widget.Toolbar>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_select_photo"

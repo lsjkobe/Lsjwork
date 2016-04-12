@@ -6,12 +6,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.CacheUtils;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCallBack;
 import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -75,6 +77,8 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
                     MyHelper.USER_RELEAS_COUNT = 0;
                     MyHelper.USER_FROWARD_COUNT = 0;
                     CacheUtils.setCacheClear(mContext);
+                    UiHelper.showUserLogin(mContext,1);
+                    AppManager.getAppManager().finishActivity();
                 }
             }
         });

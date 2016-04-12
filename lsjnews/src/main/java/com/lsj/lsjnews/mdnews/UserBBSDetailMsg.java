@@ -23,6 +23,7 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.UserMsgAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCommonCallBack;
+import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsDetailMsgBean;
 import com.lsj.lsjnews.common.UiHelper;
@@ -38,7 +39,7 @@ import java.util.List;
 /**
  * Created by lsj on 2016/4/4.
  */
-public class UserBBSDetailMsg extends MyBaseActivity{
+public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickListener{
     private CardView mCardBBSDetailMsg;
     private TabLayout mTabBBSDetailMsg;
     private TabLayout mTabBBSDetailMsgTop;//当mTabBBSDetailMsg划出屏幕显示，功能类似于滑到头部固定
@@ -46,13 +47,11 @@ public class UserBBSDetailMsg extends MyBaseActivity{
     private List<View> mViewList;
     private List<String> mViewTitles;
     private detailMsgAdapter mViewpagerAdapter;
-    private recyclerAdapter mRecyclerCommentAdapter,mRecyclerStarAdapter;
+    private recyclerAdapter mRecyclerForwardAdapter,mRecyclerCommentAdapter,mRecyclerStarAdapter;
     private RecyclerView mRecyclerForward,mRecyclerComment,mRecyclerStar;
     private MyNestedScrollView mNested;
-
     private bbsDetailMsgBean.allDatas mAllDatas;
     private int currentPosition = 1; //当前viewpager
-
     private int key; //0点击转发后的微博进， 1点击转发微博源微博进
     private bbsBean.Lists bean;
     private ImageView mImgUserHead;
@@ -60,7 +59,7 @@ public class UserBBSDetailMsg extends MyBaseActivity{
     private RecyclerView mRecyleImgs;
     private LinearLayout mLayLocation;
     private TextView mTxtLocation;
-    private ImageView mImgBtnStar,mImgBtnForward;
+    private ImageView mImgBtnStar,mImgBtnForward, mImgBtnComment;
     //转发时显示
     private CardView mCardSource;
     private TextView mTxtSourceContent;
@@ -96,10 +95,15 @@ public class UserBBSDetailMsg extends MyBaseActivity{
         mTxtLocation = (TextView) findViewById(R.id.txt_item_location);
         mImgBtnStar = (ImageView) findViewById(R.id.img_btn_msg_star);
         mImgBtnForward = (ImageView) findViewById(R.id.img_btn_msg_forward);
+        mImgBtnComment = (ImageView) findViewById(R.id.img_btn_msg_comment);
         mCardSource = (CardView) findViewById(R.id.card_source_bbs_msg);
         mTxtSourceContent = (TextView) findViewById(R.id.txt_source_bbs_content);
         mTxtSourceUserName = (TextView) findViewById(R.id.txt_source_bbs_user_name);
         mSourceRecyleImgs = (RecyclerView) findViewById(R.id.recyle_user_source_bbs_img);
+
+        mImgBtnStar.setOnClickListener(this);
+        mImgBtnForward.setOnClickListener(this);
+        mImgBtnComment.setOnClickListener(this);
     }
 
 
@@ -110,6 +114,7 @@ public class UserBBSDetailMsg extends MyBaseActivity{
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 //                MyLogger.showLogWithLineNum(3,"111:"+scrollY+":"+oldScrollY);
                 if(scrollY > oldScrollY){
+                    //15是由于cardview的高度造成的大概误差
                     if(scrollY >= mCardBBSDetailMsg.getHeight()+15){
                         mTabBBSDetailMsgTop.setVisibility(View.VISIBLE);
                     }
@@ -126,6 +131,16 @@ public class UserBBSDetailMsg extends MyBaseActivity{
     }
 
     private void initDetailMsg(){
+        if(key == 0){
+            if(bean.getIs_star() == 1){
+                mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+            }
+        }else{
+            if(bean.getS_is_star() == 1){
+                mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+            }
+        }
+
         Glide.with(mContext).load(bean.getuHeadImg()).into(mImgUserHead);
         mTxtUserName.setText(bean.getuName());
         mTxtDate.setText(bean.getDate());
@@ -146,6 +161,7 @@ public class UserBBSDetailMsg extends MyBaseActivity{
         if(bean.getmType() == 0){
             mCardSource.setVisibility(View.GONE);
             mRecyleImgs.setVisibility(View.VISIBLE);
+
         }else{
             mTxtSourceContent.setText(EmojiParser.getInstance(mContext).replace(bean.getSourceContent()));
             mTxtSourceUserName.setText("@"+bean.getsName());
@@ -199,6 +215,7 @@ public class UserBBSDetailMsg extends MyBaseActivity{
         mViewpagerAdapter = new detailMsgAdapter(mViewList) ;
         mViewPager.setAdapter(mViewpagerAdapter);
         mViewPager.setCurrentItem(1);
+        mViewPager.addOnPageChangeListener(new detailOnPagerChangeListener());
         initTabLayout();
         initRecycler();
     }
@@ -229,7 +246,11 @@ public class UserBBSDetailMsg extends MyBaseActivity{
 
     private void getBBSComment(){
         RequestParams params = new RequestParams(Conts.GET_BBS_COMMENTS);
-        params.addBodyParameter("mid","38");
+        if(key == 0){
+            params.addBodyParameter("mid",String.valueOf(bean.getMid()));
+        }else{
+            params.addBodyParameter("mid",String.valueOf(bean.getSid()));
+        }
         x.http().get(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
@@ -250,6 +271,14 @@ public class UserBBSDetailMsg extends MyBaseActivity{
     }
 
     private void initOrRefresh() {
+        if (mRecyclerForwardAdapter == null) {
+            mRecyclerForwardAdapter = new recyclerAdapter(mAllDatas, 0);
+            mRecyclerForward.setAdapter(mRecyclerForwardAdapter);
+        } else {
+            if(currentPosition == 0){
+                mRecyclerForwardAdapter.notifyDataSetChanged();
+            }
+        }
         if (mRecyclerStarAdapter == null) {
             mRecyclerStarAdapter = new recyclerAdapter(mAllDatas, 2);
             mRecyclerStar.setAdapter(mRecyclerStarAdapter);
@@ -267,6 +296,52 @@ public class UserBBSDetailMsg extends MyBaseActivity{
             }
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.img_btn_msg_star:
+                RequestParams params = new RequestParams(Conts.GET_USER_CLICK_STAR);
+                if (key ==0) {
+                    params.addBodyParameter("mid", String.valueOf(bean.getMid()));
+                }else{
+                    params.addBodyParameter("mid", String.valueOf(bean.getSid()));
+                }
+
+                x.http().get(params, new NewCommonCallBack() {
+                    @Override
+                    public void onSuccess(String s) {
+                        baseBean bean = JSON.parseObject(s, baseBean.class);
+                        switch (bean.getResultCode()) {
+                            case 1:
+                                mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+                                break;
+                            case -1:
+                                mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
+                                break;
+                            case 0:
+                                MyToast.showToast(mContext, "赞失败");
+                                break;
+                        }
+
+                    }
+                });
+                break;
+            case R.id.img_btn_msg_forward:
+//                UiHelper.showUserForward(mContext,bean); //错误，如果key==1 bean被改变
+                UiHelper.showUserForward(mContext,(bbsBean.Lists) getIntent().getSerializableExtra("detailMsg"));
+                break;
+            case R.id.img_btn_msg_comment:
+                if(key == 0){
+                    UiHelper.showComment(mContext,bean.getMid());
+                }else{
+                    UiHelper.showComment(mContext, bean.getSid());
+                }
+
+                break;
+        }
+    }
+
     private class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.recyclerViewHolder>{
 
         private bbsDetailMsgBean.allDatas lists;
@@ -294,6 +369,10 @@ public class UserBBSDetailMsg extends MyBaseActivity{
                 holder.mTxtDate.setText(bean.getcCreateDate());
                 holder.mTxtContent.setText(EmojiParser.getInstance(mContext).replace(bean.getContent()));
                 Glide.with(mContext).load(bean.getuHeadImg()).into(holder.mImgHead);
+            }else if(key == 0){
+                bbsDetailMsgBean.allDatas.forwardBean bean = lists.getForwardLists().get(position);
+                holder.mTxtUserName.setText(bean.getuName());
+                Glide.with(mContext).load(bean.getuHeadImg()).into(holder.mImgHead);
             }else{
                 bbsDetailMsgBean.allDatas.starBean bean = lists.getStarLists().get(position);
                 holder.mTxtUserName.setText(bean.getuName());
@@ -306,6 +385,8 @@ public class UserBBSDetailMsg extends MyBaseActivity{
         public int getItemCount() {
             if(key == 1){
                 return lists.getCommentLists().size();
+            }else if(key == 0){
+                return lists.getForwardLists().size();
             }else{
                 return lists.getStarLists().size();
             }

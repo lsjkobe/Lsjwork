@@ -27,10 +27,7 @@
         <activity
             android:name=".activity.NewsMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".activity.ActivityNewsWeb"
@@ -57,11 +54,24 @@
         <activity
             android:name=".mdnews.UserForwardActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+        //评论界面
+        <activity
+            android:name=".mdnews.UserBBSComment"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         //圈子正文
         <activity android:name=".mdnews.UserBBSDetailMsg"/>
         //用户个人界面
         <activity
             android:name=".mdnews.UserMainActivity"/>
+        //其他用户界面
+        <activity
+            android:name=".mdnews.OtherUserMain">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         //mob
         <activity
             android:name="com.mob.tools.MobUIShell"

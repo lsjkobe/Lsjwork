@@ -34,11 +34,20 @@ public class bbsBean extends baseBean{
         private List<imglists> imglists ;
         private String location;
         private int is_star;
+        private int s_is_star; //如果是转发，点进原圈子后用户是否赞
         private int mType;
         private String sourceContent;
         private String sName;
         private int suid; //原圈子用户id
         private int sid; // 原圈子id
+
+        public int getS_is_star() {
+            return s_is_star;
+        }
+
+        public void setS_is_star(int s_is_star) {
+            this.s_is_star = s_is_star;
+        }
 
         public int getSid() {
             return sid;

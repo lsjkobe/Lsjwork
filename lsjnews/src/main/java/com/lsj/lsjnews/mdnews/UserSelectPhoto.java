@@ -38,7 +38,7 @@ import java.util.Map;
  * Created by lsj on 2016/3/21.
  */
 public class UserSelectPhoto extends MyBaseActivity{
-    private final int PHOTO_COUNT = 9;
+    private int PHOTO_COUNT = 9;
     private final int LOAD_FINISH = 1;
     private List<String> mPhotoLists = new ArrayList<>();
     private int [] is_select ;
@@ -46,6 +46,14 @@ public class UserSelectPhoto extends MyBaseActivity{
     private Toolbar mToolbar;
     private int allCount = 0;
     private TextView mTxtCount;
+
+    @Override
+    protected void initGetIntent() {
+        super.initGetIntent();
+        PHOTO_COUNT = getIntent().getIntExtra("imgCount",9);
+
+    }
+
     @Override
     protected void initView() {
         super.initView();
@@ -56,6 +64,7 @@ public class UserSelectPhoto extends MyBaseActivity{
 
     @Override
     protected void initData() {
+        setToolbarCenterCount(0);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(mContext,3);
         mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRecyclePhoto.setLayoutManager(mGridLayoutManager);

@@ -8,7 +8,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
@@ -16,6 +19,7 @@ import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.EmojiAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
+import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.interfaces.OnEmojiOnclick;
 import com.lsj.lsjnews.utils.EmojiParser;
@@ -25,6 +29,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 /**
+ * 转发圈子
  * Created by lsj on 2016/3/21.
  */
 public class UserForwardActivity extends MyBaseActivity implements View.OnClickListener{
@@ -35,14 +40,23 @@ public class UserForwardActivity extends MyBaseActivity implements View.OnClickL
     private LsjLoadingView mLoading;
     private Toolbar mToolbar;
     private int sid , mid; //原圈子id
+    private bbsBean.Lists list;
 
     private boolean is_emoji_open = false;
 
+    private ImageView mImgSourcePic;
+    private TextView mTxtSourceName,mTxtSourceContent;
     @Override
     protected void initGetIntent() {
         super.initGetIntent();
-        sid = getIntent().getIntExtra("sid",-1);
-        mid = getIntent().getIntExtra("mid",-1);
+        list = (bbsBean.Lists) getIntent().getSerializableExtra("list");
+        if(list.getmType() == 0){
+            sid = -1;
+            mid = list.getMid();
+        }else{
+            sid = list.getSid();
+            mid = list.getMid();
+        }
         MyLogger.showLogWithLineNum(3,"----:"+sid+":"+mid);
     }
 
@@ -55,12 +69,17 @@ public class UserForwardActivity extends MyBaseActivity implements View.OnClickL
         mImgEmoji = (ImageView) findViewById(R.id.img_forward_bbs_emoji);
         mLoading = (LsjLoadingView) findViewById(R.id.loading_forward_write_bbs);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_forward_bbs_main);
+        mImgSourcePic = (ImageView) findViewById(R.id.img_forward_source_bbs);
+        mTxtSourceName = (TextView) findViewById(R.id.txt_forward_source_bbs_user_name);
+        mTxtSourceContent = (TextView) findViewById(R.id.txt_forward_source_bbs_content);
+
         mImgRelease.setOnClickListener(this);
         mImgEmoji.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
+        initForward();
         initToolbar();
         initRecycler();
         mEditForwardContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -72,6 +91,22 @@ public class UserForwardActivity extends MyBaseActivity implements View.OnClickL
                 }
             }
         });
+    }
+
+    private void initForward(){
+        if(list.getImglists() != null && list.getImglists().size() != 0){
+            Glide.with(mContext).load(list.getImglists().get(0).getImgsrc()).into(mImgSourcePic);
+        }else{
+            Glide.with(mContext).load(list.getuHeadImg()).into(mImgSourcePic);
+        }
+        if(list.getmType() == 0){
+            mTxtSourceName.setText("@"+list.getuName());
+            mTxtSourceContent.setText(EmojiParser.getInstance(mContext).replace(list.getContent()));
+        }else{
+            mTxtSourceName.setText("@"+list.getsName());
+            mTxtSourceContent.setText(EmojiParser.getInstance(mContext).replace(list.getSourceContent()));
+        }
+
     }
 
     private void initRecycler() {

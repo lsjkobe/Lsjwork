@@ -25,10 +25,8 @@ import com.lsj.lsjnews.interfaces.OnRefresh;
 import com.lsj.lsjnews.utils.CircleImageView;
 import com.lsj.lsjnews.utils.EmojiParser;
 import com.lsj.lsjnews.utils.RecycleSpaceItemDecoration;
-
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,18 +91,13 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         holder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int sid , mid;
-                if(is_source[position] == 0){
-                    sid = -1;
-                    mid = datas.get(position).getMid();
-                    UiHelper.showUserForward(context,sid,mid);
-                }else{
-                    sid = datas.get(position).getSid();
-                    mid = datas.get(position).getMid();
-                    UiHelper.showUserForward(context,sid,mid);
-                }
-//                MyToast.showToast(context,""+sid);
-
+                UiHelper.showUserForward(context,datas.get(position));
+            }
+        });
+        holder.mImgBtnComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UiHelper.showComment(context,datas.get(position).getMid());
             }
         });
         holder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
@@ -119,10 +112,12 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                         switch (bean.getResultCode()){
                             case 1:
                                 holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+                                datas.get(position).setIs_star(1);
                                 is_star[holder.getAdapterPosition()] = 1;
                                 break;
                             case -1:
                                 holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
+                                datas.get(position).setIs_star(0);
                                 is_star[holder.getAdapterPosition()] = 0;
                                 break;
                             case 0:
@@ -222,7 +217,7 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         RecyclerView mRecyleImgs;
         LinearLayout mLayLocation;
         TextView mTxtLocation;
-        ImageView mImgBtnStar,mImgBtnForward;
+        ImageView mImgBtnStar,mImgBtnForward,mImgBtnComment;
         //转发是显示
         CardView mCardSource;
         TextView mTxtSourceContent;
@@ -239,6 +234,7 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             mTxtLocation = (TextView) itemView.findViewById(R.id.txt_item_location);
             mImgBtnStar = (ImageView) itemView.findViewById(R.id.img_btn_msg_star);
             mImgBtnForward = (ImageView) itemView.findViewById(R.id.img_btn_msg_forward);
+            mImgBtnComment = (ImageView) itemView.findViewById(R.id.img_btn_msg_comment);
             mCardSource = (CardView) itemView.findViewById(R.id.card_source_bbs_msg);
             mTxtSourceContent = (TextView) itemView.findViewById(R.id.txt_source_bbs_content);
             mTxtSourceUserName = (TextView) itemView.findViewById(R.id.txt_source_bbs_user_name);

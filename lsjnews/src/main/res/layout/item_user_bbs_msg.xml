@@ -125,6 +125,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:layout_margin="10dp">
             <ImageView
                 android:id="@+id/img_btn_msg_forward"
@@ -132,6 +133,7 @@
                 android:layout_height="25dp"
                 android:src="@mipmap/ic_forward"/>
             <ImageView
+                android:id="@+id/img_btn_msg_comment"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@mipmap/ic_commend"

@@ -158,7 +158,7 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_write_bbs_select:
-                UiHelper.showSelectPhoto(mContext);
+                UiHelper.showSelectPhoto(mContext,9);
                 break;
             case R.id.img_write_bbs_location:
 //                myLocation.getInstance().getLocation(mContext);

@@ -20,6 +20,16 @@ public class bbsDetailMsgBean extends baseBean{
     public static class allDatas{
         private List<commentBean> commentLists;
         private List<starBean> starLists;
+        private List<forwardBean> forwardLists;
+
+        public List<forwardBean> getForwardLists() {
+            return forwardLists;
+        }
+
+        public void setForwardLists(List<forwardBean> forwardLists) {
+            this.forwardLists = forwardLists;
+        }
+
         public List<commentBean> getCommentLists() {
             return commentLists;
         }
@@ -148,6 +158,36 @@ public class bbsDetailMsgBean extends baseBean{
             }
             public void setMid(int mid) {
                 this.mid = mid;
+            }
+        }
+
+        public static class forwardBean{
+            private int uid;
+            private String uName;
+            private String uHeadImg;
+
+            public String getuHeadImg() {
+                return uHeadImg;
+            }
+
+            public void setuHeadImg(String uHeadImg) {
+                this.uHeadImg = uHeadImg;
+            }
+
+            public int getUid() {
+                return uid;
+            }
+
+            public void setUid(int uid) {
+                this.uid = uid;
+            }
+
+            public String getuName() {
+                return uName;
+            }
+
+            public void setuName(String uName) {
+                this.uName = uName;
             }
         }
     }

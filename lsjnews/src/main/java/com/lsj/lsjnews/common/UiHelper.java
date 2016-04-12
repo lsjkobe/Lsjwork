@@ -15,6 +15,7 @@ import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.mdnews.UserBBSComment;
 import com.lsj.lsjnews.mdnews.UserBBSDetailMsg;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserForwardActivity;
@@ -114,9 +115,11 @@ public class UiHelper {
     /**
      * 选择图片界面
      * @param context
+     * @param count最多选择图片的数量
      */
-    public static void showSelectPhoto(Context context){
+    public static void showSelectPhoto(Context context, int count){
         Intent intent = new Intent();
+        intent.putExtra("imgCount",count);
         intent.setClass(context, UserSelectPhoto.class);
         ((Activity)context).startActivityForResult(intent,1);
     }
@@ -134,10 +137,11 @@ public class UiHelper {
      * 转发圈子界面
      * @param context
      */
-    public static void showUserForward(Context context,int sid, int mid){
+    public static void showUserForward(Context context,bbsBean.Lists list){
         Intent intent = new Intent();
-        intent.putExtra("sid",sid);
-        intent.putExtra("mid",mid);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("list",list);
+        intent.putExtras(bundle);
         intent.setClass(context, UserForwardActivity.class);
         ((Activity)context).startActivityForResult(intent,1);
     }
@@ -153,6 +157,16 @@ public class UiHelper {
         intent.putExtras(bundle);
         intent.putExtra("key",key);
         intent.setClass(context, UserBBSDetailMsg.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 圈子评论界面
+     * @param context
+     */
+    public static void showComment(Context context,int mid){
+        Intent intent = new Intent();
+        intent.putExtra("mid",mid);
+        intent.setClass(context, UserBBSComment.class);
         context.startActivity(intent);
     }
     /**
