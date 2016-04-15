@@ -27,7 +27,10 @@
         <activity
             android:name=".activity.NewsMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.ActivityNewsWeb"
@@ -66,10 +69,7 @@
         //其他用户界面
         <activity
             android:name=".mdnews.OtherUserMain">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         //mob
