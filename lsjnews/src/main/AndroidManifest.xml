@@ -69,7 +69,6 @@
         //其他用户界面
         <activity
             android:name=".mdnews.OtherUserMain">
-
         </activity>
 
         //mob

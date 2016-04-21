@@ -88,18 +88,24 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }else{
             holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
         }
+        holder.mImgHead.setOnClickListener(new mOnClickListener(holder,position));
+        holder.mName.setOnClickListener(new mOnClickListener(holder,position));
+        holder.mTxtSourceUserName.setOnClickListener(new mOnClickListener(holder,position));
+        //转发
         holder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UiHelper.showUserForward(context,datas.get(position));
             }
         });
+        //评论
         holder.mImgBtnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UiHelper.showComment(context,datas.get(position).getMid());
             }
         });
+        //点赞
         holder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +167,29 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
     }
 
+    //用户界面跳转监听
+    private class mOnClickListener implements View.OnClickListener{
+        msgViewHolder holder;
+        int position;
+        public mOnClickListener(msgViewHolder holder, int position){
+            this.holder = holder;
+            this.position = position;
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.img_user_bbs_msg_head:
+                    UiHelper.showOtherUserMain(context,datas.get(position).getUid());
+                    break;
+                case R.id.txt_user_bbs_msg_username:
+                    UiHelper.showOtherUserMain(context,datas.get(position).getUid());
+                    break;
+                case R.id.txt_source_bbs_user_name:
+                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
+                    break;
+            }
+        }
+    }
     private void initRecyle(msgViewHolder holder, int position) {
         mImgAdapter = new imgAdapter(context,datas.get(position).getImglists());
         //如果是原创加载mRemRecyleImgs  其它加载mSourceRecyleImgs

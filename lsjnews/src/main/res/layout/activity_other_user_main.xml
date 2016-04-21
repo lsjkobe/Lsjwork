@@ -37,8 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:textSize="@dimen/text_size_24"
-                        android:textColor="@color/black"
-                        android:text="李上健"/>
+                        android:textColor="@color/black"/>
                     <TextView
                         android:id="@+id/txt_other_user_main_address"
                         android:layout_width="wrap_content"
@@ -57,6 +56,7 @@
                             android:textSize="@dimen/text_size_18"
                             android:text="圈子"/>
                         <TextView
+                            android:id="@+id/txt_other_user_main_releas_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_20"
@@ -69,6 +69,7 @@
                             android:layout_marginLeft="40dp"
                             android:text="粉丝"/>
                         <TextView
+                            android:id="@+id/txt_other_user_main_fans_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_20"
@@ -81,6 +82,7 @@
                             android:layout_marginLeft="20dp"
                             android:text="关注"/>
                         <TextView
+                            android:id="@+id/txt_other_user_main_follow_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/text_size_20"
@@ -88,6 +90,7 @@
                             android:text="13"/>
                     </LinearLayout>
                     <TextView
+                        android:id="@+id/txt_other_user_main_state_content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -113,16 +116,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <include
                 android:id="@+id/tablayout_other_user_main"
                 layout="@layout/tab_bbs_msg_menu"/>
-            <android.support.v4.view.ViewPager
+            <com.lsj.lsjnews.view.MyViewPager
                 android:id="@+id/viewpager_other_user_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-            </android.support.v4.view.ViewPager>
+.
+            </com.lsj.lsjnews.view.MyViewPager>
         </LinearLayout>
     </com.lsj.lsjnews.view.MyNestedScrollView>
     <android.support.design.widget.TabLayout

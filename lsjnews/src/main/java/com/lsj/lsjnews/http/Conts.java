@@ -30,6 +30,11 @@ public class Conts {
     //圈子评论
     public final static String POST_BBS_COMMENTS = HTTP_HOST+"CommentBBS.php";
 
+    //获取其它用户资料
+    public final static String GET_OTHER_USER_MSG = HTTP_HOST+"getOtherUserMsg.php";
+    //获取其它用户圈子
+    public final static String GET_OTHER_USER_BBS = HTTP_HOST+"getOtherUserBBS.php";
+
     //点赞
     public final static String GET_USER_CLICK_STAR = HTTP_HOST+"clickStarBBS.php";
 }

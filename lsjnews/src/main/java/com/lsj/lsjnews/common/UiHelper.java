@@ -15,6 +15,7 @@ import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.mdnews.OtherUserMain;
 import com.lsj.lsjnews.mdnews.UserBBSComment;
 import com.lsj.lsjnews.mdnews.UserBBSDetailMsg;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
@@ -167,6 +168,16 @@ public class UiHelper {
         Intent intent = new Intent();
         intent.putExtra("mid",mid);
         intent.setClass(context, UserBBSComment.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 其它用户界面
+     * @param context
+     */
+    public static void showOtherUserMain(Context context,int uid){
+        Intent intent = new Intent();
+        intent.putExtra("uid",uid);
+        intent.setClass(context, OtherUserMain.class);
         context.startActivity(intent);
     }
     /**
