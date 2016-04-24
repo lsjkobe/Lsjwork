@@ -5,9 +5,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -21,7 +24,6 @@ import com.lsj.lsjnews.bean.mdnewsBean.userBean;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.mdnews.fragment.OtherUserBBS;
 import com.lsj.lsjnews.utils.CircleImageView;
-import com.lsj.lsjnews.view.MyViewPager;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 import java.util.ArrayList;
@@ -35,10 +37,11 @@ public class OtherUserMain extends MyBaseActivity{
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
     private TabLayout mTabDefoult,mTabTop;
-    private MyViewPager mViewPager;
+    private ViewPager mViewPager;
     private TextView mTxtName,mTxtReleasCount,mTxtFansCount,mTxtFollowCount,mTxtStateContent;
     private otherUserViewPagerAdapter mViewPagerAdapter;
     private List<BaseFragment> datas;
+    private ImageView mImgSexy;
     private int uid;
 
     @Override
@@ -55,52 +58,62 @@ public class OtherUserMain extends MyBaseActivity{
         mToolbar = (Toolbar) findViewById(R.id.toolbar_other_user_mian);
         mTabDefoult = (TabLayout) findViewById(R.id.tablayout_other_user_main);
         mTabTop = (TabLayout) findViewById(R.id.tablayout_other_user_main_top);
-        mViewPager = (MyViewPager) findViewById(R.id.viewpager_other_user_main);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager_other_user_main);
         mTxtName = (TextView) findViewById(R.id.txt_other_user_main_name);
         mTxtReleasCount = (TextView) findViewById(R.id.txt_other_user_main_releas_count);
         mTxtFansCount = (TextView) findViewById(R.id.txt_other_user_main_fans_count);
         mTxtFollowCount = (TextView) findViewById(R.id.txt_other_user_main_follow_count);
         mTxtStateContent = (TextView) findViewById(R.id.txt_other_user_main_state_content);
+        mImgSexy = (ImageView) findViewById(R.id.img_other_user_mian_sexy);
     }
 
     private boolean is_show_top_tab = false;
     @Override
     protected void initData() {
+        getUserMsg();
+        initOtherUserFragment();
+
 //        mImgOtherUserHead.setVisibility(View.GONE);
 //        AlphaAnimation mAlphaAnim = new AlphaAnimation(1f,0f);
 //        mAlphaAnim.setDuration(5000);
 //        如果fillAfter的值为true,则动画执行后,控件将停留在执行结束的状态
 //        mSAnim.setFillAfter(true);
 //        mImgOtherUserHead.setAnimation(mAlphaAnim);
+
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 //                MyLogger.showLogWithLineNum(3,"------------:"+verticalOffset+":"+mAppBarLayout.getHeight()+":"+mToolbar.getHeight());
+
                 if( verticalOffset == mToolbar.getHeight() - mAppBarLayout.getHeight() ){
                     //刚好把整个appbarlayout滑出就显示topTablayout设置is_show_top_tab = true
                     is_show_top_tab = true;
                     mTabTop.setVisibility(View.VISIBLE);
+                    mFragmentBBS1.setRecyclerViewScroll(true);
+                    mFragmentBBS2.setRecyclerViewScroll(true);
                 }else if(is_show_top_tab){
                     //把整个appbarlayout滑出屏幕后向下滑的一瞬间就隐藏topTablayout设置is_show_top_tab = false
                     is_show_top_tab = false;
                     mTabTop.setVisibility(View.GONE);
+                    mFragmentBBS1.setRecyclerViewScroll(false);
+                    mFragmentBBS2.setRecyclerViewScroll(false);
                 }
             }
         });
-        getUserMsg();
-        initOtherUserFragment();
-    }
 
+    }
+    OtherUserBBS mFragmentBBS1,mFragmentBBS2;
     private void initOtherUserFragment() {
         datas = new ArrayList<>();
-        OtherUserBBS mFragmentBBS1 = new OtherUserBBS();
+        mFragmentBBS1 = new OtherUserBBS();
         mFragmentBBS1.setUid(uid);
         datas.add(mFragmentBBS1);
-        OtherUserBBS mFragmentBBS2 = new OtherUserBBS();
+        mFragmentBBS2 = new OtherUserBBS();
         datas.add(mFragmentBBS2);
         mViewPagerAdapter = new otherUserViewPagerAdapter(getSupportFragmentManager(),datas);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(0);
+
         initTabLayout();
     }
 
@@ -125,7 +138,6 @@ public class OtherUserMain extends MyBaseActivity{
             public void onSuccess(String s) {
                 MyLogger.showLogWithLineNum(3,s);
                 userBean user = JSON.parseObject(s,userBean.class);
-                MyToast.showToast(mContext,""+user.getResultCode());
                 if(user.getResultCode() == 0){
                     MyToast.showToast(mContext,"用户不存在");
                 }else{
@@ -135,24 +147,33 @@ public class OtherUserMain extends MyBaseActivity{
                     mTxtFollowCount.setText(""+user.getuFollowCount());
                     mTxtStateContent.setText(user.getuStateContent());
                     Glide.with(mContext).load(user.getuImg()).into(mImgOtherUserHead);
+                    if(user.getuSexy() == 0){
+                        mImgSexy.setBackgroundResource(R.mipmap.ic_sexy_boy);
+                    }else{
+                        mImgSexy.setBackgroundResource(R.mipmap.ic_sexy_girl);
+                    }
                 }
             }
         });
     }
-//
-//    int count=0;
-//    void getTotle(int m,int totle){
-//        for(int i=m; i<=19; i++){
-//            if(totle+i >= 20){
-//                if(totle+i == 20){
-//                    count++;
-//                }
-//                break;
-//            }else{
-//                getTotle(i+1,totle+i);
-//            }
-//        }
-//    }
+
+    private class otherUserViewPagerSelect implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+//            mViewPager.getLayoutParams().height = 1000;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
 
     private class otherUserViewPagerAdapter extends FragmentPagerAdapter{
         List<BaseFragment> datas;

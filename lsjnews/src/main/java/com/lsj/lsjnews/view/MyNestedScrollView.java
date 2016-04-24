@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
+import com.example.lsj.httplibrary.utils.MyLogger;
+
 /**
  * Created by lsj on 2016/4/6.
  * 解决nestedScrollView嵌套RecyclerView滑动没惯性的问题

@@ -11,7 +11,7 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,13 +31,32 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"
                     android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/txt_other_user_main_name"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:textSize="@dimen/text_size_24"
-                        android:textColor="@color/black"/>
+                        android:layout_marginTop="5dp">
+                        <TextView
+                            android:id="@+id/txt_other_user_main_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size_24"
+                            android:textColor="@color/black"/>
+                        <ImageView
+                            android:id="@+id/img_other_user_mian_sexy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"/>
+                        <Button
+                            android:layout_width="50dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/shape_relations_button"
+                            android:textColor="@color/colorPrimary"
+                            android:text="关注"/>
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/txt_other_user_main_address"
                         android:layout_width="wrap_content"
@@ -109,26 +128,26 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <com.lsj.lsjnews.view.MyNestedScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:orientation="vertical">
             <include
                 android:id="@+id/tablayout_other_user_main"
                 layout="@layout/tab_bbs_msg_menu"/>
-            <com.lsj.lsjnews.view.MyViewPager
+            <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager_other_user_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-.
-            </com.lsj.lsjnews.view.MyViewPager>
+
+            </android.support.v4.view.ViewPager>
         </LinearLayout>
-    </com.lsj.lsjnews.view.MyNestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
     <android.support.design.widget.TabLayout
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:android="http://schemas.android.com/apk/res/android"

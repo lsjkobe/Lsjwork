@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/4/13.
+ * Created by lsj on 2016/4/13.
  */
 public class OtherUserBBS extends BaseFragment{
     private RecyclerView mRecyclerView;
@@ -36,7 +36,14 @@ public class OtherUserBBS extends BaseFragment{
     protected void initGetIntent() {
         super.initGetIntent();
         showTopView(false);
+
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_other_user_main);
+        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -105,6 +112,9 @@ public class OtherUserBBS extends BaseFragment{
     }
     public void setUid(int uid) {
         this.uid = uid;
+    }
+    public void setRecyclerViewScroll(boolean isScroll){
+        mRecyclerView.setNestedScrollingEnabled(isScroll);
     }
     @Override
     protected int getLayoutId() {
