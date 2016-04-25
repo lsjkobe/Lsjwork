@@ -31,6 +31,8 @@ import com.lsj.lsjnews.utils.RecycleSpaceItemDecoration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,7 @@ public class UserSelectPhoto extends MyBaseActivity{
     private final int LOAD_FINISH = 1;
     private List<String> mPhotoLists = new ArrayList<>();
     private int [] is_select ;
+    private LinkedHashMap<Integer,Integer> selectSort = new LinkedHashMap<>();
     private RecyclerView mRecyclePhoto;
     private Toolbar mToolbar;
     private int allCount = 0;
@@ -169,11 +172,13 @@ public class UserSelectPhoto extends MyBaseActivity{
                             }
                         }else{
                             is_select[holder.getAdapterPosition()] = 1;
+                            selectSort.put(position,position);
                             setToolbarCenterCount(allCount);
                         }
                     }else{
                         allCount--;
                         is_select[holder.getAdapterPosition()] = 0;
+                        selectSort.remove(position);
                     }
 
                 }
@@ -228,10 +233,15 @@ public class UserSelectPhoto extends MyBaseActivity{
         return super.onOptionsItemSelected(item);
     }
     private void setImgList(){
-        for(int i=0; i<is_select.length; i++){
-            if(is_select[i] == 1){
-                mImgLists.add(mPhotoLists.get(i));
-            }
+//        for(int i=0; i<is_select.length; i++){
+//            if(is_select[i] == 1){
+//                mImgLists.add(mPhotoLists.get(i));
+//            }
+//        }
+        Iterator i = selectSort.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry entry = (java.util.Map.Entry)i.next();
+            mImgLists.add(mPhotoLists.get((Integer) entry.getKey()));
         }
     }
     private boolean isHasSelect(){

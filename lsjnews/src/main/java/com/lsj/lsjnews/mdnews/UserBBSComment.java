@@ -2,6 +2,7 @@ package com.lsj.lsjnews.mdnews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,7 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
     private RecyclerView mRecycleEmoji;
     private EmojiAdapter mEmojiAdapter;
     private ImageView mImgCommentPhoto;
+    private CardView mCardPhoto;
     private int mid;
     @Override
     protected void initGetIntent() {
