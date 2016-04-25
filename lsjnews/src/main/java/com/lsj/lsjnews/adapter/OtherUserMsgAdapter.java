@@ -1,6 +1,7 @@
 package com.lsj.lsjnews.adapter;
 
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.LPhone;
@@ -22,18 +24,21 @@ import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.interfaces.OnRefresh;
+import com.lsj.lsjnews.mdnews.OtherUserMain;
 import com.lsj.lsjnews.utils.CircleImageView;
 import com.lsj.lsjnews.utils.EmojiParser;
 import com.lsj.lsjnews.utils.RecycleSpaceItemDecoration;
+
 import org.xutils.http.RequestParams;
 import org.xutils.x;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lsj on 2016/3/16.
+ * Created by lsj on 2016/4/25.
  */
-public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewHolder>{
+public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public static final int ITEM_SPACE = 0;
     private Context context;
@@ -43,7 +48,7 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
     private int [] is_star ;
     private int [] is_source; //0原创 1其它
 
-    public UserMsgAdapter(Context context, List<bbsBean.Lists> datas){
+    public OtherUserMsgAdapter(Context context, List<bbsBean.Lists> datas){
         this.context = context;
         this.datas = datas;
         changeNewConfig();
@@ -53,117 +58,131 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         is_source = new int[datas.size()];
     }
     @Override
-    public msgViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if(viewType == 0 || viewType == 3){
-            lineCount = 1;
-        }else if(viewType == 1 || viewType == 4){
-            lineCount = 2;
-        }else if(viewType == 2 || viewType == 5){
-            lineCount = 3;
-        }
-        View view = LayoutInflater.from(context).inflate(R.layout.item_user_bbs_msg, parent, false);
-        final msgViewHolder viewHolder = new msgViewHolder(view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UiHelper.showBBSDetailMsg(context,datas.get(viewHolder.getAdapterPosition()), 0);
-            }
-        });
-
-        if(viewType == 0 || viewType == 1 || viewType ==2){
-            viewHolder.mCardSource.setVisibility(View.GONE);
-            viewHolder.mRecyleImgs.setVisibility(View.VISIBLE);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == 233){
+            View view = LayoutInflater.from(context).inflate(R.layout.tab_bbs_msg_menu, parent, false);
+            headViewHolder viewHolder = new headViewHolder(view);
+            viewHolder.mTablayout.setupWithViewPager(OtherUserMain.mViewPager);
+            viewHolder.mTablayout.setTabMode(TabLayout.MODE_FIXED);
+            viewHolder.mTablayout.setScrollPosition(0,0,true);
+            viewHolder.mTablayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            return viewHolder;
         }else{
-            viewHolder.mCardSource.setVisibility(View.VISIBLE);
-            viewHolder.mRecyleImgs.setVisibility(View.GONE);
+            if(viewType == 0 || viewType == 3){
+                lineCount = 1;
+            }else if(viewType == 1 || viewType == 4){
+                lineCount = 2;
+            }else if(viewType == 2 || viewType == 5){
+                lineCount = 3;
+            }
+            View view = LayoutInflater.from(context).inflate(R.layout.item_user_bbs_msg, parent, false);
+            final msgViewHolder viewHolder = new msgViewHolder(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UiHelper.showBBSDetailMsg(context,datas.get(viewHolder.getAdapterPosition()), 0);
+                }
+            });
+            if(viewType == 0 || viewType == 1 || viewType ==2){
+                viewHolder.mCardSource.setVisibility(View.GONE);
+                viewHolder.mRecyleImgs.setVisibility(View.VISIBLE);
+            }else{
+                viewHolder.mCardSource.setVisibility(View.VISIBLE);
+                viewHolder.mRecyleImgs.setVisibility(View.GONE);
+            }
+            return viewHolder;
         }
-        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final msgViewHolder holder, final int position) {
-        if(is_star[holder.getAdapterPosition()] == 1){
-            holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
-        }else{
-            holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
-        }
-        holder.mImgHead.setOnClickListener(new mOnClickListener(holder,position));
-        holder.mName.setOnClickListener(new mOnClickListener(holder,position));
-        holder.mTxtSourceUserName.setOnClickListener(new mOnClickListener(holder,position));
-        //转发
-        holder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UiHelper.showUserForward(context,datas.get(position));
-            }
-        });
-        //评论
-        holder.mImgBtnComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UiHelper.showComment(context,datas.get(position).getMid());
-            }
-        });
-        //点赞
-        holder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RequestParams params = new RequestParams(Conts.GET_USER_CLICK_STAR);
-                params.addBodyParameter("mid", String.valueOf(datas.get(holder.getAdapterPosition()).getMid()));
-                x.http().get(params, new NewCommonCallBack() {
-                    @Override
-                    public void onSuccess(String s) {
-                        baseBean bean = JSON.parseObject(s, baseBean.class);
-                        switch (bean.getResultCode()){
-                            case 1:
-                                holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
-                                datas.get(position).setIs_star(1);
-                                is_star[holder.getAdapterPosition()] = 1;
-                                break;
-                            case -1:
-                                holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
-                                datas.get(position).setIs_star(0);
-                                is_star[holder.getAdapterPosition()] = 0;
-                                break;
-                            case 0:
-                                MyToast.showToast(context,"赞失败");
-                                break;
-                        }
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
-                    }
-                });
-            }
-        });
-        if(datas.get(holder.getAdapterPosition()).getLocation() != null && datas.get(holder.getAdapterPosition()).getLocation().length() != 0){
-            holder.mLayLocation.setVisibility(View.VISIBLE);
-            holder.mTxtLocation.setText(datas.get(holder.getAdapterPosition()).getLocation());
+        if(position == 0){
+
         }else{
-            holder.mLayLocation.setVisibility(View.GONE);
-        }
-        Glide.with(context).load(datas.get(position).getuHeadImg()).into(holder.mImgHead);
-        holder.mName.setText(datas.get(position).getuName());
-        holder.mDate.setText(datas.get(position).getDate());
-//        holder.mContent.setText(datas.get(position).getContent());
-        holder.mContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getContent()));
-        if(datas.get(position).getImglists() != null && datas.get(position).getImglists().size()!=0){
-                initRecyle(holder,position);
-        }
-        if(is_source[position] == 1){
-            //进入转发源圈子
-            holder.mCardSource.setOnClickListener(new View.OnClickListener() {
+            final msgViewHolder viewHolder = (msgViewHolder) holder;
+            if(is_star[holder.getAdapterPosition()] == 1){
+                viewHolder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+            }else{
+                viewHolder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
+            }
+            viewHolder.mImgHead.setOnClickListener(new mOnClickListener(viewHolder,position));
+            viewHolder.mName.setOnClickListener(new mOnClickListener(viewHolder,position));
+            viewHolder.mTxtSourceUserName.setOnClickListener(new mOnClickListener(viewHolder,position));
+            //转发
+            viewHolder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UiHelper.showBBSDetailMsg(context,datas.get(position), 1);
+                    UiHelper.showUserForward(context,datas.get(position));
                 }
             });
-            if(datas.get(position).getSourceContent() != null){
-                holder.mTxtSourceContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getSourceContent()));
+            //评论
+            viewHolder.mImgBtnComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UiHelper.showComment(context,datas.get(position).getMid());
+                }
+            });
+            //点赞
+            viewHolder.mImgBtnStar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestParams params = new RequestParams(Conts.GET_USER_CLICK_STAR);
+                    params.addBodyParameter("mid", String.valueOf(datas.get(position).getMid()));
+                    x.http().get(params, new NewCommonCallBack() {
+                        @Override
+                        public void onSuccess(String s) {
+                            baseBean bean = JSON.parseObject(s, baseBean.class);
+                            switch (bean.getResultCode()){
+                                case 1:
+                                    viewHolder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+                                    datas.get(position).setIs_star(1);
+                                    is_star[viewHolder.getAdapterPosition()] = 1;
+                                    break;
+                                case -1:
+                                    viewHolder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
+                                    datas.get(position).setIs_star(0);
+                                    is_star[holder.getAdapterPosition()] = 0;
+                                    break;
+                                case 0:
+                                    MyToast.showToast(context,"赞失败");
+                                    break;
+                            }
+
+                        }
+                    });
+                }
+            });
+            if(datas.get(holder.getAdapterPosition()).getLocation() != null && datas.get(holder.getAdapterPosition()).getLocation().length() != 0){
+                viewHolder.mLayLocation.setVisibility(View.VISIBLE);
+                viewHolder.mTxtLocation.setText(datas.get(holder.getAdapterPosition()).getLocation());
+            }else{
+                viewHolder.mLayLocation.setVisibility(View.GONE);
             }
-            holder.mTxtSourceUserName.setText("@"+datas.get(position).getsName());
-        }
-        if(position == datas.size() - 1){
-            mOnRefresh.Refresh();
+            Glide.with(context).load(datas.get(position).getuHeadImg()).into(viewHolder.mImgHead);
+            viewHolder.mName.setText(datas.get(position).getuName());
+            viewHolder.mDate.setText(datas.get(position).getDate());
+//        holder.mContent.setText(datas.get(position).getContent());
+            viewHolder.mContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getContent()));
+            if(datas.get(position).getImglists() != null && datas.get(position).getImglists().size()!=0){
+                initRecyle(viewHolder,position);
+            }
+            if(is_source[position] == 1){
+                //进入转发源圈子
+                viewHolder.mCardSource.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UiHelper.showBBSDetailMsg(context,datas.get(position), 1);
+                    }
+                });
+                if(datas.get(position).getSourceContent() != null){
+                    viewHolder.mTxtSourceContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getSourceContent()));
+                }
+                viewHolder.mTxtSourceUserName.setText("@"+datas.get(position).getsName());
+            }
+            if(position == datas.size() - 1){
+                mOnRefresh.Refresh();
+            }
         }
     }
 
@@ -177,7 +196,6 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
         @Override
         public void onClick(View v) {
-
             switch (v.getId()){
                 case R.id.img_user_bbs_msg_head:
                     UiHelper.showOtherUserMain(context,datas.get(position).getUid());
@@ -205,6 +223,9 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
     // 3 4 5
     @Override
     public int getItemViewType(int position) {
+        if(position == 0){
+            return 233;
+        }
         if(datas.get(position).getIs_star() == 1){
             is_star[position] = 1;
         }
@@ -272,14 +293,24 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyleImgs.setLayoutManager(mGridLayoutManager);
+            //防止滑动冲突
+            mRecyleImgs.setNestedScrollingEnabled(false);
             GridLayoutManager mGridLayoutManagerSource = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mSourceRecyleImgs.setLayoutManager(mGridLayoutManagerSource);
+            mSourceRecyleImgs.setNestedScrollingEnabled(false);
             int spacingInPixels = ITEM_SPACE;
             mRecyleImgs.addItemDecoration(new RecycleSpaceItemDecoration(spacingInPixels));
         }
-    }
 
+    }
+    public class headViewHolder extends RecyclerView.ViewHolder {
+        TabLayout mTablayout;
+        public headViewHolder(View itemView) {
+            super(itemView);
+            mTablayout = (TabLayout) itemView.findViewById(R.id.tablayout_other_user_main);
+        }
+    }
     public static class imgAdapter extends RecyclerView.Adapter<imgAdapter.imgViewHolder>{
 
         private Context mContext;

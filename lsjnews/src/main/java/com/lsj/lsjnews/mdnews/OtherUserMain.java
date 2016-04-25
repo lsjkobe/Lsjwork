@@ -1,5 +1,7 @@
 package com.lsj.lsjnews.mdnews;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,8 +10,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
@@ -20,7 +24,9 @@ import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCommonCallBack;
+import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
 import com.lsj.lsjnews.bean.mdnewsBean.userBean;
+import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.mdnews.fragment.OtherUserBBS;
 import com.lsj.lsjnews.utils.CircleImageView;
@@ -32,16 +38,19 @@ import java.util.List;
 /**
  * Created by lsj on 2016/4/12.
  */
-public class OtherUserMain extends MyBaseActivity{
+public class OtherUserMain extends MyBaseActivity implements View.OnClickListener{
     private CircleImageView mImgOtherUserHead;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
-    private TabLayout mTabDefoult,mTabTop;
-    private ViewPager mViewPager;
+//    private TabLayout mTabDefoult,mTabTop;
+    private TabLayout mTabTop;
+    public static ViewPager mViewPager;
     private TextView mTxtName,mTxtReleasCount,mTxtFansCount,mTxtFollowCount,mTxtStateContent;
     private otherUserViewPagerAdapter mViewPagerAdapter;
     private List<BaseFragment> datas;
     private ImageView mImgSexy;
+    private Button mBtnRelation;
+    private userBean user;
     private int uid;
 
     @Override
@@ -56,7 +65,7 @@ public class OtherUserMain extends MyBaseActivity{
         mImgOtherUserHead = (CircleImageView) findViewById(R.id.img_other_user_main_head);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.lay_other_user_main_appbarLayout);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_other_user_mian);
-        mTabDefoult = (TabLayout) findViewById(R.id.tablayout_other_user_main);
+//        mTabDefoult = (TabLayout) findViewById(R.id.tablayout_other_user_main);
         mTabTop = (TabLayout) findViewById(R.id.tablayout_other_user_main_top);
         mViewPager = (ViewPager) findViewById(R.id.viewpager_other_user_main);
         mTxtName = (TextView) findViewById(R.id.txt_other_user_main_name);
@@ -65,6 +74,9 @@ public class OtherUserMain extends MyBaseActivity{
         mTxtFollowCount = (TextView) findViewById(R.id.txt_other_user_main_follow_count);
         mTxtStateContent = (TextView) findViewById(R.id.txt_other_user_main_state_content);
         mImgSexy = (ImageView) findViewById(R.id.img_other_user_mian_sexy);
+        mBtnRelation = (Button) findViewById(R.id.btn_other_user_relation);
+
+        mBtnRelation.setOnClickListener(this);
     }
 
     private boolean is_show_top_tab = false;
@@ -89,14 +101,14 @@ public class OtherUserMain extends MyBaseActivity{
                     //刚好把整个appbarlayout滑出就显示topTablayout设置is_show_top_tab = true
                     is_show_top_tab = true;
                     mTabTop.setVisibility(View.VISIBLE);
-                    mFragmentBBS1.setRecyclerViewScroll(true);
-                    mFragmentBBS2.setRecyclerViewScroll(true);
+//                    mFragmentBBS1.setRecyclerViewScroll(true);
+//                    mFragmentBBS2.setRecyclerViewScroll(true);
                 }else if(is_show_top_tab){
                     //把整个appbarlayout滑出屏幕后向下滑的一瞬间就隐藏topTablayout设置is_show_top_tab = false
                     is_show_top_tab = false;
                     mTabTop.setVisibility(View.GONE);
-                    mFragmentBBS1.setRecyclerViewScroll(false);
-                    mFragmentBBS2.setRecyclerViewScroll(false);
+//                    mFragmentBBS1.setRecyclerViewScroll(false);
+//                    mFragmentBBS2.setRecyclerViewScroll(false);
                 }
             }
         });
@@ -109,6 +121,7 @@ public class OtherUserMain extends MyBaseActivity{
         mFragmentBBS1.setUid(uid);
         datas.add(mFragmentBBS1);
         mFragmentBBS2 = new OtherUserBBS();
+        mFragmentBBS2.setUid(uid);
         datas.add(mFragmentBBS2);
         mViewPagerAdapter = new otherUserViewPagerAdapter(getSupportFragmentManager(),datas);
         mViewPager.setAdapter(mViewPagerAdapter);
@@ -118,11 +131,6 @@ public class OtherUserMain extends MyBaseActivity{
     }
 
     private void initTabLayout() {
-        mTabDefoult.setupWithViewPager(mViewPager);
-        mTabDefoult.setScrollPosition(0,0,true);
-        mTabDefoult.setTabMode(TabLayout.MODE_FIXED);
-        mTabDefoult.setTabGravity(TabLayout.GRAVITY_FILL);
-
         mTabTop.setupWithViewPager(mViewPager);
         mTabTop.setScrollPosition(0,0,true);
         mTabTop.setTabMode(TabLayout.MODE_FIXED);
@@ -137,7 +145,7 @@ public class OtherUserMain extends MyBaseActivity{
             @Override
             public void onSuccess(String s) {
                 MyLogger.showLogWithLineNum(3,s);
-                userBean user = JSON.parseObject(s,userBean.class);
+                user = JSON.parseObject(s,userBean.class);
                 if(user.getResultCode() == 0){
                     MyToast.showToast(mContext,"用户不存在");
                 }else{
@@ -152,9 +160,37 @@ public class OtherUserMain extends MyBaseActivity{
                     }else{
                         mImgSexy.setBackgroundResource(R.mipmap.ic_sexy_girl);
                     }
+                    switch (user.getKey()){
+                        case -1:
+                            mBtnRelation.setVisibility(View.GONE);
+                            break;
+                        case 0:
+                            mBtnRelation.setText("关注");
+                            break;
+                        case 1:
+                            mBtnRelation.setText("已关注");
+                            break;
+                        case 2:
+                            mBtnRelation.setText("相互关注");
+                            break;
+                    }
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_other_user_relation:
+                if(user.getKey() == 1 || user.getKey() == 2){
+                    showDialog();
+                }else{
+                    followOrCancel(1);
+                }
+
+                break;
+        }
     }
 
     private class otherUserViewPagerSelect implements ViewPager.OnPageChangeListener {
@@ -197,13 +233,67 @@ public class OtherUserMain extends MyBaseActivity{
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "测试";
+            return MyHelper.OTHER_USER_MAIN_LIST[position];
         }
 
         @Override
         public float getPageWidth(int position) {
             return super.getPageWidth(position);
         }
+    }
+
+    //取消关注对话框
+    public void showDialog() {
+
+        final Dialog dialog = new Dialog(mContext,R.style.Theme_MyDialog);
+        dialog.setContentView(R.layout.dialog_follow_or_cancle);
+        Button mButConfirm = (Button) dialog
+                .findViewById(R.id.btn_cancel_relation_confirm);
+        Button mButCancel = (Button) dialog
+                .findViewById(R.id.btn_cancel_relation_cancel);
+        mButConfirm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                MyToast.showToast(mContext,"nihao");
+                followOrCancel(0);
+                dialog.dismiss();
+            }
+        });
+        mButCancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    /**
+     *
+     * @param kind 1关注 0取消关注
+     */
+    private void followOrCancel(final int kind){
+        RequestParams params = new RequestParams(Conts.GET_FOLLOW_OR_CANCEL);
+        params.addBodyParameter("uid",String.valueOf(user.getUid()));
+        params.addBodyParameter("key",String.valueOf(user.getKey()));
+        x.http().get(params, new NewCommonCallBack() {
+            @Override
+            public void onSuccess(String s) {
+
+                baseBean bean = JSON.parseObject(s,baseBean.class);
+                switch (bean.getResultCode()){
+                    case 1:
+                        if(kind == 1){
+                            user.setKey(1);
+                            mBtnRelation.setText("已关注");
+                        }else{
+                            mBtnRelation.setText("关注");
+                            user.setKey(0);
+                        }
+                        break;
+                    case 0:
+                        break;
+                }
+            }
+        });
     }
     @Override
     protected int getLayoutId() {

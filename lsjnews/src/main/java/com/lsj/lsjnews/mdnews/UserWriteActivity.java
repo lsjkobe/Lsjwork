@@ -316,6 +316,13 @@ public class UserWriteActivity extends MyBaseActivity implements View.OnClickLis
         @Override
         public void onBindViewHolder(final writeViewHolder holder, final int position) {
             Glide.with(mContext).load(datas.get(position)).into(holder.mImgPhoto);
+            holder.mImgDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    datas.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         @Override

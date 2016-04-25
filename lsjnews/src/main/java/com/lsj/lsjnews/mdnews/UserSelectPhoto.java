@@ -98,7 +98,7 @@ public class UserSelectPhoto extends MyBaseActivity{
 //                Uri mImageUri = null;
                 Cursor cursor = mContentResolver.query(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null,
-                        MediaStore.Images.Media.DEFAULT_SORT_ORDER);
+                        MediaStore.Images.Media.DATE_MODIFIED);
                 cursor.moveToFirst();
 
                 while (!cursor.isAfterLast()) {

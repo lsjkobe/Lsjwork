@@ -12,6 +12,15 @@ public class userBean extends baseBean {
     private int uReleasCount;
     private int uSexy;
     private String uStateContent;
+    private int key;
+
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
 
     public String getuStateContent() {
         return uStateContent;

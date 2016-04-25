@@ -1,5 +1,7 @@
 package com.lsj.lsjnews.mdnews.fragment;
 
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,15 +12,18 @@ import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
+import com.lsj.lsjnews.adapter.OtherUserMsgAdapter;
 import com.lsj.lsjnews.adapter.UserMsgAdapter;
 import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.interfaces.OnRefresh;
+import com.lsj.lsjnews.view.LsjLoadingView;
 
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +32,10 @@ import java.util.List;
  */
 public class OtherUserBBS extends BaseFragment{
     private RecyclerView mRecyclerView;
-    private UserMsgAdapter mMsgAdapter;
+    private OtherUserMsgAdapter mMsgAdapter;
     private List<bbsBean.Lists> bbsBeanList = new ArrayList<>();
+    private bbsBean.Lists nullBean = new bbsBean.Lists(); // 一个空的bean，在adapter会被header代替
+    private LsjLoadingView mLoading;
     private int page = 1;
     private int pageCount;
     private int uid;
@@ -36,14 +43,14 @@ public class OtherUserBBS extends BaseFragment{
     protected void initGetIntent() {
         super.initGetIntent();
         showTopView(false);
-
     }
 
     @Override
     protected void initView() {
         super.initView();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_other_user_main);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        mLoading = (LsjLoadingView) findViewById(R.id.loading_other_user_main_bbs);
+//        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class OtherUserBBS extends BaseFragment{
     private void getBBSData(){
         RequestParams params = new RequestParams(Conts.GET_OTHER_USER_BBS);
         params.addBodyParameter("uid",String.valueOf(uid));
-        params.addBodyParameter("uid","1");
+        params.addBodyParameter("page","1");
         x.http().get(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
@@ -76,6 +83,7 @@ public class OtherUserBBS extends BaseFragment{
                         if(mbbsBean.getLists() != null && mbbsBean.getLists().size() != 0){
                             if(page == 1){
                                 bbsBeanList.clear();
+                                bbsBeanList.add(nullBean);
                             }
                             bbsBeanList.addAll(mbbsBean.getLists());
                             initOrRefresh();
@@ -86,12 +94,20 @@ public class OtherUserBBS extends BaseFragment{
                         break;
                 }
             }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                mLoading.setVisibility(View.GONE);
+                mLoading.clearAnimation();
+            }
         });
+
     }
     private void initOrRefresh(){
 
         if(mMsgAdapter == null){
-            mMsgAdapter = new UserMsgAdapter(mContext, bbsBeanList);
+            mMsgAdapter = new OtherUserMsgAdapter(mContext, bbsBeanList);
             mRecyclerView.setAdapter(mMsgAdapter);
             mMsgAdapter.setOnRefresh(new OnRefresh() {
                 @Override
@@ -99,7 +115,10 @@ public class OtherUserBBS extends BaseFragment{
                     page++;
                     if(page > pageCount){
                         MyToast.showToast(mContext,"没有数据了");
+
                     }else{
+                        mLoading.setVisibility(View.VISIBLE);
+                        mLoading.startLoadingAnim();
                         getBBSData();
                     }
                 }

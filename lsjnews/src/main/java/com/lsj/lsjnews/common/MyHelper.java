@@ -40,4 +40,8 @@ public class MyHelper {
             "NBA",
             "足球"
     };
+    public final static String[] OTHER_USER_MAIN_LIST = new String[]{
+            "圈子",
+            "相册"
+    };
 }

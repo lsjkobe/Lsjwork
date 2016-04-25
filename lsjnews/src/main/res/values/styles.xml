@@ -20,4 +20,9 @@
         <item name="android:windowEnterAnimation">@anim/item_right_in</item>
         <item name="android:windowExitAnimation">@anim/item_right_out</item>
     </style>
+
+    <style name="Theme.MyDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/sel_dialog_fill_box</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

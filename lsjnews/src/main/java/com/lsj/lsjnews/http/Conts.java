@@ -34,6 +34,8 @@ public class Conts {
     public final static String GET_OTHER_USER_MSG = HTTP_HOST+"getOtherUserMsg.php";
     //获取其它用户圈子
     public final static String GET_OTHER_USER_BBS = HTTP_HOST+"getOtherUserBBS.php";
+    //关注或取消关注
+    public final static String GET_FOLLOW_OR_CANCEL = HTTP_HOST+"clickFollowOrCancel.php";
 
     //点赞
     public final static String GET_USER_CLICK_STAR = HTTP_HOST+"clickStarBBS.php";
