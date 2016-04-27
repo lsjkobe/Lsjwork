@@ -304,8 +304,8 @@ public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
     }
-    public class headViewHolder extends RecyclerView.ViewHolder {
-        TabLayout mTablayout;
+    public static class headViewHolder extends RecyclerView.ViewHolder {
+        public TabLayout mTablayout;
         public headViewHolder(View itemView) {
             super(itemView);
             mTablayout = (TabLayout) itemView.findViewById(R.id.tablayout_other_user_main);

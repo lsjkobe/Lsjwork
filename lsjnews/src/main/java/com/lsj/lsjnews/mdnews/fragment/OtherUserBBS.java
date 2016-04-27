@@ -1,19 +1,14 @@
 package com.lsj.lsjnews.mdnews.fragment;
 
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
-
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.adapter.OtherUserMsgAdapter;
-import com.lsj.lsjnews.adapter.UserMsgAdapter;
 import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.http.Conts;
@@ -68,7 +63,7 @@ public class OtherUserBBS extends BaseFragment{
     private void getBBSData(){
         RequestParams params = new RequestParams(Conts.GET_OTHER_USER_BBS);
         params.addBodyParameter("uid",String.valueOf(uid));
-        params.addBodyParameter("page","1");
+        params.addBodyParameter("page",String.valueOf(page));
         x.http().get(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
@@ -132,9 +127,7 @@ public class OtherUserBBS extends BaseFragment{
     public void setUid(int uid) {
         this.uid = uid;
     }
-    public void setRecyclerViewScroll(boolean isScroll){
-        mRecyclerView.setNestedScrollingEnabled(isScroll);
-    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_other_user_bbs;

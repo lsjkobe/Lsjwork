@@ -222,11 +222,12 @@ public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.On
 
         return super.onOptionsItemSelected(item);
     }
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+
     private void showPopUpWindow(){
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.item_mdnews_main_top_right_menu, null);
         CardView mCardItem1 = (CardView) contentView.findViewById(R.id.card_mdnews_top_right_menu_item1);
         CardView mCardItem2 = (CardView) contentView.findViewById(R.id.card_mdnews_top_right_menu_item2);
+        mCardItem2.setCardBackgroundColor(0xffeeeeee);
         CardView mCardItem3 = (CardView) contentView.findViewById(R.id.card_mdnews_top_right_menu_item3);
         ImageView mImgUser = (ImageView) contentView.findViewById(R.id.img_right_menu_user_img);
         Glide.with(mContext).load(MyHelper.USER_HEAD_IMG).into(mImgUser);
@@ -238,7 +239,9 @@ public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.On
         popWnd.setFocusable(true);
         popWnd.setOutsideTouchable(true);
         popWnd.setBackgroundDrawable(new BitmapDrawable());
-        popWnd.showAsDropDown(mToolbar,0,0, Gravity.RIGHT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popWnd.showAsDropDown(mToolbar,0,0, Gravity.RIGHT);
+        }
     }
 
     @Override

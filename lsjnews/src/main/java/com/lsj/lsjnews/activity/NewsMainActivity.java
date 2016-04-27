@@ -269,12 +269,12 @@ public class NewsMainActivity extends MyBaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void showPopUpWindow(){
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.item_mdnews_main_top_right_menu, null);
         CardView mCardItem1 = (CardView) contentView.findViewById(R.id.card_mdnews_top_right_menu_item1);
         CardView mCardItem2 = (CardView) contentView.findViewById(R.id.card_mdnews_top_right_menu_item2);
         CardView mCardItem3 = (CardView) contentView.findViewById(R.id.card_mdnews_top_right_menu_item3);
+        mCardItem3.setCardBackgroundColor(0xffeeeeee);
         ImageView mImgUser = (ImageView) contentView.findViewById(R.id.img_right_menu_user_img);
         Glide.with(mContext).load(MyHelper.USER_HEAD_IMG).into(mImgUser);
         PopupWindow popWnd = new PopupWindow (contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -285,7 +285,9 @@ public class NewsMainActivity extends MyBaseActivity{
         popWnd.setFocusable(true);
         popWnd.setOutsideTouchable(true);
         popWnd.setBackgroundDrawable(new BitmapDrawable());
-        popWnd.showAsDropDown(mToolbar,0,0,Gravity.RIGHT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            popWnd.showAsDropDown(mToolbar,0,0,Gravity.RIGHT);
+        }
     }
     private class myOnclickListener implements View.OnClickListener {
         PopupWindow popWnd;

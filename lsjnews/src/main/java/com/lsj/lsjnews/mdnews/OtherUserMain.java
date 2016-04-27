@@ -2,7 +2,9 @@ package com.lsj.lsjnews.mdnews;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.base.BaseFragment;
+import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
@@ -29,6 +32,7 @@ import com.lsj.lsjnews.bean.mdnewsBean.userBean;
 import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.mdnews.fragment.OtherUserBBS;
+import com.lsj.lsjnews.mdnews.fragment.OtherUserPhoto;
 import com.lsj.lsjnews.utils.CircleImageView;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -43,6 +47,7 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
 //    private TabLayout mTabDefoult,mTabTop;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TabLayout mTabTop;
     public static ViewPager mViewPager;
     private TextView mTxtName,mTxtReleasCount,mTxtFansCount,mTxtFollowCount,mTxtStateContent;
@@ -75,6 +80,7 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
         mTxtStateContent = (TextView) findViewById(R.id.txt_other_user_main_state_content);
         mImgSexy = (ImageView) findViewById(R.id.img_other_user_mian_sexy);
         mBtnRelation = (Button) findViewById(R.id.btn_other_user_relation);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.layout_other_user_collapsing);
 
         mBtnRelation.setOnClickListener(this);
     }
@@ -83,6 +89,7 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
     @Override
     protected void initData() {
         getUserMsg();
+        initToolbar();
         initOtherUserFragment();
 
 //        mImgOtherUserHead.setVisibility(View.GONE);
@@ -95,34 +102,44 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                MyLogger.showLogWithLineNum(3,"------------:"+verticalOffset+":"+mAppBarLayout.getHeight()+":"+mToolbar.getHeight());
+                MyLogger.showLogWithLineNum(3,"------------:"+verticalOffset+":"+mAppBarLayout.getHeight()+":"+mToolbar.getHeight());
 
                 if( verticalOffset == mToolbar.getHeight() - mAppBarLayout.getHeight() ){
                     //刚好把整个appbarlayout滑出就显示topTablayout设置is_show_top_tab = true
                     is_show_top_tab = true;
                     mTabTop.setVisibility(View.VISIBLE);
-//                    mFragmentBBS1.setRecyclerViewScroll(true);
-//                    mFragmentBBS2.setRecyclerViewScroll(true);
                 }else if(is_show_top_tab){
                     //把整个appbarlayout滑出屏幕后向下滑的一瞬间就隐藏topTablayout设置is_show_top_tab = false
                     is_show_top_tab = false;
                     mTabTop.setVisibility(View.GONE);
-//                    mFragmentBBS1.setRecyclerViewScroll(false);
-//                    mFragmentBBS2.setRecyclerViewScroll(false);
                 }
             }
         });
 
     }
-    OtherUserBBS mFragmentBBS1,mFragmentBBS2;
+
+    private void initToolbar() {
+        mToolbar.setNavigationIcon(R.mipmap.ic_back);
+        //向下扩张时隐藏title
+        mCollapsingToolbarLayout.setExpandedTitleColor(Color.parseColor("#00000000"));
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppManager.getAppManager().finishActivity();
+            }
+        });
+    }
+    OtherUserBBS mFragmentBBS;
+    OtherUserPhoto mFragmentPhoto;
     private void initOtherUserFragment() {
         datas = new ArrayList<>();
-        mFragmentBBS1 = new OtherUserBBS();
-        mFragmentBBS1.setUid(uid);
-        datas.add(mFragmentBBS1);
-        mFragmentBBS2 = new OtherUserBBS();
-        mFragmentBBS2.setUid(uid);
-        datas.add(mFragmentBBS2);
+        mFragmentBBS = new OtherUserBBS();
+        mFragmentBBS.setUid(uid);
+        datas.add(mFragmentBBS);
+        mFragmentPhoto = new OtherUserPhoto();
+        mFragmentPhoto.setUid(uid);
+        datas.add(mFragmentPhoto);
         mViewPagerAdapter = new otherUserViewPagerAdapter(getSupportFragmentManager(),datas);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.setCurrentItem(0);
@@ -154,6 +171,7 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
                     mTxtFansCount.setText(""+user.getuFansCount());
                     mTxtFollowCount.setText(""+user.getuFollowCount());
                     mTxtStateContent.setText(user.getuStateContent());
+                    mCollapsingToolbarLayout.setTitle(user.getuName());
                     Glide.with(mContext).load(user.getuImg()).into(mImgOtherUserHead);
                     if(user.getuSexy() == 0){
                         mImgSexy.setBackgroundResource(R.mipmap.ic_sexy_boy);
@@ -253,7 +271,6 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
                 .findViewById(R.id.btn_cancel_relation_cancel);
         mButConfirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                MyToast.showToast(mContext,"nihao");
                 followOrCancel(0);
                 dialog.dismiss();
             }

@@ -104,6 +104,9 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
         mImgBtnStar.setOnClickListener(this);
         mImgBtnForward.setOnClickListener(this);
         mImgBtnComment.setOnClickListener(this);
+        mImgUserHead.setOnClickListener(this);
+        mTxtUserName.setOnClickListener(this);
+        mTxtSourceUserName.setOnClickListener(this);
     }
 
 
@@ -271,6 +274,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
     }
 
     private void initOrRefresh() {
+        //转发adapter数据更新
         if (mRecyclerForwardAdapter == null) {
             mRecyclerForwardAdapter = new recyclerAdapter(mAllDatas, 0);
             mRecyclerForward.setAdapter(mRecyclerForwardAdapter);
@@ -279,6 +283,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
                 mRecyclerForwardAdapter.notifyDataSetChanged();
             }
         }
+        //赞adapter数据更新
         if (mRecyclerStarAdapter == null) {
             mRecyclerStarAdapter = new recyclerAdapter(mAllDatas, 2);
             mRecyclerStar.setAdapter(mRecyclerStarAdapter);
@@ -287,6 +292,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
                 mRecyclerStarAdapter.notifyDataSetChanged();
             }
         }
+        //评论adapter数据更新
         if (mRecyclerCommentAdapter == null) {
             mRecyclerCommentAdapter = new recyclerAdapter(mAllDatas, 1);
             mRecyclerComment.setAdapter(mRecyclerCommentAdapter);
@@ -315,6 +321,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
                         switch (bean.getResultCode()) {
                             case 1:
                                 mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
+
                                 break;
                             case -1:
                                 mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
@@ -339,6 +346,15 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
                 }
 
                 break;
+            case R.id.img_user_bbs_msg_head:
+                UiHelper.showOtherUserMain(mContext,bean.getUid());
+                break;
+            case R.id.txt_user_bbs_msg_username:
+                UiHelper.showOtherUserMain(mContext,bean.getUid());
+                break;
+            case R.id.txt_source_bbs_user_name:
+                UiHelper.showOtherUserMain(mContext,bean.getSuid());
+                break;
         }
     }
 
@@ -362,13 +378,52 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
         }
 
         @Override
-        public void onBindViewHolder(recyclerViewHolder holder, int position) {
+        public void onBindViewHolder(recyclerViewHolder holder, final int position) {
+            //点击名字跳转用户个人中心
+            holder.mTxtUserName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (key){
+                        case 0:
+                            UiHelper.showOtherUserMain(mContext,lists.getForwardLists().get(position).getUid());
+                            break;
+                        case 1:
+                            UiHelper.showOtherUserMain(mContext,lists.getCommentLists().get(position).getUid());
+                            break;
+                        case 2:
+                            UiHelper.showOtherUserMain(mContext,lists.getStarLists().get(position).getUid());
+                            break;
+                    }
+                }
+            });
+            //点击头像跳转用户个人中心
+            holder.mImgHead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (key){
+                        case 0:
+                            UiHelper.showOtherUserMain(mContext,lists.getForwardLists().get(position).getUid());
+                            break;
+                        case 1:
+                            UiHelper.showOtherUserMain(mContext,lists.getCommentLists().get(position).getUid());
+                            break;
+                        case 2:
+                            UiHelper.showOtherUserMain(mContext,lists.getStarLists().get(position).getUid());
+                            break;
+                    }
+                }
+            });
             if(key == 1){
                 bbsDetailMsgBean.allDatas.commentBean bean = lists.getCommentLists().get(position);
                 holder.mTxtUserName.setText(bean.getuName());
                 holder.mTxtDate.setText(bean.getcCreateDate());
                 holder.mTxtContent.setText(EmojiParser.getInstance(mContext).replace(bean.getContent()));
                 Glide.with(mContext).load(bean.getuHeadImg()).into(holder.mImgHead);
+                if(bean.getcIsImage() == 1){
+                    holder.mImgComment.setVisibility(View.VISIBLE);
+                    Glide.with(mContext).load(bean.getCommentImg()).into(holder.mImgComment);
+                }
+
             }else if(key == 0){
                 bbsDetailMsgBean.allDatas.forwardBean bean = lists.getForwardLists().get(position);
                 holder.mTxtUserName.setText(bean.getuName());
@@ -397,12 +452,14 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
             private TextView mTxtDate;
             private TextView mTxtContent;
             private ImageView mImgHead;
+            private ImageView mImgComment;
             public recyclerViewHolder(View itemView) {
                 super(itemView);
                 mTxtUserName = (TextView) itemView.findViewById(R.id.txt_user_bbs_detail_msg_username);
                 mTxtDate = (TextView) itemView.findViewById(R.id.txt_user_bbs_detail_msg_date);
                 mTxtContent = (TextView) itemView.findViewById(R.id.txt_user_bbs_detail_msg_content);
                 mImgHead = (ImageView) itemView.findViewById(R.id.img_user_bbs_detail_msg_head);
+                mImgComment = (ImageView) itemView.findViewById(R.id.img_user_bbs_detail_msg_comment);
             }
         }
     }

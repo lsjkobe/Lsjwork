@@ -41,7 +41,7 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
     private ImageView mImgEmoji,mImgPhoto,mImgComment;
     private RecyclerView mRecycleEmoji;
     private EmojiAdapter mEmojiAdapter;
-    private ImageView mImgCommentPhoto;
+    private ImageView mImgCommentPhoto,mImgDeletePhoto;
     private CardView mCardPhoto;
     private int mid;
     @Override
@@ -63,9 +63,12 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
         mImgComment = (ImageView) findViewById(R.id.img_comment_bbs_ok);
         mRecycleEmoji = (RecyclerView) findViewById(R.id.recycler_comment_emoji_select);
         mImgCommentPhoto = (ImageView) findViewById(R.id.img_comment_content_photo);
+        mImgDeletePhoto = (ImageView) findViewById(R.id.img_comment_photo_delete);
+        mCardPhoto = (CardView) findViewById(R.id.card_bbs_comment_photo);
         mImgEmoji.setOnClickListener(this);
         mImgPhoto.setOnClickListener(this);
         mImgComment.setOnClickListener(this);
+        mImgDeletePhoto.setOnClickListener(this);
     }
 
     @Override
@@ -136,6 +139,10 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
                     MyToast.showToast(mContext,"内容不能为空");
                 }
                 break;
+            case R.id.img_comment_photo_delete:
+                mImgLists.clear();
+                mCardPhoto.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -152,7 +159,12 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
         x.http().post(params, new NewCommonCallBack() {
             @Override
             public void onSuccess(String s) {
-                MyToast.showToast(mContext,s);
+//                MyToast.showToast(mContext,s);
+                if(s.equals("1")){
+                    MyToast.showToast(mContext,"评论成功");
+                }else{
+                    MyToast.showToast(mContext,"评论失败");
+                }
             }
         });
     }
@@ -164,7 +176,7 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
         if (requestCode == 1 && resultCode == 1) {
             mImgLists = data.getStringArrayListExtra("imgList");
             if (mImgLists != null) {
-                mImgCommentPhoto.setVisibility(View.VISIBLE);
+                mCardPhoto.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(mImgLists.get(0)).into(mImgCommentPhoto);
             }
         }

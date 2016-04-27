@@ -55,6 +55,16 @@ public class bbsDetailMsgBean extends baseBean{
             private int cIsImage;
             private String uHeadImg;
             private String uName;
+            private String commentImg;
+
+            public String getCommentImg() {
+                return commentImg;
+            }
+
+            public void setCommentImg(String commentImg) {
+                this.commentImg = commentImg;
+            }
+
             public String getuName() {
                 return uName;
             }
