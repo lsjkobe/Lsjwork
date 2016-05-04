@@ -22,6 +22,7 @@ import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserForwardActivity;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserMainActivity;
+import com.lsj.lsjnews.mdnews.UserOrBBSSearch;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
 import com.lsj.lsjnews.mdnews.UserSelectPhoto;
 import com.lsj.lsjnews.mdnews.UserWriteActivity;
@@ -171,13 +172,22 @@ public class UiHelper {
         context.startActivity(intent);
     }
     /**
-     * 其它用户界面
+     * 其他用户界面
      * @param context
      */
     public static void showOtherUserMain(Context context,int uid){
         Intent intent = new Intent();
         intent.putExtra("uid",uid);
         intent.setClass(context, OtherUserMain.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 搜索界面
+     * @param context
+     */
+    public static void showSearchActivity(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserOrBBSSearch.class);
         context.startActivity(intent);
     }
     /**

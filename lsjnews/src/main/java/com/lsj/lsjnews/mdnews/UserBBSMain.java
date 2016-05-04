@@ -210,14 +210,18 @@ public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.On
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.bbs_menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_people){
+        if(item.getItemId() == R.id.bbs_action_people){
             showPopUpWindow();
+        }
+        if(item.getItemId() == R.id.bbs_action_sreach){
+//            MyToast.showToast(mContext,"123");
+            UiHelper.showSearchActivity(mContext);
         }
 
         return super.onOptionsItemSelected(item);

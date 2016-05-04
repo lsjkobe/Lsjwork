@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".mdnews.UserBBSMain">
+    <item android:id="@+id/bbs_action_sreach"
+        android:title="3"
+        android:icon="@mipmap/ic_search"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/bbs_action_people"
+        android:title="3"
+        android:icon="@mipmap/ic_people"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>
+</menu>

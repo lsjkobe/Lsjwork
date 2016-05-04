@@ -38,7 +38,8 @@ public class Conts {
     public final static String GET_FOLLOW_OR_CANCEL = HTTP_HOST+"clickFollowOrCancel.php";
     //获取圈子图片
     public final static String GET_USER_BBS_PHOTO = HTTP_HOST+"getUserBBSPhoto.php";
-
+    //查找用户
+    public final static String GET_SEARCH_USER = HTTP_HOST+"searchUser.php";
     //点赞
     public final static String GET_USER_CLICK_STAR = HTTP_HOST+"clickStarBBS.php";
 }
