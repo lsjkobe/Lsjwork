@@ -298,15 +298,19 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
                 baseBean bean = JSON.parseObject(s,baseBean.class);
                 switch (bean.getResultCode()){
                     case 1:
-                        if(kind == 1){
-                            user.setKey(1);
-                            mBtnRelation.setText("已关注");
-                        }else{
-                            mBtnRelation.setText("关注");
-                            user.setKey(0);
-                        }
+                        user.setKey(1);
+                        mBtnRelation.setText("已关注");
                         break;
                     case 0:
+                        mBtnRelation.setText("关注");
+                        user.setKey(0);
+                        break;
+                    case 2:
+                        mBtnRelation.setText("相互关注");
+                        user.setKey(2);
+                        break;
+                    case -2:
+                        MyToast.showToast(mContext,"重试");
                         break;
                 }
             }

@@ -19,7 +19,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 /**
- * Created by Administrator on 2016/3/25.
+ * Created by lsj on 2016/3/25.
  */
 public class UserMainActivity extends MyBaseActivity implements View.OnClickListener{
     private CardView mCardLogout;

@@ -40,6 +40,33 @@ public class bbsBean extends baseBean{
         private String sName;
         private int suid; //原圈子用户id
         private int sid; // 原圈子id
+        private int mCommentCount;
+        private int mForwardCount;
+        private int mStar;
+
+        public int getmCommentCount() {
+            return mCommentCount;
+        }
+
+        public void setmCommentCount(int mCommentCount) {
+            this.mCommentCount = mCommentCount;
+        }
+
+        public int getmForwardCount() {
+            return mForwardCount;
+        }
+
+        public void setmForwardCount(int mForwardCount) {
+            this.mForwardCount = mForwardCount;
+        }
+
+        public int getmStar() {
+            return mStar;
+        }
+
+        public void setmStar(int mStar) {
+            this.mStar = mStar;
+        }
 
         public int getS_is_star() {
             return s_is_star;

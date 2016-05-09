@@ -1,24 +1,31 @@
 package com.lsj.lsjnews.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.LPhone;
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.utils.PxDipUnti;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.common.MyHelper;
 import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.interfaces.OnRefresh;
@@ -91,6 +98,12 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         holder.mImgHead.setOnClickListener(new mOnClickListener(holder,position));
         holder.mName.setOnClickListener(new mOnClickListener(holder,position));
         holder.mTxtSourceUserName.setOnClickListener(new mOnClickListener(holder,position));
+        holder.mImgBBSMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBBSMoreWindow(holder, position);
+            }
+        });
         //转发
         holder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,11 +133,17 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                                 holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
                                 datas.get(position).setIs_star(1);
                                 is_star[holder.getAdapterPosition()] = 1;
+                                datas.get(position).setmStar(datas.get(position).getmStar()+1);
+                                notifyDataSetChanged();
+
                                 break;
                             case -1:
                                 holder.mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_default);
                                 datas.get(position).setIs_star(0);
                                 is_star[holder.getAdapterPosition()] = 0;
+                                datas.get(position).setmStar(datas.get(position).getmStar()-1);
+                                notifyDataSetChanged();
+
                                 break;
                             case 0:
                                 MyToast.showToast(context,"赞失败");
@@ -146,6 +165,10 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         holder.mDate.setText(datas.get(position).getDate());
 //        holder.mContent.setText(datas.get(position).getContent());
         holder.mContent.setText(EmojiParser.getInstance(context).replace(datas.get(position).getContent()));
+
+        holder.mTxtForward.setText(""+datas.get(position).getmForwardCount());
+        holder.mTxtComment.setText(""+datas.get(position).getmCommentCount());
+        holder.mTxtStar.setText(""+datas.get(position).getmStar());
         if(datas.get(position).getImglists() != null && datas.get(position).getImglists().size()!=0){
                 initRecyle(holder,position);
         }
@@ -167,6 +190,56 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
     }
 
+    private void showBBSMoreWindow(msgViewHolder viewHolder, int position){
+        View contentView = LayoutInflater.from(context).inflate(R.layout.item_bbs_main_more_menu, null);
+        CardView mCardCollect = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_collect);
+        CardView mCardReport = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_report);
+        PopupWindow popWnd = new PopupWindow (contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mCardCollect.setOnClickListener(new myOnclickListener(popWnd, position));
+        mCardReport.setOnClickListener(new myOnclickListener(popWnd, position));
+        popWnd.setAnimationStyle(R.style.popwin_anim_style);
+        popWnd.setFocusable(true);
+        popWnd.setOutsideTouchable(true);
+        popWnd.setBackgroundDrawable(new BitmapDrawable());
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        popWnd.showAsDropDown(viewHolder.mImgBBSMore,-30,0);
+//        }
+    }
+    private class myOnclickListener implements View.OnClickListener {
+        PopupWindow popWnd;
+        int position;
+        public myOnclickListener(PopupWindow popWnd, int position){
+            this.popWnd = popWnd;
+            this.position = position;
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.card_bbs_main_more_menu_collect:
+                    //收藏
+                    RequestParams params = new RequestParams(Conts.POST_BBS_COLLECT);
+                    params.addBodyParameter("mid",String.valueOf(datas.get(position).getMid()));
+                    x.http().post(params, new NewCommonCallBack() {
+                        @Override
+                        public void onSuccess(String s) {
+                            baseBean bean = JSON.parseObject(s, baseBean.class);
+                            MyLogger.showLogWithLineNum(3,"--------------:"+s);
+                            if(bean.getResultCode() == 1){
+                                MyToast.showToast(context,"成功");
+                            }else{
+                                MyToast.showToast(context,"失败");
+                            }
+                        }
+                    });
+                    popWnd.dismiss();
+                    break;
+                case R.id.card_bbs_main_more_menu_report:
+                    //举报
+                    popWnd.dismiss();
+                    break;
+            }
+        }
+    }
     //用户界面跳转监听
     private class mOnClickListener implements View.OnClickListener{
         msgViewHolder holder;
@@ -186,6 +259,12 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                     UiHelper.showOtherUserMain(context,datas.get(position).getUid());
                     break;
                 case R.id.txt_source_bbs_user_name:
+                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
+                    break;
+                case R.id.card_bbs_main_more_menu_collect:
+                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
+                    break;
+                case R.id.card_bbs_main_more_menu_report:
                     UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
                     break;
             }
@@ -248,6 +327,8 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         LinearLayout mLayLocation;
         TextView mTxtLocation;
         ImageView mImgBtnStar,mImgBtnForward,mImgBtnComment;
+        TextView mTxtForward,mTxtComment,mTxtStar;
+        ImageView mImgBBSMore;
         //转发是显示
         CardView mCardSource;
         TextView mTxtSourceContent;
@@ -269,6 +350,10 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
             mTxtSourceContent = (TextView) itemView.findViewById(R.id.txt_source_bbs_content);
             mTxtSourceUserName = (TextView) itemView.findViewById(R.id.txt_source_bbs_user_name);
             mSourceRecyleImgs = (RecyclerView) itemView.findViewById(R.id.recyle_user_source_bbs_img);
+            mTxtForward = (TextView) itemView.findViewById(R.id.txt_btn_msg_forward_count);
+            mTxtComment = (TextView) itemView.findViewById(R.id.txt_btn_msg_comment_count);
+            mTxtStar = (TextView) itemView.findViewById(R.id.txt_btn_msg_star_count);
+            mImgBBSMore = (ImageView) itemView.findViewById(R.id.img_user_bbs_msg_more);
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyleImgs.setLayoutManager(mGridLayoutManager);

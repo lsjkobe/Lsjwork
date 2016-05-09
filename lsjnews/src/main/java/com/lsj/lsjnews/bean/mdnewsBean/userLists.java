@@ -6,23 +6,32 @@ import java.util.List;
  * Created by lsj on 2016/5/4.
  */
 public class userLists extends baseBean{
-   private List<user> userLists;
+    private List<searchUser> userLists;
 
-    public List<user> getUserLists() {
+    public List<searchUser> getUserLists() {
         return userLists;
     }
 
-    public void setUserLists(List<user> userLists) {
+    public void setUserLists(List<searchUser> userLists) {
         this.userLists = userLists;
     }
 
-    public static class user{
-       private int uid;
-       private String uName;
-       private String uImg;
-       private int uFansCount;
+    public static class searchUser{
+        private int uid;
+        private String uName;
+        private String uImg;
+        private int uFansCount;
+        private int key;
 
-       public int getuFansCount() {
+        public int getKey() {
+            return key;
+        }
+
+        public void setKey(int key) {
+            this.key = key;
+        }
+
+        public int getuFansCount() {
            return uFansCount;
        }
 

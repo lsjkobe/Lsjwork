@@ -53,6 +53,14 @@
                     android:text="2016-3-18 18:23"
                     android:textSize="@dimen/text_size_16" />
             </LinearLayout>
+            <ImageView
+                android:id="@+id/img_user_bbs_msg_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sel_bbs_more"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"/>
         </RelativeLayout>
         <TextView
             android:id="@+id/txt_user_bbs_content"
@@ -127,23 +135,57 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_margin="10dp">
-            <ImageView
-                android:id="@+id/img_btn_msg_forward"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@mipmap/ic_forward"/>
-            <ImageView
-                android:id="@+id/img_btn_msg_comment"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@mipmap/ic_commend"
-                android:layout_gravity="center"/>
-            <ImageView
-                android:id="@+id/img_btn_msg_star"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@mipmap/ic_star_default"
-                android:layout_gravity="right"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/img_btn_msg_forward"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/ic_forward"/>
+                <TextView
+                    android:id="@+id/txt_btn_msg_forward_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/text_size_18"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+                <ImageView
+                    android:id="@+id/img_btn_msg_comment"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/ic_commend"/>
+                <TextView
+                    android:id="@+id/txt_btn_msg_comment_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/text_size_18"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right">
+                <ImageView
+                    android:id="@+id/img_btn_msg_star"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/ic_star_default" />
+                <TextView
+                    android:id="@+id/txt_btn_msg_star_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/text_size_18"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+
         </FrameLayout>
 
     </LinearLayout>

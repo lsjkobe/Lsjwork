@@ -3,6 +3,8 @@ package com.lsj.lsjnews.mdnews.fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
+
 import com.alibaba.fastjson.JSON;
 import com.example.lsj.httplibrary.base.BaseFragment;
 import com.example.lsj.httplibrary.utils.MyLogger;
@@ -31,8 +33,9 @@ public class OtherUserBBS extends BaseFragment{
     private List<bbsBean.Lists> bbsBeanList = new ArrayList<>();
     private bbsBean.Lists nullBean = new bbsBean.Lists(); // 一个空的bean，在adapter会被header代替
     private LsjLoadingView mLoading;
+    private TextView mTxtNoData;
     private int page = 1;
-    private int pageCount;
+    private int pageCount = 1;
     private int uid;
     @Override
     protected void initGetIntent() {
@@ -45,6 +48,7 @@ public class OtherUserBBS extends BaseFragment{
         super.initView();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_other_user_main);
         mLoading = (LsjLoadingView) findViewById(R.id.loading_other_user_main_bbs);
+        mTxtNoData = (TextView) findViewById(R.id.txt_other_user_main_no_data);
 //        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
@@ -85,6 +89,9 @@ public class OtherUserBBS extends BaseFragment{
                         }
                         break;
                     case 0:
+                        bbsBeanList.add(nullBean);
+                        initOrRefresh();
+                        mTxtNoData.setVisibility(View.VISIBLE);
                         MyToast.showToast(mContext,"没数据");
                         break;
                 }
@@ -110,7 +117,6 @@ public class OtherUserBBS extends BaseFragment{
                     page++;
                     if(page > pageCount){
                         MyToast.showToast(mContext,"没有数据了");
-
                     }else{
                         mLoading.setVisibility(View.VISIBLE);
                         mLoading.startLoadingAnim();

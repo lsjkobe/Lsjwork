@@ -60,6 +60,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
     private LinearLayout mLayLocation;
     private TextView mTxtLocation;
     private ImageView mImgBtnStar,mImgBtnForward, mImgBtnComment;
+    private TextView mTxtForward,mTxtComment,mTxtStar;
     //转发时显示
     private CardView mCardSource;
     private TextView mTxtSourceContent;
@@ -100,6 +101,9 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
         mTxtSourceContent = (TextView) findViewById(R.id.txt_source_bbs_content);
         mTxtSourceUserName = (TextView) findViewById(R.id.txt_source_bbs_user_name);
         mSourceRecyleImgs = (RecyclerView) findViewById(R.id.recyle_user_source_bbs_img);
+        mTxtForward = (TextView) findViewById(R.id.txt_btn_msg_forward_count);
+        mTxtComment = (TextView) findViewById(R.id.txt_btn_msg_comment_count);
+        mTxtStar = (TextView) findViewById(R.id.txt_btn_msg_star_count);
 
         mImgBtnStar.setOnClickListener(this);
         mImgBtnForward.setOnClickListener(this);
@@ -138,6 +142,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
             if(bean.getIs_star() == 1){
                 mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
             }
+
         }else{
             if(bean.getS_is_star() == 1){
                 mImgBtnStar.setBackgroundResource(R.mipmap.ic_star_select);
@@ -264,6 +269,13 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
                         if(bean.getAllDataArray() != null){
                             mAllDatas = bean.getAllDataArray();
                             initOrRefresh();
+                            mTxtForward.setText(""+mAllDatas.getForwardLists().size());
+                            mTxtComment.setText(""+mAllDatas.getCommentLists().size());
+                            mTxtStar.setText(""+mAllDatas.getStarLists().size());
+                        }else{
+                            mTxtForward.setText(""+0);
+                            mTxtComment.setText(""+0);
+                            mTxtStar.setText(""+0);
                         }
                         break;
                     case 0:
@@ -274,6 +286,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
     }
 
     private void initOrRefresh() {
+
         //转发adapter数据更新
         if (mRecyclerForwardAdapter == null) {
             mRecyclerForwardAdapter = new recyclerAdapter(mAllDatas, 0);

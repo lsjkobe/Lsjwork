@@ -8,15 +8,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
+import com.lsj.lsjnews.adapter.UserMsgAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCommonCallBack;
+import com.lsj.lsjnews.bean.mdnewsBean.baseBean;
+import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
 import com.lsj.lsjnews.bean.mdnewsBean.userLists;
+import com.lsj.lsjnews.common.UiHelper;
 import com.lsj.lsjnews.http.Conts;
+import com.lsj.lsjnews.interfaces.OnRefresh;
+import com.lsj.lsjnews.utils.CircleImageView;
 import com.lsj.lsjnews.view.MyViewPager;
 
 import org.xutils.http.RequestParams;
@@ -30,7 +42,7 @@ import java.util.List;
  */
 public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListener{
     private TabLayout mTabMenu;
-    private MyViewPager mViewPager;
+    private ViewPager mViewPager;
     private RecyclerView mRecyclerUser,mRecyclerBBS;
     private List<View> mViewList;
     private List<String> mViewTitles;
@@ -38,14 +50,17 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
     private int currentPosition = 0;
     private ImageView mImgSearch;
     private EditText mEditKeyWord;
+    private userSearchAdapter userAdapter;
+    private List<userLists.searchUser> userLists = new ArrayList<>();
+    private UserMsgAdapter bbsAdapter;
+    private List<bbsBean.Lists> bbsLists = new ArrayList<>();
     @Override
     protected void initView() {
         super.initView();
         mTabMenu = (TabLayout) findViewById(R.id.tabs_user_bbs_search);
-        mViewPager = (MyViewPager) findViewById(R.id.viewpager_user_bbs_search);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager_user_bbs_search);
         mImgSearch = (ImageView) findViewById(R.id.img_user_bbs_search);
         mEditKeyWord = (EditText) findViewById(R.id.edit_user_bbs_search);
-
         mImgSearch.setOnClickListener(this);
     }
     @Override
@@ -72,12 +87,12 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
         initRecycler();
     }
     private void initRecycler() {
-        LinearLayoutManager mForwardLinearLayoutManager = new LinearLayoutManager(mContext);
-        mForwardLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LinearLayoutManager mCommentLinearLayoutManager = new LinearLayoutManager(mContext);
-        mCommentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LinearLayoutManager mStarLinearLayoutManager = new LinearLayoutManager(mContext);
-        mCommentLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager mUserLinearLayoutManager = new LinearLayoutManager(mContext);
+        mUserLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerUser.setLayoutManager(mUserLinearLayoutManager);
+        LinearLayoutManager mBBSLinearLayoutManager = new LinearLayoutManager(mContext);
+        mBBSLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerBBS.setLayoutManager(mBBSLinearLayoutManager);
     }
 
     private void initTabLayout() {
@@ -94,16 +109,64 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
             @Override
             public void onSuccess(String s) {
                 userLists mUserLists = JSON.parseObject(s,userLists.class);
+                MyLogger.showLogWithLineNum(3,"-------------"+s);
                 if(mUserLists.getResultCode() == 0){
                     MyToast.showToast(mContext,"用户不存在");
                 }else{
-                    MyToast.showToast(mContext,s);
+                    if(mUserLists.getUserLists() != null){
+                        userLists.clear();
+                        userLists.addAll(mUserLists.getUserLists());
+                        initOrRefreshUser();
+                    }
                 }
 
             }
         });
     }
+    private void initOrRefreshUser(){
+        if(userAdapter == null){
+            userAdapter = new userSearchAdapter(userLists);
+            mRecyclerUser.setAdapter(userAdapter);
+        }else{
+            userAdapter.notifyDataSetChanged();
+        }
+    }
 
+    private void getSearchBBS() {
+        RequestParams params = new RequestParams(Conts.GET_SEARCH_BBS);
+        params.addBodyParameter("keyWord",mEditKeyWord.getText().toString());
+        x.http().get(params, new NewCommonCallBack() {
+            @Override
+            public void onSuccess(String s) {
+                bbsBean mBBSLists = JSON.parseObject(s,bbsBean.class);
+                MyLogger.showLogWithLineNum(3,"-------------"+s);
+                if(mBBSLists.getResultCode() == 0){
+                    MyToast.showToast(mContext,"找不到圈子");
+                }else{
+                    if(mBBSLists.getLists() != null){
+                        bbsLists.clear();
+                        bbsLists.addAll(mBBSLists.getLists());
+                        initOrRefreshBBS();
+                    }
+                }
+
+            }
+        });
+    }
+    private void initOrRefreshBBS(){
+        if(bbsAdapter == null){
+            bbsAdapter = new UserMsgAdapter(mContext, bbsLists);
+            mRecyclerBBS.setAdapter(bbsAdapter);
+            bbsAdapter.setOnRefresh(new OnRefresh() {
+                @Override
+                public void Refresh() {
+                    MyToast.showToast(mContext,"到底了");
+                }
+            });
+        }else{
+            bbsAdapter.notifyDataSetChanged();
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -113,6 +176,8 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
                 }else{
                     if(currentPosition == 0){
                         getSearchUser();
+                    }else{
+                        getSearchBBS();
                     }
                 }
 
@@ -169,6 +234,107 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
 
         }
     }
+    private class userSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+        private List<userLists.searchUser> datas;
+        public userSearchAdapter(List<userLists.searchUser> datas){
+            this.datas = datas;
+        }
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_search_user,parent,false);
+            userViewHolder viewHolder = new userViewHolder(view);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            final userViewHolder viewHolder = (userViewHolder) holder;
+            viewHolder.mTxtName.setText(datas.get(position).getuName());
+            viewHolder.mTxtFansCount.setText("粉丝:"+datas.get(position).getuFansCount());
+            Glide.with(mContext).load(datas.get(position).getuImg()).into(viewHolder.mImgUserHead);
+
+            switch(datas.get(position).getKey()){
+                case -1:
+                    viewHolder.mBtnRelation.setVisibility(View.GONE);
+                    break;
+                case 0:
+                    viewHolder.mBtnRelation.setText("关注");
+                    viewHolder.mBtnRelation.setVisibility(View.VISIBLE);
+                    break;
+                case 1:
+                    viewHolder.mBtnRelation.setText("已关注");
+                    viewHolder.mBtnRelation.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    viewHolder.mBtnRelation.setText("相互关注");
+                    viewHolder.mBtnRelation.setVisibility(View.VISIBLE);
+                    break;
+            }
+            viewHolder.mBtnRelation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    followOrCancel(position,viewHolder.mBtnRelation);
+                }
+            });
+            viewHolder.mRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UiHelper.showOtherUserMain(mContext,datas.get(position).getUid());
+                }
+            });
+        }
+
+        private void followOrCancel(final int position, final Button btn){
+            RequestParams params = new RequestParams(Conts.GET_FOLLOW_OR_CANCEL);
+            params.addBodyParameter("uid",String.valueOf(datas.get(position).getUid()));
+            params.addBodyParameter("key",String.valueOf(datas.get(position).getKey()));
+            x.http().get(params, new NewCommonCallBack() {
+                @Override
+                public void onSuccess(String s) {
+                    baseBean bean = JSON.parseObject(s,baseBean.class);
+                    MyToast.showToast(mContext,""+bean.getResultCode());
+                    switch (bean.getResultCode()){
+                        case 1:
+                            datas.get(position).setKey(1);
+                            btn.setText("已关注");
+                            break;
+                        case 0:
+                            btn.setText("关注");
+                            datas.get(position).setKey(0);
+                            break;
+                        case 2:
+                            btn.setText("相互关注");
+                            datas.get(position).setKey(2);
+                            break;
+                        case -2:
+                            MyToast.showToast(mContext,"重试");
+                            break;
+                    }
+                }
+            });
+        }
+        @Override
+        public int getItemCount() {
+            return datas.size();
+        }
+        public class userViewHolder extends RecyclerView.ViewHolder{
+            private TextView mTxtName;
+            private TextView mTxtFansCount;
+            private CircleImageView mImgUserHead;
+            private Button mBtnRelation;
+            private RelativeLayout mRelativeLayout;
+            public userViewHolder(View itemView) {
+                super(itemView);
+                mTxtName = (TextView) itemView.findViewById(R.id.txt_search_user_name);
+                mTxtFansCount = (TextView) itemView.findViewById(R.id.txt_search_user_fans_count);
+                mImgUserHead = (CircleImageView) itemView.findViewById(R.id.img_search_user_head);
+                mBtnRelation = (Button) itemView.findViewById(R.id.btn_search_user_relation);
+                mRelativeLayout = (RelativeLayout) itemView.findViewById(R.id.layout_search_user);
+            }
+        }
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_user_bbs_search;

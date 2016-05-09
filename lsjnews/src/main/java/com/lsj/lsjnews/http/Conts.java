@@ -40,6 +40,11 @@ public class Conts {
     public final static String GET_USER_BBS_PHOTO = HTTP_HOST+"getUserBBSPhoto.php";
     //查找用户
     public final static String GET_SEARCH_USER = HTTP_HOST+"searchUser.php";
+    //查找圈子
+    public final static String GET_SEARCH_BBS = HTTP_HOST+"searchBBS.php";
     //点赞
     public final static String GET_USER_CLICK_STAR = HTTP_HOST+"clickStarBBS.php";
+
+    //收藏
+    public final static String POST_BBS_COLLECT = HTTP_HOST+"BBSCollect.php";
 }

@@ -26,9 +26,9 @@
     <include
         android:id="@+id/tabs_user_bbs_search"
         layout="@layout/tab_bbs_msg_menu" />
-    <com.lsj.lsjnews.view.MyViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_user_bbs_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </com.lsj.lsjnews.view.MyViewPager>
+    </android.support.v4.view.ViewPager>
 </LinearLayout>

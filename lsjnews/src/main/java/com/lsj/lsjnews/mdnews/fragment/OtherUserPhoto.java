@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
@@ -37,8 +38,9 @@ public class OtherUserPhoto extends BaseFragment{
     private LsjLoadingView mLoading;
     private List<photoLists.photoBean> photoLists = new ArrayList<>();
     private photoLists.photoBean nullBean = new photoLists.photoBean();
+    private TextView mTxtNoData;
     private int page = 1;
-    private int pageCount;
+    private int pageCount=1;
     private int uid;
     @Override
     protected void initGetIntent() {
@@ -51,6 +53,7 @@ public class OtherUserPhoto extends BaseFragment{
         super.initView();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_other_user_main);
         mLoading = (LsjLoadingView) findViewById(R.id.loading_other_user_main_bbs);
+        mTxtNoData = (TextView) findViewById(R.id.txt_other_user_main_no_data);
 //        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
@@ -92,6 +95,9 @@ public class OtherUserPhoto extends BaseFragment{
                         initOrRefresh();
                         break;
                     case 0:
+                        photoLists.add(nullBean);
+                        initOrRefresh();
+                        mTxtNoData.setVisibility(View.VISIBLE);
                         break;
 
                 }

@@ -10,6 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <TextView
+        android:id="@+id/txt_other_user_main_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="@dimen/text_size_24"
+        android:text="没数据"
+        android:visibility="gone"/>
     <com.lsj.lsjnews.view.LsjLoadingView
         android:id="@+id/loading_other_user_main_bbs"
         android:layout_width="wrap_content"
