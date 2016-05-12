@@ -58,8 +58,8 @@ public class NewsMainActivity extends MyBaseActivity{
     private int mPosition = 0;
     private List<NetNewsFragment> datas = new ArrayList<>();
 
-    private RecycleMenuAdapter menuAdapter;
-    private RecyclerView mMenuRecycler;
+//    private RecycleMenuAdapter menuAdapter;
+//    private RecyclerView mMenuRecycler;
 
     private AppBarLayout mAppBarLayout;
 
@@ -80,7 +80,7 @@ public class NewsMainActivity extends MyBaseActivity{
         mLayDrawer = (DrawerLayout) findViewById(R.id.lay_main_drawer);
         mViewPager = (ViewPager) findViewById(R.id.view_pager_news_msg);
         mTabTopMenu = (TabLayout) findViewById(R.id.tabs_news_top_menu);
-        mMenuRecycler = (RecyclerView) findViewById(R.id.view_navigation_recycler_menu);
+//        mMenuRecycler = (RecyclerView) findViewById(R.id.view_navigation_recycler_menu);
         mAppBarLayout = (AppBarLayout) findViewById(R.id.lay_main_top_bar);
 
 
@@ -107,16 +107,16 @@ public class NewsMainActivity extends MyBaseActivity{
 //        mViewPager.setCurrentItem(0);
         initTab();
         initToolbar();
-        initRecycler();
+//        initRecycler();
     }
 
-    private void initRecycler() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mMenuRecycler.setLayoutManager(linearLayoutManager);
-        menuAdapter = new RecycleMenuAdapter(mContext);
-        mMenuRecycler.setAdapter(menuAdapter);
-    }
+//    private void initRecycler() {
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        mMenuRecycler.setLayoutManager(linearLayoutManager);
+//        menuAdapter = new RecycleMenuAdapter(mContext);
+//        mMenuRecycler.setAdapter(menuAdapter);
+//    }
 
     //初始化新闻Fragment 0焦点 1体育 2社会 3nba 4足球
     private void initFragment(){
@@ -173,32 +173,32 @@ public class NewsMainActivity extends MyBaseActivity{
         setSupportActionBar(mToolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
-                R.string.app_name){
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                //刚划出来时启动动画效果
-                if(slideOffset == 0 && mLayDrawer.isShown()){
-                    menuAdapter = new RecycleMenuAdapter(mContext);
-                    mMenuRecycler.setAdapter(menuAdapter);
-                }
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                menuAdapter = null;
-
-            }
-        };
-        mLayDrawer.setDrawerListener(toggle);
-        toggle.syncState();
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mLayDrawer, mToolbar, R.string.app_name,
+//                R.string.app_name){
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//            }
+//
+//            @Override
+//            public void onDrawerSlide(View drawerView, float slideOffset) {
+//                super.onDrawerSlide(drawerView, slideOffset);
+//                //刚划出来时启动动画效果
+//                if(slideOffset == 0 && mLayDrawer.isShown()){
+//                    menuAdapter = new RecycleMenuAdapter(mContext);
+//                    mMenuRecycler.setAdapter(menuAdapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onDrawerClosed(View drawerView) {
+//                super.onDrawerClosed(drawerView);
+//                menuAdapter = null;
+//
+//            }
+//        };
+//        mLayDrawer.setDrawerListener(toggle);
+//        toggle.syncState();
     }
     public class MainPagerAdapter extends FragmentPagerAdapter {
         List<NetNewsFragment> datas;

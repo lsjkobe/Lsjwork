@@ -73,18 +73,18 @@
 
 </android.support.design.widget.CoordinatorLayout>
 
-    <android.support.design.widget.NavigationView
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:background="#00ffffff"
-        android:fitsSystemWindows="true">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/view_navigation_recycler_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-        </android.support.v7.widget.RecyclerView>
-    </android.support.design.widget.NavigationView>
+    <!--<android.support.design.widget.NavigationView-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="left"-->
+        <!--android:background="#00ffffff"-->
+        <!--android:fitsSystemWindows="true">-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/view_navigation_recycler_menu"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center">-->
+        <!--</android.support.v7.widget.RecyclerView>-->
+    <!--</android.support.design.widget.NavigationView>-->
 
 </android.support.v4.widget.DrawerLayout>

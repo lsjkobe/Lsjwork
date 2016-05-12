@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class MyHelper {
     //登录时保存的数据
+    public static  int USER_ID =-1;
     public static  String USER_HEAD_IMG = "";
     public static  String USER_NAME = "";
     public static  int USER_FANS_COUNT = 0;

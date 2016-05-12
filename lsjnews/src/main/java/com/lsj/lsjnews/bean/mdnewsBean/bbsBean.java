@@ -34,6 +34,7 @@ public class bbsBean extends baseBean{
         private List<imglists> imglists ;
         private String location;
         private int is_star;
+        private int is_collect;
         private int s_is_star; //如果是转发，点进原圈子后用户是否赞
         private int mType;
         private String sourceContent;
@@ -43,6 +44,14 @@ public class bbsBean extends baseBean{
         private int mCommentCount;
         private int mForwardCount;
         private int mStar;
+
+        public int getIs_collect() {
+            return is_collect;
+        }
+
+        public void setIs_collect(int is_collect) {
+            this.is_collect = is_collect;
+        }
 
         public int getmCommentCount() {
             return mCommentCount;

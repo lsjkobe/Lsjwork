@@ -137,6 +137,7 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                         MyToast.showToast(mContext, "登录成功");
                         CacheUtils.setLoginCache(mContext,"phone",mEditPhone.getText().toString().trim());
                         CacheUtils.setLoginCache(mContext,"password",mEditPassword.getText().toString().trim());
+                        MyHelper.USER_ID = mUserBean.getUid();
                         MyHelper.USER_HEAD_IMG = mUserBean.getuImg();
                         MyHelper.USER_NAME = mUserBean.getuName();
                         MyHelper.USER_SEXY = mUserBean.getuSexy();

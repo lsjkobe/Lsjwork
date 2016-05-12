@@ -19,6 +19,7 @@ import com.lsj.lsjnews.mdnews.OtherUserMain;
 import com.lsj.lsjnews.mdnews.UserBBSComment;
 import com.lsj.lsjnews.mdnews.UserBBSDetailMsg;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
+import com.lsj.lsjnews.mdnews.UserFansActivity;
 import com.lsj.lsjnews.mdnews.UserForwardActivity;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserMainActivity;
@@ -179,6 +180,17 @@ public class UiHelper {
         Intent intent = new Intent();
         intent.putExtra("uid",uid);
         intent.setClass(context, OtherUserMain.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 粉丝列表
+     * @param key 0粉丝 1关注
+     * @param context
+     */
+    public static void showUserFans(Context context, String key){
+        Intent intent = new Intent();
+        intent.putExtra("key",key);
+        intent.setClass(context, UserFansActivity.class);
         context.startActivity(intent);
     }
     /**

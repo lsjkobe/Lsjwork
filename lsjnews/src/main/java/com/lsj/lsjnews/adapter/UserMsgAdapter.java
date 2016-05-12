@@ -98,6 +98,7 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         holder.mImgHead.setOnClickListener(new mOnClickListener(holder,position));
         holder.mName.setOnClickListener(new mOnClickListener(holder,position));
         holder.mTxtSourceUserName.setOnClickListener(new mOnClickListener(holder,position));
+        //圈子popwin
         holder.mImgBBSMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,13 +191,19 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
     }
 
+    private TextView mTxtCollect,mTxtReport;
     private void showBBSMoreWindow(msgViewHolder viewHolder, int position){
         View contentView = LayoutInflater.from(context).inflate(R.layout.item_bbs_main_more_menu, null);
         CardView mCardCollect = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_collect);
-        CardView mCardReport = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_report);
+//        CardView mCardReport = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_report);
+        mTxtCollect = (TextView) contentView.findViewById(R.id.txt_bbs_more_menu_collect);
+//        mTxtReport = (TextView) contentView.findViewById(R.id.txt_bbs_more_menu_report);
+        if(datas.get(position).getIs_collect() == 1){
+            mTxtCollect.setText("已收藏");
+        }
         PopupWindow popWnd = new PopupWindow (contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mCardCollect.setOnClickListener(new myOnclickListener(popWnd, position));
-        mCardReport.setOnClickListener(new myOnclickListener(popWnd, position));
+//        mCardReport.setOnClickListener(new myOnclickListener(popWnd, position));
         popWnd.setAnimationStyle(R.style.popwin_anim_style);
         popWnd.setFocusable(true);
         popWnd.setOutsideTouchable(true);
@@ -226,6 +233,13 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                             MyLogger.showLogWithLineNum(3,"--------------:"+s);
                             if(bean.getResultCode() == 1){
                                 MyToast.showToast(context,"成功");
+                                if(datas.get(position).getIs_collect() == 1){
+                                    mTxtCollect.setText("收藏");
+                                    datas.get(position).setIs_collect(0);
+                                }else{
+                                    mTxtCollect.setText("已收藏");
+                                    datas.get(position).setIs_collect(1);
+                                }
                             }else{
                                 MyToast.showToast(context,"失败");
                             }
@@ -233,10 +247,10 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                     });
                     popWnd.dismiss();
                     break;
-                case R.id.card_bbs_main_more_menu_report:
-                    //举报
-                    popWnd.dismiss();
-                    break;
+//                case R.id.card_bbs_main_more_menu_report:
+//                    //举报
+//                    popWnd.dismiss();
+//                    break;
             }
         }
     }
@@ -261,12 +275,12 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
                 case R.id.txt_source_bbs_user_name:
                     UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
                     break;
-                case R.id.card_bbs_main_more_menu_collect:
-                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
-                    break;
-                case R.id.card_bbs_main_more_menu_report:
-                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
-                    break;
+//                case R.id.card_bbs_main_more_menu_collect:
+//                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
+//                    break;
+//                case R.id.card_bbs_main_more_menu_report:
+//                    UiHelper.showOtherUserMain(context,datas.get(position).getSuid());
+//                    break;
             }
         }
     }

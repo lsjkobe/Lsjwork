@@ -3,6 +3,7 @@ package com.lsj.lsjnews.mdnews;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +26,7 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
     private CardView mCardLogout;
     private TextView mTxtUserName,mTxtUserState,mTxtUserFansCount,mTxtUserBBSCount,mTxtUserForwardCount;
     private ImageView mImgUser;
+    private LinearLayout mLayoutBBS,mLayoutFans,mLayoutRelation;
     @Override
     protected void initView() {
         super.initView();
@@ -35,7 +37,13 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
         mTxtUserBBSCount = (TextView) findViewById(R.id.txt_user_main_bbs_count);
         mTxtUserForwardCount = (TextView) findViewById(R.id.txt_user_main_forward_count);
         mImgUser = (ImageView) findViewById(R.id.img_user_main_head);
+        mLayoutBBS = (LinearLayout) findViewById(R.id.layout_user_main_bbs);
+        mLayoutFans = (LinearLayout) findViewById(R.id.layout_user_main_fans);
+        mLayoutRelation = (LinearLayout) findViewById(R.id.layout_user_main_relation);
         mCardLogout.setOnClickListener(this);
+        mLayoutBBS.setOnClickListener(this);
+        mLayoutFans.setOnClickListener(this);
+        mLayoutRelation.setOnClickListener(this);
     }
 
     @Override
@@ -59,6 +67,15 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
             case R.id.card_user_logout:
                 userLogout();
                 break;
+            case R.id.layout_user_main_bbs:
+                UiHelper.showOtherUserMain(mContext,MyHelper.USER_ID);
+                break;
+            case R.id.layout_user_main_fans:
+                UiHelper.showUserFans(mContext,"0");
+                break;
+            case R.id.layout_user_main_relation:
+                UiHelper.showUserFans(mContext,"1");
+                break;
         }
     }
 
@@ -69,6 +86,7 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
             public void onSuccess(String s) {
                 if(s.equals("1")){
                     MyToast.showToast(mContext,"注销成功");
+                    MyHelper.USER_ID = -1;
                     MyHelper.USER_HEAD_IMG = "";
                     MyHelper.USER_NAME = "";
                     MyHelper.USER_SEXY = 0;

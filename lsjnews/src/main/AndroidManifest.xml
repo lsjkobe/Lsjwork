@@ -74,7 +74,10 @@
         <activity
             android:name=".mdnews.UserOrBBSSearch">
         </activity>
-
+        //粉丝列表
+        <activity
+            android:name=".mdnews.UserFansActivity">
+        </activity>
         //mob
         <activity
             android:name="com.mob.tools.MobUIShell"

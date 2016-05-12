@@ -44,6 +44,8 @@ public class Conts {
     public final static String GET_SEARCH_BBS = HTTP_HOST+"searchBBS.php";
     //点赞
     public final static String GET_USER_CLICK_STAR = HTTP_HOST+"clickStarBBS.php";
+    //获取粉丝列表
+    public final static String GET_USER_FANS = HTTP_HOST+"getUserFans.php";
 
     //收藏
     public final static String POST_BBS_COLLECT = HTTP_HOST+"BBSCollect.php";

@@ -39,6 +39,7 @@ public class UserAutoLogin {
                 switch (mUserBean.getResultCode()){
                     case 1:
 //                        MyToast.showToast(context, "登录成功");
+                        MyHelper.USER_ID = mUserBean.getUid();
                         MyHelper.USER_HEAD_IMG = mUserBean.getuImg();
                         MyHelper.USER_NAME = mUserBean.getuName();
                         MyHelper.USER_SEXY = mUserBean.getuSexy();
