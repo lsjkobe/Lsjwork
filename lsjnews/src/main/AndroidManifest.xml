@@ -78,6 +78,14 @@
         <activity
             android:name=".mdnews.UserFansActivity">
         </activity>
+        //我的相册
+        <activity
+            android:name=".mdnews.UserMainPhoto">
+        </activity>
+        //我的收藏
+        <activity
+            android:name=".mdnews.UserMainCollectBBS">
+        </activity>
         //mob
         <activity
             android:name="com.mob.tools.MobUIShell"

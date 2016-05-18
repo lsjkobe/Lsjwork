@@ -102,7 +102,7 @@ public class OtherUserMain extends MyBaseActivity implements View.OnClickListene
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                MyLogger.showLogWithLineNum(3,"------------:"+verticalOffset+":"+mAppBarLayout.getHeight()+":"+mToolbar.getHeight());
+//                MyLogger.showLogWithLineNum(3,"------------:"+verticalOffset+":"+mAppBarLayout.getHeight()+":"+mToolbar.getHeight());
 
                 if( verticalOffset == mToolbar.getHeight() - mAppBarLayout.getHeight() ){
                     //刚好把整个appbarlayout滑出就显示topTablayout设置is_show_top_tab = true

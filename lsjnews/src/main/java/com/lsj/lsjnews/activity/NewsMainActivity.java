@@ -1,6 +1,5 @@
 package com.lsj.lsjnews.activity;
 
-import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -12,10 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -30,9 +26,7 @@ import android.widget.PopupWindow;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.CacheUtils;
-import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
-import com.lsj.lsjnews.adapter.RecycleMenuAdapter;
 import com.lsj.lsjnews.base.MyBaseActivity;
 import com.lsj.lsjnews.base.NewCommonCallBack;
 import com.lsj.lsjnews.common.MyHelper;

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.example.lsj.httplibrary.utils.AppManager;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
@@ -37,7 +38,7 @@ public class UserFansActivity extends MyBaseActivity{
     private List<userLists.searchUser> fansLists = new ArrayList<>();
     private userFansAdapter fansAdapter;
     private String key = "0";
-    private TextView mTxtToolbarTitle;
+//    private TextView mTxtToolbarTitle;
     private Toolbar mToolbar;
     @Override
     protected void initGetIntent() {
@@ -50,19 +51,30 @@ public class UserFansActivity extends MyBaseActivity{
         super.initView();
         mRecyclerFans = (RecyclerView) findViewById(R.id.recycler_user_main_fans_or_relation);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_fans_relation_top);
-        mTxtToolbarTitle = (TextView) findViewById(R.id.txt_toolbar_center_username);
+//        mTxtToolbarTitle = (TextView) findViewById(R.id.txt_toolbar_center_username);
     }
 
     @Override
     protected void initData() {
-        mToolbar.setBackgroundResource(R.color.colorPrimary);
-        if(key.equals("0")){
-            mTxtToolbarTitle.setText("粉丝");
-        }else{
-            mTxtToolbarTitle.setText("关注");
-        }
+        initToolbar();
         initRecycler();
         getFans();
+    }
+    private void initToolbar() {
+        mToolbar.setBackgroundResource(R.color.colorPrimary);
+        mToolbar.setNavigationIcon(R.mipmap.ic_back);
+        if(key.equals("0")){
+            mToolbar.setTitle("粉丝");
+        }else{
+            mToolbar.setTitle("关注");
+        }
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppManager.getAppManager().finishActivity();
+            }
+        });
     }
     private void initRecycler(){
         LinearLayoutManager mUserLinearLayoutManager = new LinearLayoutManager(mContext);

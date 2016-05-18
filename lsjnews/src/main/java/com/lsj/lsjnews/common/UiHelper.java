@@ -23,6 +23,8 @@ import com.lsj.lsjnews.mdnews.UserFansActivity;
 import com.lsj.lsjnews.mdnews.UserForwardActivity;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserMainActivity;
+import com.lsj.lsjnews.mdnews.UserMainCollectBBS;
+import com.lsj.lsjnews.mdnews.UserMainPhoto;
 import com.lsj.lsjnews.mdnews.UserOrBBSSearch;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
 import com.lsj.lsjnews.mdnews.UserSelectPhoto;
@@ -200,6 +202,24 @@ public class UiHelper {
     public static void showSearchActivity(Context context){
         Intent intent = new Intent();
         intent.setClass(context, UserOrBBSSearch.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 我的相册界面
+     * @param context
+     */
+    public static void showUserPhoto(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserMainPhoto.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 我的收藏
+     * @param context
+     */
+    public static void showUserCollect(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserMainCollectBBS.class);
         context.startActivity(intent);
     }
     /**

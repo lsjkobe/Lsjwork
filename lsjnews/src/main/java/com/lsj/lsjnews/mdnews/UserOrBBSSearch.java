@@ -164,6 +164,8 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
                 }
             });
         }else{
+            //数据长度改变时动态改变配置，防止数组下标越界
+            bbsAdapter.changeNewConfig();
             bbsAdapter.notifyDataSetChanged();
         }
     }

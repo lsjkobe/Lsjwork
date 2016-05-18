@@ -26,7 +26,7 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
     private CardView mCardLogout;
     private TextView mTxtUserName,mTxtUserState,mTxtUserFansCount,mTxtUserBBSCount,mTxtUserForwardCount;
     private ImageView mImgUser;
-    private LinearLayout mLayoutBBS,mLayoutFans,mLayoutRelation;
+    private LinearLayout mLayoutBBS,mLayoutFans,mLayoutRelation,mLayoutPhoto,mLayoutCollect;
     @Override
     protected void initView() {
         super.initView();
@@ -40,10 +40,14 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
         mLayoutBBS = (LinearLayout) findViewById(R.id.layout_user_main_bbs);
         mLayoutFans = (LinearLayout) findViewById(R.id.layout_user_main_fans);
         mLayoutRelation = (LinearLayout) findViewById(R.id.layout_user_main_relation);
+        mLayoutPhoto = (LinearLayout) findViewById(R.id.layout_user_main_photo);
+        mLayoutCollect = (LinearLayout) findViewById(R.id.layout_user_main_collect);
         mCardLogout.setOnClickListener(this);
         mLayoutBBS.setOnClickListener(this);
         mLayoutFans.setOnClickListener(this);
         mLayoutRelation.setOnClickListener(this);
+        mLayoutPhoto.setOnClickListener(this);
+        mLayoutCollect.setOnClickListener(this);
     }
 
     @Override
@@ -75,6 +79,12 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
                 break;
             case R.id.layout_user_main_relation:
                 UiHelper.showUserFans(mContext,"1");
+                break;
+            case R.id.layout_user_main_photo:
+                UiHelper.showUserPhoto(mContext);
+                break;
+            case R.id.layout_user_main_collect:
+                UiHelper.showUserCollect(mContext);
                 break;
         }
     }

@@ -55,6 +55,7 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         this.datas = datas;
         changeNewConfig();
     }
+    //
     public void changeNewConfig(){
         is_star = new int[datas.size()];
         is_source = new int[datas.size()];

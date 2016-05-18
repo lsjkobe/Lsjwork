@@ -1,6 +1,7 @@
 package com.lsj.lsjnews.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.LPhone;
+import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.example.lsj.httplibrary.utils.PxDipUnti;
 import com.lsj.lsjnews.R;
@@ -83,6 +86,7 @@ public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     UiHelper.showBBSDetailMsg(context,datas.get(viewHolder.getAdapterPosition()), 0);
                 }
             });
+
             if(viewType == 0 || viewType == 1 || viewType ==2){
                 viewHolder.mCardSource.setVisibility(View.GONE);
                 viewHolder.mRecyleImgs.setVisibility(View.VISIBLE);
@@ -109,6 +113,13 @@ public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder.mImgHead.setOnClickListener(new mOnClickListener(viewHolder,position));
             viewHolder.mName.setOnClickListener(new mOnClickListener(viewHolder,position));
             viewHolder.mTxtSourceUserName.setOnClickListener(new mOnClickListener(viewHolder,position));
+            //圈子popwin
+            ((msgViewHolder) holder).mImgBBSMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showBBSMoreWindow(viewHolder, position);
+                }
+            });
             //转发
             viewHolder.mImgBtnForward.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -185,7 +196,69 @@ public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
     }
-
+    private TextView mTxtCollect,mTxtReport;
+    private void showBBSMoreWindow(msgViewHolder viewHolder, int position){
+        View contentView = LayoutInflater.from(context).inflate(R.layout.item_bbs_main_more_menu, null);
+        CardView mCardCollect = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_collect);
+//        CardView mCardReport = (CardView) contentView.findViewById(R.id.card_bbs_main_more_menu_report);
+        mTxtCollect = (TextView) contentView.findViewById(R.id.txt_bbs_more_menu_collect);
+//        mTxtReport = (TextView) contentView.findViewById(R.id.txt_bbs_more_menu_report);
+        if(datas.get(position).getIs_collect() == 1){
+            mTxtCollect.setText("已收藏");
+        }
+        PopupWindow popWnd = new PopupWindow (contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mCardCollect.setOnClickListener(new myOnclickListener(popWnd, position));
+//        mCardReport.setOnClickListener(new myOnclickListener(popWnd, position));
+        popWnd.setAnimationStyle(R.style.popwin_anim_style);
+        popWnd.setFocusable(true);
+        popWnd.setOutsideTouchable(true);
+        popWnd.setBackgroundDrawable(new BitmapDrawable());
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        popWnd.showAsDropDown(viewHolder.mImgBBSMore,-30,0);
+//        }
+    }
+    private class myOnclickListener implements View.OnClickListener {
+        PopupWindow popWnd;
+        int position;
+        public myOnclickListener(PopupWindow popWnd, int position){
+            this.popWnd = popWnd;
+            this.position = position;
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.card_bbs_main_more_menu_collect:
+                    //收藏
+                    RequestParams params = new RequestParams(Conts.POST_BBS_COLLECT);
+                    params.addBodyParameter("mid",String.valueOf(datas.get(position).getMid()));
+                    x.http().post(params, new NewCommonCallBack() {
+                        @Override
+                        public void onSuccess(String s) {
+                            baseBean bean = JSON.parseObject(s, baseBean.class);
+                            MyLogger.showLogWithLineNum(3,"--------------:"+s);
+                            if(bean.getResultCode() == 1){
+                                MyToast.showToast(context,"成功");
+                                if(datas.get(position).getIs_collect() == 1){
+                                    mTxtCollect.setText("收藏");
+                                    datas.get(position).setIs_collect(0);
+                                }else{
+                                    mTxtCollect.setText("已收藏");
+                                    datas.get(position).setIs_collect(1);
+                                }
+                            }else{
+                                MyToast.showToast(context,"失败");
+                            }
+                        }
+                    });
+                    popWnd.dismiss();
+                    break;
+//                case R.id.card_bbs_main_more_menu_report:
+//                    //举报
+//                    popWnd.dismiss();
+//                    break;
+            }
+        }
+    }
     //用户界面跳转监听
     private class mOnClickListener implements View.OnClickListener{
         msgViewHolder holder;
@@ -269,6 +342,7 @@ public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         LinearLayout mLayLocation;
         TextView mTxtLocation;
         ImageView mImgBtnStar,mImgBtnForward,mImgBtnComment;
+        ImageView mImgBBSMore;
         //转发是显示
         CardView mCardSource;
         TextView mTxtSourceContent;
@@ -290,6 +364,8 @@ public class OtherUserMsgAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mTxtSourceContent = (TextView) itemView.findViewById(R.id.txt_source_bbs_content);
             mTxtSourceUserName = (TextView) itemView.findViewById(R.id.txt_source_bbs_user_name);
             mSourceRecyleImgs = (RecyclerView) itemView.findViewById(R.id.recyle_user_source_bbs_img);
+            mImgBBSMore = (ImageView) itemView.findViewById(R.id.img_user_bbs_msg_more);
+
             GridLayoutManager mGridLayoutManager = new GridLayoutManager(context,lineCount);
             mGridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyleImgs.setLayoutManager(mGridLayoutManager);

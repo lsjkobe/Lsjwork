@@ -61,6 +61,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
     private TextView mTxtLocation;
     private ImageView mImgBtnStar,mImgBtnForward, mImgBtnComment;
     private TextView mTxtForward,mTxtComment,mTxtStar;
+    private ImageView mImgBBSMore;
     //转发时显示
     private CardView mCardSource;
     private TextView mTxtSourceContent;
@@ -104,6 +105,7 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
         mTxtForward = (TextView) findViewById(R.id.txt_btn_msg_forward_count);
         mTxtComment = (TextView) findViewById(R.id.txt_btn_msg_comment_count);
         mTxtStar = (TextView) findViewById(R.id.txt_btn_msg_star_count);
+        mImgBBSMore = (ImageView) findViewById(R.id.img_user_bbs_msg_more);
 
         mImgBtnStar.setOnClickListener(this);
         mImgBtnForward.setOnClickListener(this);
@@ -111,6 +113,8 @@ public class UserBBSDetailMsg extends MyBaseActivity implements View.OnClickList
         mImgUserHead.setOnClickListener(this);
         mTxtUserName.setOnClickListener(this);
         mTxtSourceUserName.setOnClickListener(this);
+
+        mImgBBSMore.setVisibility(View.GONE);
     }
 
 
