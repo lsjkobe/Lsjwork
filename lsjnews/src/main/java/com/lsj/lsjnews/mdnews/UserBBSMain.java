@@ -251,6 +251,7 @@ public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         page = 1;
+        mTxtToolbarName.setText(MyHelper.USER_NAME);
         getBBSData();
     }
 

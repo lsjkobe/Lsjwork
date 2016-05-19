@@ -1,7 +1,7 @@
 package com.lsj.lsjnews.bean.mdnewsBean;
 
 /**
- * Created by Administrator on 2016/3/20.
+ * Created by lsj on 2016/3/20.
  */
 public class userBean extends baseBean {
     private int uid;

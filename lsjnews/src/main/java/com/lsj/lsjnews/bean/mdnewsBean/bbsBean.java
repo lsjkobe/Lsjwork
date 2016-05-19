@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/3/19.
+ * Created by lsj on 2016/3/19.
  */
 public class bbsBean extends baseBean{
     private List<Lists> lists ;
