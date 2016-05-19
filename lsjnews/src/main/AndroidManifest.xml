@@ -96,6 +96,10 @@
         <activity
             android:name=".mdnews.UserUpdateMsg">
         </activity>
+        //大图
+        <activity
+            android:name=".mdnews.BigPhotoActivity">
+        </activity>
         //mob
         <activity
             android:name="com.mob.tools.MobUIShell"

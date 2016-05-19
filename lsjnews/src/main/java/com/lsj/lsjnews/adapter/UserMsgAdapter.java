@@ -397,8 +397,14 @@ public class UserMsgAdapter extends RecyclerView.Adapter<UserMsgAdapter.msgViewH
         }
 
         @Override
-        public void onBindViewHolder(imgViewHolder holder, int position) {
+        public void onBindViewHolder(imgViewHolder holder, final int position) {
             Glide.with(mContext).load(mImgLists.get(position).getImgsrc()).into(holder.mImgItem);
+            holder.mImgItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UiHelper.showBigPhoto(mContext,mImgLists.get(position).getImgsrc());
+                }
+            });
         }
 
         @Override

@@ -15,6 +15,7 @@ import com.lsj.lsjnews.activity.NewsInfoShow;
 import com.lsj.lsjnews.activity.NewsMainActivity;
 import com.lsj.lsjnews.activity.lsj_test1;
 import com.lsj.lsjnews.bean.mdnewsBean.bbsBean;
+import com.lsj.lsjnews.mdnews.BigPhotoActivity;
 import com.lsj.lsjnews.mdnews.OtherUserMain;
 import com.lsj.lsjnews.mdnews.UserBBSComment;
 import com.lsj.lsjnews.mdnews.UserBBSDetailMsg;
@@ -239,6 +240,16 @@ public class UiHelper {
     public static void showUserUpdateMsg(Context context){
         Intent intent = new Intent();
         intent.setClass(context, UserUpdateMsg.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 大图
+     * @param context
+     */
+    public static void showBigPhoto(Context context,String path){
+        Intent intent = new Intent();
+        intent.putExtra("path",path);
+        intent.setClass(context, BigPhotoActivity.class);
         context.startActivity(intent);
     }
     /**
