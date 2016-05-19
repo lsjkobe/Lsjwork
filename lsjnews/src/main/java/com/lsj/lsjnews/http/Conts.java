@@ -50,4 +50,6 @@ public class Conts {
     public final static String GET_USER_COLLECT_BBS = HTTP_HOST+"getUserCollectBBS.php";
     //收藏
     public final static String POST_BBS_COLLECT = HTTP_HOST+"BBSCollect.php";
+    //忘记密码
+    public final static String POST_FORGET_PASSWORD = HTTP_HOST+"user_forget_password.php";
 }

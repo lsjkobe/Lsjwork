@@ -44,7 +44,13 @@
         //登录
         <activity android:name=".mdnews.UserLoginActivity"/>
         //注册
-        <activity android:name=".mdnews.UserRegisterActivity"/>
+        <activity
+            android:name=".mdnews.UserRegisterActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        //忘记密码
+        <activity
+            android:name=".mdnews.UserForgetPasswordActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         //社区主页
         <activity android:name=".mdnews.UserBBSMain"/>
         //选择照片
@@ -85,6 +91,10 @@
         //我的收藏
         <activity
             android:name=".mdnews.UserMainCollectBBS">
+        </activity>
+        //更新资料
+        <activity
+            android:name=".mdnews.UserUpdateMsg">
         </activity>
         //mob
         <activity

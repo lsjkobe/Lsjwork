@@ -107,10 +107,9 @@ public class UserLoginActivity extends MyBaseActivity implements View.OnClickLis
                 }else{
                     userLogin();
                 }
-
                 break;
             case R.id.txt_btn_forget_psw:
-
+                UiHelper.showUserForgetPwd(mContext);
                 break;
             case R.id.txt_btn_register:
                 UiHelper.showUserRegister(mContext);

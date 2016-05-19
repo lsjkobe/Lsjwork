@@ -20,6 +20,7 @@ import com.lsj.lsjnews.mdnews.UserBBSComment;
 import com.lsj.lsjnews.mdnews.UserBBSDetailMsg;
 import com.lsj.lsjnews.mdnews.UserBBSMain;
 import com.lsj.lsjnews.mdnews.UserFansActivity;
+import com.lsj.lsjnews.mdnews.UserForgetPasswordActivity;
 import com.lsj.lsjnews.mdnews.UserForwardActivity;
 import com.lsj.lsjnews.mdnews.UserLoginActivity;
 import com.lsj.lsjnews.mdnews.UserMainActivity;
@@ -28,6 +29,7 @@ import com.lsj.lsjnews.mdnews.UserMainPhoto;
 import com.lsj.lsjnews.mdnews.UserOrBBSSearch;
 import com.lsj.lsjnews.mdnews.UserRegisterActivity;
 import com.lsj.lsjnews.mdnews.UserSelectPhoto;
+import com.lsj.lsjnews.mdnews.UserUpdateMsg;
 import com.lsj.lsjnews.mdnews.UserWriteActivity;
 
 /**
@@ -94,7 +96,15 @@ public class UiHelper {
         intent.setClass(context, UserRegisterActivity.class);
         context.startActivity(intent);
     }
-
+    /**
+     * 显示忘记密码
+     * @param context
+     */
+    public static void showUserForgetPwd(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserForgetPasswordActivity.class);
+        context.startActivity(intent);
+    }
     /**
      * 显示bbs首页
      * @param context
@@ -220,6 +230,15 @@ public class UiHelper {
     public static void showUserCollect(Context context){
         Intent intent = new Intent();
         intent.setClass(context, UserMainCollectBBS.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 修改信息
+     * @param context
+     */
+    public static void showUserUpdateMsg(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, UserUpdateMsg.class);
         context.startActivity(intent);
     }
     /**

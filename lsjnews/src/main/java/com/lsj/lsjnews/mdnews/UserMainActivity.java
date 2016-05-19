@@ -4,6 +4,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,7 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
     private TextView mTxtUserName,mTxtUserState,mTxtUserFansCount,mTxtUserBBSCount,mTxtUserForwardCount;
     private ImageView mImgUser;
     private LinearLayout mLayoutBBS,mLayoutFans,mLayoutRelation,mLayoutPhoto,mLayoutCollect;
+    private RelativeLayout mLayoutUserMsg;
     @Override
     protected void initView() {
         super.initView();
@@ -42,12 +44,14 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
         mLayoutRelation = (LinearLayout) findViewById(R.id.layout_user_main_relation);
         mLayoutPhoto = (LinearLayout) findViewById(R.id.layout_user_main_photo);
         mLayoutCollect = (LinearLayout) findViewById(R.id.layout_user_main_collect);
+        mLayoutUserMsg = (RelativeLayout) findViewById(R.id.layout_user_main_msg);
         mCardLogout.setOnClickListener(this);
         mLayoutBBS.setOnClickListener(this);
         mLayoutFans.setOnClickListener(this);
         mLayoutRelation.setOnClickListener(this);
         mLayoutPhoto.setOnClickListener(this);
         mLayoutCollect.setOnClickListener(this);
+        mLayoutUserMsg.setOnClickListener(this);
     }
 
     @Override
@@ -85,6 +89,9 @@ public class UserMainActivity extends MyBaseActivity implements View.OnClickList
                 break;
             case R.id.layout_user_main_collect:
                 UiHelper.showUserCollect(mContext);
+                break;
+            case R.id.layout_user_main_msg:
+                UiHelper.showUserUpdateMsg(mContext);
                 break;
         }
     }
