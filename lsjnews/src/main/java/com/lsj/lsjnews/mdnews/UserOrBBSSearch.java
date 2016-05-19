@@ -295,7 +295,7 @@ public class UserOrBBSSearch extends MyBaseActivity implements View.OnClickListe
                 @Override
                 public void onSuccess(String s) {
                     baseBean bean = JSON.parseObject(s,baseBean.class);
-                    MyToast.showToast(mContext,""+bean.getResultCode());
+//                    MyToast.showToast(mContext,""+bean.getResultCode());
                     switch (bean.getResultCode()){
                         case 1:
                             datas.get(position).setKey(1);
