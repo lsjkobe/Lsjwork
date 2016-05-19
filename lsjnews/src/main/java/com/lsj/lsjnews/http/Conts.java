@@ -52,4 +52,9 @@ public class Conts {
     public final static String POST_BBS_COLLECT = HTTP_HOST+"BBSCollect.php";
     //忘记密码
     public final static String POST_FORGET_PASSWORD = HTTP_HOST+"user_forget_password.php";
+    //修改头像
+    public final static String POST_UPDATE_HEAD_IMG = HTTP_HOST+"UserUpdateHeadImg.php";
+    //修改资料
+    public final static String POST_UPDATE_MSG = HTTP_HOST+"UserUpdateMsg.php";
+
 }

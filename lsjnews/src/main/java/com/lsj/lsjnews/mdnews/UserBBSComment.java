@@ -31,7 +31,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2016/4/11.
+ * Created by lsj on 2016/4/11.
  */
 public class UserBBSComment extends MyBaseActivity implements View.OnClickListener{
 
@@ -154,7 +154,7 @@ public class UserBBSComment extends MyBaseActivity implements View.OnClickListen
             File imgFile = new File(mImgLists.get(0));
             params.addParameter("imgSrc",imgFile);
         } else {
-            params.addParameter("imgList", null);
+            params.addParameter("imgSrc", null);
         }
         x.http().post(params, new NewCommonCallBack() {
             @Override

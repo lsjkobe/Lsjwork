@@ -1,20 +1,24 @@
 package com.lsj.lsjnews.mdnews;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.bumptech.glide.Glide;
 import com.example.lsj.httplibrary.utils.MyLogger;
 import com.example.lsj.httplibrary.utils.MyToast;
 import com.lsj.lsjnews.R;
 import com.lsj.lsjnews.base.MyBaseActivity;
+import com.lsj.lsjnews.base.NewCommonCallBack;
+import com.lsj.lsjnews.common.MyHelper;
+import com.lsj.lsjnews.http.Conts;
 import com.lsj.lsjnews.utils.CircleImageView;
 import com.lsj.lsjnews.utils.ImageUtils;
+
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.File;
 
@@ -27,23 +31,27 @@ public class UserUpdateMsg extends MyBaseActivity implements View.OnClickListene
     public static final int PHOTORESOULT = 3;// 结果
     public static final String IMAGE_UNSPECIFIED = "image/*";
     private CircleImageView mImgHead;
-    private EditText mEditNickName, mEditStatement, mEditQQ;
-    private Button mBtnSave;
+    private EditText mEditNickName, mEditStateContent, mEditQQ;
+    private Button mBtnSave,mBtnHeadSave;
     @Override
     protected void initView() {
         super.initView();
         mImgHead = (CircleImageView) findViewById(R.id.img_user_update_msg_head);
         mEditNickName = (EditText) findViewById(R.id.edit_user_update_msg_nickname);
-        mEditStatement = (EditText) findViewById(R.id.edit_user_update_msg_statement);
+        mEditStateContent = (EditText) findViewById(R.id.edit_user_update_msg_state_content);
         mEditQQ = (EditText) findViewById(R.id.edit_user_update_msg_qq);
         mBtnSave = (Button) findViewById(R.id.btn_user_update_msg_save);
+        mBtnHeadSave = (Button) findViewById(R.id.btn_user_update_head_img_save);
         mImgHead.setOnClickListener(this);
         mBtnSave.setOnClickListener(this);
+        mBtnHeadSave.setOnClickListener(this);
     }
 
     @Override
     protected void initData() {
-
+        Glide.with(mContext).load(MyHelper.USER_HEAD_IMG).into(mImgHead);
+        mEditNickName.setText(MyHelper.USER_NAME);
+        mEditStateContent.setText(MyHelper.USER_STATE_CONTENT);
     }
 
     @Override
@@ -58,15 +66,60 @@ public class UserUpdateMsg extends MyBaseActivity implements View.OnClickListene
                 startActivityForResult(intent, PHOTOZOOM);
                 break;
             case R.id.btn_user_update_msg_save:
+                if(mEditNickName.getText().toString().trim().length() == 0){
+                    MyToast.showToast(mContext,"昵称没有填写");
+                }else if(mEditStateContent.getText().toString().trim().length() == 0){
+                    MyToast.showToast(mContext,"没有填写状态");
+                }else if(mEditQQ.getText().toString().trim().length() == 0){
+                    MyToast.showToast(mContext,"没有填写QQ");
+                }else{
+                    saveUserMsg();
+                }
+                break;
+            case R.id.btn_user_update_head_img_save:
+                if(file == null){
+                    MyToast.showToast(mContext,"请选择图片");
+                }else{
+                    saveUserHead();
+                }
                 break;
         }
     }
-    private void saveUserMsg(){
-
-
-
+    private void saveUserHead(){
+        RequestParams params = new RequestParams(Conts.POST_UPDATE_HEAD_IMG);
+        params.addBodyParameter("test", "");//不加服务端接收不了file
+        params.addParameter("imgSrc",file);
+        x.http().post(params, new NewCommonCallBack() {
+            @Override
+            public void onSuccess(String s) {
+                MyLogger.showLogWithLineNum(3,s);
+                if(s.equals("1")){
+                    MyToast.showToast(mContext,"修改头像成功");
+                    MyHelper.USER_HEAD_IMG = file.getPath();
+                }else{
+                    MyToast.showToast(mContext,"修改头像失败");
+                }
+            }
+        });
     }
-
+    private void saveUserMsg(){
+        RequestParams params = new RequestParams(Conts.POST_UPDATE_MSG);
+        params.addBodyParameter("nickname",mEditNickName.getText().toString());
+        params.addBodyParameter("statecontent", mEditStateContent.getText().toString());
+        params.addBodyParameter("qq",mEditQQ.getText().toString());
+        x.http().post(params, new NewCommonCallBack() {
+            @Override
+            public void onSuccess(String s) {
+                MyLogger.showLogWithLineNum(3,s);
+                if(s.equals("1")){
+                    MyToast.showToast(mContext,"修改成功");
+                }else{
+                    MyToast.showToast(mContext,"修改失败");
+                }
+            }
+        });
+    }
+    private File file;
     //选择图片后的处理
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -85,7 +138,7 @@ public class UserUpdateMsg extends MyBaseActivity implements View.OnClickListene
                 //	String path = ImageUtils.getRealPathFromURI(this,ImageUtils.cropImageUri);
                 String path = ImageUtils.cropImageUri.getEncodedPath();
 
-                File file = new File(path);
+                file = new File(path);
 //                try {
 //                    postPicToNet(file);
 //                } catch (FileNotFoundException e) {
