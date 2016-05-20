@@ -152,6 +152,7 @@ public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.On
             public void onSuccess(String s) {
                 MyLogger.showLogWithLineNum(3,"-----------------------------"+s);
                 bbsBean mbbsBean = JSON.parseObject(s, bbsBean.class);
+                MyLogger.showLogWithLineNum(3,"-----------------------------"+mbbsBean.getPageCount()+":"+page);
 //                        DbCookieStore instance = DbCookieStore.INSTANCE;
 //                        List cookies = instance.getCookies();
                 switch(mbbsBean.getResultCode()){
@@ -196,9 +197,10 @@ public class UserBBSMain extends MyBaseActivity implements SwipeRefreshLayout.On
                     if(page > pageCount){
                        MyToast.showToast(mContext,"没有数据了");
                     }else{
-                        getBBSData();
+//                        MyToast.showToast(mContext,""+page);
                         mLoadingBBS.setVisibility(View.VISIBLE);
                         mLoadingBBS.startLoadingAnim();
+                        getBBSData();
                     }
                 }
             });
