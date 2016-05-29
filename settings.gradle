@@ -1,1 +1,1 @@
-include ':app', ':httplibrary', ':lsjnews', ':nineImg'
+include ':app', ':httplibrary', ':lsjnews', ':nineImg', ':lsjchat'

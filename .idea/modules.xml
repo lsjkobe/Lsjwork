@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Lsjwork.iml" filepath="$PROJECT_DIR$/Lsjwork.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/httplibrary/httplibrary.iml" filepath="$PROJECT_DIR$/httplibrary/httplibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lsjchat/lsjchat.iml" filepath="$PROJECT_DIR$/lsjchat/lsjchat.iml" />
       <module fileurl="file://$PROJECT_DIR$/lsjnews/lsjnews.iml" filepath="$PROJECT_DIR$/lsjnews/lsjnews.iml" />
       <module fileurl="file://$PROJECT_DIR$/nineImg/nineImg.iml" filepath="$PROJECT_DIR$/nineImg/nineImg.iml" />
     </modules>
